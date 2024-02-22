@@ -40,6 +40,7 @@ const MainRouting = () => {
           <Route path="/inventory/shoes" element={<ShoesItem />} />
           <Route path="/inventory/clothing" element={<ClothingItem />} />
           <Route path="/inventory/accessories" element={<AccessoriesItem />} />
+          <Route path="/inventory/warehouse" element={<Warehouse />} />
         </>
       )}
 
