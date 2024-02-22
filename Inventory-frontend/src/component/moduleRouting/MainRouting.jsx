@@ -68,6 +68,8 @@ import Categories from "../inventory/Categories";
 import ItemsList from "../inventory/ItemsList";
 import Warehouse from "../inventory/Warehouse";
 import CreateCompany from "../authentication/CreateCompany";
+import PurchaseOrder from "../purchase/PurchaseOrder";
+import Invoices from "../purchase/Invoices";
 
 const MainRouting = () => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -95,6 +97,8 @@ const MainRouting = () => {
       <Route path="/inventory/clothing" element={loggedIn ? <ClothingItem /> : <Navigate to="/" />} />
       <Route path="/inventory/accessories" element={loggedIn ? <AccessoriesItem /> : <Navigate to="/" />} />
       <Route path="/inventory/warehouse" element={loggedIn ? <Warehouse /> : <Navigate to="/" />} />
+      <Route path="/purchase/purchase-order" element={loggedIn ? <PurchaseOrder /> : <Navigate to="/" />} />
+      <Route path="/purchase/invoices" element={loggedIn ? <Invoices /> : <Navigate to="/" />} />
     </Routes>
   );
 };

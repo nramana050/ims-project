@@ -1,6 +1,7 @@
 import React, { useEffect, useState }from 'react'
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import { RxCrossCircled } from "react-icons/rx";
 import axios from "axios";
@@ -8,6 +9,8 @@ import Form from 'react-bootstrap/Form';
 
 
 const CreateCompany = () => {
+  const navigation = useNavigate();
+  const [error, setError] = useState("#D5D4D2");
 
   
     const [open, setOpen] = useState(false);
