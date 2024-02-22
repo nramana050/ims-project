@@ -24,7 +24,7 @@ const CreateCompany = () => {
         pincode:"",
         mobileNumber: "",
         email: "",
-        resgitrationType: "",
+        registrationType: "",
        
        
        
@@ -42,8 +42,10 @@ const CreateCompany = () => {
       const handleSave = async () => {
         await axios
           .post("http://localhost:3600/buyers-suppliers", formData)
-          .then((result) => console.log(result.data))
-          .catch((err) => console.log(err));
+          .then((result) =>
+        result.data === "success" ? navigation("/dashboard") : setError("red")
+      )
+      .catch((err) => console.log(err));
       };
 
       const cancelButton = () => {
@@ -312,6 +314,7 @@ const CreateCompany = () => {
             type="submit"
             variant="outlined"
             onClick={handleSave}
+
             //   disabled={buttonCheck?false:true}
           >
             Submit

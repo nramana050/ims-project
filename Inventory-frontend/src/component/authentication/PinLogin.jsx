@@ -16,7 +16,7 @@ const PinLogin = () => {
     await axios
       .post("http://localhost:3500/mpin", { mpin: firstPin })
       .then((result) =>
-        result.data === "success" ? navigation("/dashboard") : setError("red")
+        result.data === "success" ? navigation("/createcompany") : setError("red")
       )
       .catch((err) => console.log(err));
   };

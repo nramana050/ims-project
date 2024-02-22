@@ -87,7 +87,7 @@ const MainRouting = () => {
       <Route path="/dashboard" element={loggedIn ? <Dashboard /> : <Navigate to="/" />} />
       <Route path="/set-mpin" element={loggedIn ? <Mpin /> : <Navigate to="/" />} />
       <Route path="/mpin" element={loggedIn ? <PinLogin /> : <Navigate to="/" />} />
-      <Route path="/createcompany" element ={<CreateCompany/>} />
+      <Route path="/createcompany" element ={ loggedIn ? <CreateCompany/> : <Navigate to="/" />} />
       <Route path="/buyers-suppliers" element={loggedIn ? <BuyersSuppliers /> : <Navigate to="/" />} />
       <Route path="/inventory/categories" element={loggedIn ? <Categories /> : <Navigate to="/" />} />
       <Route path="/inventory/items-list/:id" element={loggedIn ? <ItemsList /> : <Navigate to="/" />} />
