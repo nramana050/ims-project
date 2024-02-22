@@ -21,6 +21,9 @@ const Categories = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [itemName, setItemName] = useState("");
 
   const navigation = useNavigate();
 
@@ -88,6 +91,13 @@ const Categories = () => {
       gstTax: 0,
       reorderPoint: 0,
       category: "shoes",
+      batch: [
+        {
+          batchNumber: "",
+          size: "",
+          stockQty: "",
+        },
+      ],
     });
     setOpen(false);
   };
@@ -165,7 +175,6 @@ const Categories = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     try {
       const res = await axios.post(
         "http://localhost:3700/inventory",
@@ -206,7 +215,6 @@ const Categories = () => {
   });
 
   useEffect(() => {
-    console.log(formData);
     setFormData({
       ...formData,
       itemName: itemName,
@@ -214,10 +222,6 @@ const Categories = () => {
     });
   }, []);
 
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const [itemName, setItemName] = useState("");
-  console.log(formData);
   return (
     <div>
       {isLoading ? (
@@ -352,7 +356,7 @@ const Categories = () => {
                 <div className="add-item-modal-bottom">
                   <div className="two-buttons-in">
                     <div className="mt-1" style={{ fontWeight: "700" }}>
-                      TOTAL: {totalStocks}
+                      {totalStocks ? `TOTAL: ${totalStocks}` : ""}
                     </div>
                     <button
                       className="next-button-in"
@@ -498,6 +502,7 @@ const Categories = () => {
                                 stockQty: batchItem.stockQty,
                               })),
                             });
+                            setTotalStocks(totalStocks);
                             setItemName(selectedOption.value.itemName);
                           }
                         }}

@@ -83,6 +83,27 @@
   width: 80px;
 }
 
+#item {
+  margin: 30px 10px;
+  width: calc(80% / 3);
+  border: 2px dashed #d2d2d2;
+  border-radius: 8px;
+  height: 40vh;
+  background-color: #f7f7f7;
+}
+
+#itemSearch {
+  padding: 0;
+  width: 50%;
+}
+
+#itemSearch .css-13cymwt-control {
+  width: 100%;
+}
+#itemSearch .css-t3ipsp-control {
+  width: 100%;
+}
+
 .buyer-form-cross {
   position: absolute;
   top: 10px;
@@ -786,5 +807,3 @@
   border-radius: 5px;
   font-size: 14px;
 }
-
-

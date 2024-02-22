@@ -10282,7 +10282,7 @@ progress {
     --bs-table-color-state,
     var(--bs-table-color-type, var(--bs-table-color))
   );
-  background-color: var(--bs-table-bg);
+
   border-bottom-width: var(--bs-border-width);
   box-shadow: inset 0 0 0 9999px
     var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
@@ -30295,4 +30295,137 @@ table.dataTable.dtr-inline.collapsed.d-row
   color: rgba(61, 61, 61, 1);
   font-weight: 400;
   font-size: 14px;
+}
+
+.input-group-1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(244, 247, 246, 1);
+  margin-bottom: 7px;
+}
+.search-input-in {
+  border-radius: 6px 0 0 6px;
+  border: 1px solid rgba(210, 210, 210, 1);
+  height: 35px;
+  width: 350px;
+  padding: 0 10px;
+  outline: none;
+}
+.search-button-in {
+  background-color: rgba(0, 172, 154, 1);
+  border-radius: 0 6px 6px 0;
+  height: 35px;
+  border: none;
+  color: white;
+  padding: 0 20px;
+}
+.filter-button-in {
+  border: 1px solid rgba(210, 210, 210, 1);
+  border-radius: 2px;
+}
+.filter-icon-in {
+  font-size: 20px;
+}
+.add-button-in {
+  background-color: rgba(0, 172, 154, 1);
+  border-radius: 6px;
+  height: 30px;
+  border: none;
+  color: white;
+  padding: 0 20px;
+}
+.modal-ka-baap {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  z-index: 9999;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.53);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-item-modal-in {
+  height: 80%;
+  width: auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 1);
+  position: fixed;
+  border-radius: 6px;
+}
+.close-modal-in:hover {
+  color: red;
+}
+
+.table thead th {
+  border-top: 0;
+  border-bottom-width: 1px;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px dotted rgba(163, 163, 163, 0.5);
+}
+
+.table tbody tr td {
+  border: 1px solid rgba(163, 163, 163, 0.5);
+}
+.table tbody tr:hover {
+  background-color: rgba(163, 163, 163, 0.2);
+  cursor: pointer;
+}
+.add-item-modal-mid {
+  overflow-y: auto;
+  height: 78%;
+}
+.two-buttons-in {
+  display: flex;
+  gap: 20px;
+  justify-content: end;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+.next-button-in {
+  background-color: rgba(0, 172, 154, 1);
+  border-radius: 4px;
+  height: 30px;
+  border: none;
+  color: white;
+  padding: 0 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.cancel-button-in {
+  background-color: rgba(255, 216, 216, 1);
+  border-radius: 4px;
+  height: 30px;
+  border: none;
+  color: red;
+  padding: 0 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.table-below-add-btn {
+  border: 1px dotted rgba(163, 163, 163, 0.75);
+  background-color: transparent;
+  font-weight: 600;
 }
