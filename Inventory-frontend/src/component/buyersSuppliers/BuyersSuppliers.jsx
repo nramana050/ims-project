@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 // import "../../components/Style.css";
 import customer from "../../assets/customer.png";
 import courier from "../../assets/courier.png";
@@ -14,6 +15,9 @@ import Modal from "@mui/material/Modal";
 import { RxCrossCircled } from "react-icons/rx";
 import axios from "axios";
 import noDataImg from "../../assets/nodata.png";
+import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 const BuyersSuppliers = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -276,7 +280,18 @@ const BuyersSuppliers = () => {
             {/* start: page header */}
             <NavBar />
             {/* start: page toolbar */}
-
+            <div style={{ padding: "40px" }}>
+                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
+                        <Link
+                          to="/dashboard"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          Home{" "}
+                        </Link>{" "}
+                       /
+                      </span>
+                      <span style={{ color: "black" }}> Buyers & Suppliers</span>
+                    </div>
             <div className="wrapper buyer-wrapper">
               <div className="container">
                 <div style={{ width: "100%" }}>

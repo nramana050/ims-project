@@ -172,6 +172,24 @@ const SideBar = () => {
                   <span className="ms-2">Sales</span>
                 </a>
                 {/* Menu: Sub menu ul */}
+                <ul className="sub-menu collapse show" id="my_dashboard">
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/sales/sales-order")}
+                    >
+                      Sales Order
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/sales/invoices")}
+                    >
+                     Invoice
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a

@@ -15,7 +15,8 @@ import QRCode from "react-qr-code";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddCircleOutline } from "react-icons/io5";
-
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 const Categories = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -155,6 +156,18 @@ const Categories = () => {
             {/* start: page header */}
             <NavBar />
             {/* start: page toolbar */}
+            <div style={{ padding: "40px" }}>
+                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
+                        <Link
+                          to="/dashboard"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          Home{" "}
+                        </Link>{" "}
+                       / Inventory
+                      </span>
+                      <span style={{ color: "black" }}> Products</span>
+                    </div>
             <div className="main-div">
               <div className="item-list-div">
                 <div className="card-heading-item">

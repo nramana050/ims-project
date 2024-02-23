@@ -70,6 +70,7 @@ import Warehouse from "../inventory/Warehouse";
 import CreateCompany from "../authentication/CreateCompany";
 import PurchaseOrder from "../purchase/PurchaseOrder";
 import Invoices from "../purchase/Invoices";
+import SalesForm from "../sales/SalesForm";
 
 const MainRouting = () => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -99,6 +100,7 @@ const MainRouting = () => {
       <Route path="/inventory/warehouse" element={loggedIn ? <Warehouse /> : <Navigate to="/" />} />
       <Route path="/purchase/purchase-order" element={loggedIn ? <PurchaseOrder /> : <Navigate to="/" />} />
       <Route path="/purchase/invoices" element={loggedIn ? <Invoices /> : <Navigate to="/" />} />
+      <Route path="/sales/sales-order" element={loggedIn ? <SalesForm /> : <Navigate to="/" />} />
     </Routes>
   );
 };
