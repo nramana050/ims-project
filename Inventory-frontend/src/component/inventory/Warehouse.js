@@ -15,6 +15,9 @@ import Select from "@mui/material/Select";
 import Modal from "@mui/material/Modal";
 import { TbRefreshDot } from "react-icons/tb";
 import "../../AddedStyles.css";
+import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 const Warehouse = () => {
   const [age, setAge] = React.useState("");
@@ -124,6 +127,18 @@ const Warehouse = () => {
           <SideBar />
           <div className="wrapper">
             <NavBar />
+            <div style={{ padding: "40px" }}>
+                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
+                        <Link
+                          to="/dashboard"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          Home{" "}
+                        </Link>{" "}
+                       / Inventory
+                      </span>
+                      <span style={{ color: "black" }}>Warehouse</span>
+                    </div>
             <div className="main-div">
               <div className="items-list-2">
                 <div className="table" id="main-table">
