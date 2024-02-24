@@ -100,7 +100,6 @@ const Warehouse = () => {
     });
   };
 
-  
   return (
     <div>
       {isLoading ? (
@@ -185,401 +184,277 @@ const Warehouse = () => {
                       </button>
                     </div>
 
-                    <button
-                      type="button"
-                      className="btn btn-transfer"
-                      data-mdb-ripple-init=""
-                    >
-                      Transfer Stock
-                      <div className="icon-refresh">
-                        <TbRefreshDot />
-                      </div>
-                    </button>
 
-                    <div className="filter">
-                      <HiOutlineFilter size={30} color="rgba(0, 172, 154, 1)" />
-                    </div>
+            <div className="main-div-2">
+              <div className="table" id="main-table">
+                <div className="input-group-1">
+                  <div>
+                    <p style={{ width: "220px" }}>Stock in Warehouse </p>
+                  </div>
+                  <div className="input-group ">
+                    <input
+                      type="search"
+                      className="rounded search-bar"
+                      placeholder="Search"
+                      aria-label="Search"
+                      aria-describedby="search-addon"
+                    />
+
                     <button
                       type="button"
                       className="btn search-btn"
-                      data-mdb-ripple-init=""
-                      onClick={handleOpen}
+                      style={{
+                        backgroundColor: "rgba(0, 172, 154, 1)",
+                        color: "white",
+                      }}
                     >
-                      Add
+                      Search
                     </button>
                   </div>
-                  <table className="table table-bordered ">
-                    <div id="table-responsive" className="table-responsive">
-                      <table
-                        id="table"
-                        className="table table-hover table-striped text-nowrap table-vcenter mb-0"
-                      >
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>ITEMS NAME</th>
-                            <th>ITEM CODE</th>
-                            <th>OPENING STOCK</th>
-                            <th>STATUS</th>
-                            <th>STOCK PRICE</th>
-                            <th>SELLING PRICE</th>
-                            <th>PURCHASE DATE</th>
-                            <th>ACTION</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>Reebok Floatride Women's Running Shoes</td>
 
-                            <td>E088</td>
-                            <td>209 PCS</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 396.84</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Saucony Kinvara Men's Running Shoes</td>
-
-                            <td>R091</td>
-                            <td>$14,500</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 275.43</td>
-                            <td>₹ 782.01</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>New Balance Fresh Foam Men's Running Shoes</td>
-                            <td>D077</td>
-                            <td>400 PCS</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 630.44</td>
-                            <td>₹ 576.28</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Salomon Speedcross Men's Running Shoes</td>
-
-                            <td>W055</td>
-                            <td>503 PCS</td>
-                            <td>
-                              <button className="button2">Out of Stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 854.08</td>
-                            <td>₹ 475.22</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>5</td>
-                            <td>Hoka One One Bondi Men's Running Shoes</td>
-
-                            <td>E088</td>
-                            <td>403 PCS</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 328.85</td>
-                            <td>₹ 450.54</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>6</td>
-                            <td>Brooks Adrenaline GTS Men's Running Shoes</td>
-
-                            <td>R076</td>
-                            <td>$9,500</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 169.43</td>
-                            <td>₹ 601.13</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>7</td>
-                            <td>Mizuno Wave Rider Men's Running Shoes</td>
-
-                            <td>R099</td>
-                            <td>503 PCS</td>
-                            <td>
-                              <button className="button3">Low Stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 948.55</td>
-                            <td>₹ 202.87</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>8</td>
-                            <td>Newton Running Fate Men's Running Shoes</td>
-
-                            <td>R076</td>
-                            <td>400 PCS</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 169.43</td>
-                            <td>₹ 601.13</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>9</td>
-                            <td>Hoka One One Clifton Men's Running Shoes</td>
-
-                            <td>R076</td>
-                            <td>400 PCS</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 169.43</td>
-                            <td>₹ 601.13</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                          <tr>
-                            <td>10</td>
-                            <td>
-                              Under Armour Charged Bandit Men's Running Shoes
-                            </td>
-
-                            <td>R076</td>
-                            <td>400 PCS</td>
-                            <td>
-                              <button className="button1">In stock</button>
-                            </td>
-                            <td>₹ 779.58</td>
-                            <td>₹ 169.43</td>
-                            <td>₹ 601.13</td>
-                            <div className="action-btn">
-                              <td>
-                                <FiEdit style={{ color: "#6F6F6F" }} />
-                              </td>
-                              <td>
-                                <AiOutlineDelete style={{ color: "red" }} />
-                              </td>
-                            </div>
-                          </tr>
-                        </tbody>
-                      </table>
+                  <div className="filter-container">
+                    <div className="filter">
+                      <HiOutlineFilter size={30} color="rgba(0, 172, 154, 1)" />
                     </div>
-                  </table>
+                  </div>
                 </div>
+                <table className="table table-bordered ">
+                  <div id="table-responsive" className="table-responsive">
+                    <table
+                      id="table"
+                      className="table table-hover table-striped text-nowrap table-vcenter mb-0"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Sl No</th>
+                          <th>ITEMS NAME</th>
+                          <th>ITEM CODE</th>
+                          <th>OPENING STOCK</th>
+                          <th>STATUS</th>
+                          <th>STOCK PRICE</th>
+                          <th>SELLING PRICE</th>
+                          <th>PURCHASE DATE</th>
+                          <th>ACTION</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Reebok Floatride Women's Running Shoes</td>
+
+                          <td>E088</td>
+                          <td>209 PCS</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 396.84</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>Saucony Kinvara Men's Running Shoes</td>
+
+                          <td>R091</td>
+                          <td>$14,500</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 275.43</td>
+                          <td>₹ 782.01</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>3</td>
+                          <td>New Balance Fresh Foam Men's Running Shoes</td>
+                          <td>D077</td>
+                          <td>400 PCS</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 630.44</td>
+                          <td>₹ 576.28</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>4</td>
+                          <td>Salomon Speedcross Men's Running Shoes</td>
+
+                          <td>W055</td>
+                          <td>503 PCS</td>
+                          <td>
+                            <button className="button2">Out of Stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 854.08</td>
+                          <td>₹ 475.22</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>5</td>
+                          <td>Hoka One One Bondi Men's Running Shoes</td>
+
+                          <td>E088</td>
+                          <td>403 PCS</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 328.85</td>
+                          <td>₹ 450.54</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>6</td>
+                          <td>Brooks Adrenaline GTS Men's Running Shoes</td>
+
+                          <td>R076</td>
+                          <td>$9,500</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 169.43</td>
+                          <td>₹ 601.13</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>7</td>
+                          <td>Mizuno Wave Rider Men's Running Shoes</td>
+
+                          <td>R099</td>
+                          <td>503 PCS</td>
+                          <td>
+                            <button className="button3">Low Stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 948.55</td>
+                          <td>₹ 202.87</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>8</td>
+                          <td>Newton Running Fate Men's Running Shoes</td>
+
+                          <td>R076</td>
+                          <td>400 PCS</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 169.43</td>
+                          <td>₹ 601.13</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>9</td>
+                          <td>Hoka One One Clifton Men's Running Shoes</td>
+
+                          <td>R076</td>
+                          <td>400 PCS</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 169.43</td>
+                          <td>₹ 601.13</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                        <tr>
+                          <td>10</td>
+                          <td>
+                            Under Armour Charged Bandit Men's Running Shoes
+                          </td>
+
+                          <td>R076</td>
+                          <td>400 PCS</td>
+                          <td>
+                            <button className="button1">In stock</button>
+                          </td>
+                          <td>₹ 779.58</td>
+                          <td>₹ 169.43</td>
+                          <td>₹ 601.13</td>
+                          <div className="action-btn">
+                            <td>
+                              <FiEdit style={{ color: "#6F6F6F" }} />
+                            </td>
+                            <td>
+                              <AiOutlineDelete style={{ color: "red" }} />
+                            </td>
+                          </div>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </table>
               </div>
             </div>
-            <Modal
-              className="buyer-form-modal"
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-            <div
-                className="buyer-form-container"
-                style={{ position: "relative" }}
-              >
-            <h3>Add New Godown</h3>
-                 <form onSubmit={handleSubmit}>
-                          <div className="data-input-fields">
-                            <div className="buyer-input-label">
-                              <label>Godown Name</label>
-                              <TextField
-                                className="buyer-input"
-                                margin="dense"
-                                type="text"
-                                fullWidth
-                                name="godownName"
-                                id="godownName"
-                                value={formData.godownName}
-                                onChange={(e) => handleInputChange(e)}
-                                required
-                              />
-                            </div>
-        
-                            <div className="buyer-input-label">
-                              <label>Street Address</label>
-                              <TextField
-                                className="buyer-input"
-                                margin="dense"
-                                type="text"
-                                fullWidth
-                                name="streetAddress"
-                                id="streetAddress"
-                                value={formData.streetAddress}
-                                onChange={(e) => handleInputChange(e)}
-                                required
-                              />
-                            </div>
-                          </div>
-        
-                          <div className="data-input-fields">
-                            <div className="buyer-input-label">
-                                <label>Place of Supply</label>
-                                <TextField
-                                    id="placeOfSupply"
-                                    margin="dense"
-                                    className="buyer-input"
-                                    select
-                                    fullWidth
-                                    defaultValue="Select State"
-                                    value={formData.placeOfSupply}
-                                    onChange={(e) => handleInputChange(e)}
-                                    name="placeOfSupply"
-                                    SelectProps={{
-                                    native: true,
-                                    }}
-                                >
-                                    {Type.map((option) => (
-                                    <option
-                                        key={option.value}
-                                        disabled={
-                                        option.label === "Select State"
-                                            ? true
-                                            : false
-                                        }
-                                        value={option.label}
-                                    >
-                                        {option.label}
-                                    </option>
-                                    ))}
-                                </TextField>
-                            </div>
-                            {/*  */}
-        
-                            <div className="buyer-input-label">
-                              <label>Pin Code</label>
-                              <TextField
-                                className="buyer-input"
-                                margin="dense"
-                                type="number"
-                                fullWidth
-                                name="pinCode"
-                                id="pinCode"
-                                value={formData.pinCode}
-                                onChange={(e) => handleInputChange(e)}
-                                required
-                              />
-                            </div>
-                          </div>
-        
-                          <div className="data-input-fields">
-                            <div className="buyer-input-label">
-                              <label>City</label>
-                              <TextField
-                                className="buyer-input"
-                                margin="dense"
-                                type="text"
-                                fullWidth
-                                name="city"
-                                id="city"
-                                value={formData.city}
-                                onChange={(e) => handleInputChange(e)}
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div className="data-buttons">
-                            <Button
-                              id="input-btn-submit"
-                              className="submit"
-                              type="submit"
-                              variant="outlined"
-                            //   onClick={handleSave}
-                              //   disabled={buttonCheck?false:true}
-                            >
-                              Submit
-                            </Button>
-                            <Button
-                              id="input-btn-cancel"
-                              className="cancel"
-                              onClick={cancelButton}
-                              variant="outlined"
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </form>
-            </div>
-            </Modal>
           </div>
         </div>
       )}

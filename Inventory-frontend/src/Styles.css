@@ -10282,7 +10282,7 @@ progress {
     --bs-table-color-state,
     var(--bs-table-color-type, var(--bs-table-color))
   );
-  background-color: var(--bs-table-bg);
+
   border-bottom-width: var(--bs-border-width);
   box-shadow: inset 0 0 0 9999px
     var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
@@ -30296,7 +30296,6 @@ table.dataTable.dtr-inline.collapsed.d-row
   font-weight: 400;
   font-size: 14px;
 }
-
 .sales-order-top-right{
   display: flex;
   align-items: center;
@@ -30386,6 +30385,8 @@ table.dataTable.dtr-inline.collapsed.d-row
   justify-content:space-between
 }
 .input-group-1{
+.input-group-1 {
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30393,6 +30394,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   margin-bottom: 7px;
 }
 .search-input-in{
+.search-input-in {
   border-radius: 6px 0 0 6px;
   border: 1px solid rgba(210, 210, 210, 1);
   height: 35px;
@@ -30401,6 +30403,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   outline: none;
 }
 .search-button-in{
+.search-button-in {
   background-color: rgba(0, 172, 154, 1);
   border-radius: 0 6px 6px 0;
   height: 35px;
@@ -30416,6 +30419,14 @@ table.dataTable.dtr-inline.collapsed.d-row
   font-size: 20px;
 }
 .add-button-in{
+.filter-button-in {
+  border: 1px solid rgba(210, 210, 210, 1);
+  border-radius: 2px;
+}
+.filter-icon-in {
+  font-size: 20px;
+}
+.add-button-in {
   background-color: rgba(0, 172, 154, 1);
   border-radius: 6px;
   height: 30px;
@@ -30423,7 +30434,9 @@ table.dataTable.dtr-inline.collapsed.d-row
   color: white;
   padding: 0 20px;
 }
+
 .modal-ka-baap{
+.modal-ka-baap {
   height: 100%;
   width: 100%;
   background-color: black;
@@ -30435,6 +30448,8 @@ table.dataTable.dtr-inline.collapsed.d-row
   justify-content: center;
 }
 .add-item-modal-in{
+.add-item-modal-in {
+
   height: 80%;
   width: auto;
   padding: 20px;
@@ -30442,8 +30457,11 @@ table.dataTable.dtr-inline.collapsed.d-row
   position: fixed;
   border-radius: 6px;
 }
+
 .close-modal-in:hover{
   color:red;
+.close-modal-in:hover {
+  color: red;
 }
 
 .table thead th {
@@ -30455,7 +30473,6 @@ table.dataTable.dtr-inline.collapsed.d-row
   font-size: 0.9rem;
   border: 1px dotted rgba(163, 163, 163, 0.5);
 }
-
 .table tbody tr td{
   border: 1px solid rgba(163, 163, 163, 0.5);
 }
@@ -30470,12 +30487,28 @@ table.dataTable.dtr-inline.collapsed.d-row
 .two-buttons-in{
   display: flex;
   gap:20px;
+.table tbody tr td {
+  border: 1px solid rgba(163, 163, 163, 0.5);
+}
+.table tbody tr:hover {
+  background-color: rgba(163, 163, 163, 0.2);
+  cursor: pointer;
+}
+.add-item-modal-mid {
+  overflow-y: auto;
+  height: 78%;
+}
+.two-buttons-in {
+  display: flex;
+  gap: 20px;
   justify-content: end;
   position: absolute;
   bottom: 20px;
   right: 20px;
 }
+
 .next-button-in{
+.next-button-in {
   background-color: rgba(0, 172, 154, 1);
   border-radius: 4px;
   height: 30px;
@@ -30486,6 +30519,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   font-weight: 600;
 }
 .cancel-button-in{
+.cancel-button-in {
   background-color: rgba(255, 216, 216, 1);
   border-radius: 4px;
   height: 30px;
@@ -30652,3 +30686,21 @@ width: 700px;
 .companyName{
   font-size: 30px;
 }
+
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.table-below-add-btn {
+  border: 1px dotted rgba(163, 163, 163, 0.75);
+  background-color: transparent;
+  font-weight: 600;
+}
+
