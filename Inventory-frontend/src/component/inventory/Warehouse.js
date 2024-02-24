@@ -15,6 +15,9 @@ import Select from "@mui/material/Select";
 import Modal from "@mui/material/Modal";
 import { TbRefreshDot } from "react-icons/tb";
 import "../../AddedStyles.css";
+import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 const Warehouse = () => {
   const [age, setAge] = React.useState("");
@@ -123,6 +126,65 @@ const Warehouse = () => {
           <SideBar />
           <div className="wrapper">
             <NavBar />
+            <div style={{ padding: "40px" }}>
+                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
+                        <Link
+                          to="/dashboard"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          Home{" "}
+                        </Link>{" "}
+                       / Inventory
+                      </span>
+                      <span style={{ color: "black" }}>Warehouse</span>
+                    </div>
+            <div className="main-div">
+              <div className="items-list-2">
+                <div className="table" id="main-table">
+                  <div className="input-group-1">
+                    <div>
+                      {" "}
+                      <FormControl sx={{ minWidth: 240 }} size="small">
+                        <InputLabel id="demo-simple-select-label">
+                          Select Godown
+                        </InputLabel>
+                        <Select
+                          labelId="demo-select-small-label"
+                          id="demo-select-small"
+                          value={age}
+                          label="Age"
+                          onChange={handleChange}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value={10}>Ten</MenuItem>
+                          <MenuItem value={20}>Twenty</MenuItem>
+                          <MenuItem value={30}>Thirty</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </div>
+                    <div
+                      className="input-group "
+                      style={{ marginLeft: "30rem" }}
+                    >
+                      <input
+                        type="search"
+                        className="rounded search-bar"
+                        placeholder="Search"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                      />
+                      <button
+                        type="button"
+                        className="btn search-btn"
+                        data-mdb-ripple-init=""
+                      >
+                        Search
+                      </button>
+                    </div>
+
+
             <div className="main-div-2">
               <div className="table" id="main-table">
                 <div className="input-group-1">
@@ -137,6 +199,7 @@ const Warehouse = () => {
                       aria-label="Search"
                       aria-describedby="search-addon"
                     />
+
                     <button
                       type="button"
                       className="btn search-btn"

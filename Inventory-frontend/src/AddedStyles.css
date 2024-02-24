@@ -139,7 +139,7 @@
 #openingStockRate,
 #gstTax,
 #reorderPoint {
-  padding: 8px;
+  /* padding: 8px; */
   font-size: 14px;
   display: flex;
   justify-content: center;
@@ -587,12 +587,24 @@
   border-radius: 5px;
 }
 
+.buyer-input-labels{
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
 .buyer-input-label {
   width: 50%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
+}
+
+.page-head{
+  display: "flex";
+  justify-content: space-between;
 }
 
 .buyer-input-label label {
@@ -620,6 +632,37 @@
   gap: 10px;
   margin-top: 20px;
 }
+
+.data-buttons-2{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top:-35px;
+}
+
+#input-btn-gst{
+  width: 180.09px;
+  height: 44.09px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #00ac9a;
+  display:flex;
+  gap:5px;
+}
+
+#input-btn-gst2{
+  width: 180.09px;
+  height: 44.09px;
+  border:3px solid #BFBFBF;
+  border-radius: 5px;
+  color: #666666;;
+  display:flex;
+  gap:5px;
+  
+}
+
+
+
 #input-btn-submit {
   width: 136.09px;
   height: 42.09px;

@@ -12,7 +12,7 @@ import OtpInput from "react-otp-input";
 import image3 from "../../assets/image3.png";
 import { Bars } from "react-loader-spinner";
 
-const Signin = () => {
+const Signin = ({onLogin}) => {
   const navigation = useNavigate();
   const [number, setNumber] = useState("");
   const [otp, setOtp] = useState("");
@@ -148,11 +148,12 @@ const Signin = () => {
           ).toString();
           console.log(encryptedExpiryDate);
           localStorage.setItem("expiryDate", encryptedExpiryDate);
-
-          getData ? navigation("/mpin") : navigation("/set-mpin");
-        } else {
-          getData ? navigation("/mpin") : navigation("/set-mpin");
         }
+  
+        
+        onLogin(true);
+   
+        getData ? navigation("/mpin") : navigation("/set-mpin");
       } else {
         setError("* Invalid username or password");
       }
@@ -415,7 +416,7 @@ const Signin = () => {
                       <button
                         className="col-12 text-center mt-4 btn btn-lg btn-block btn-dark lift text-uppercase"
                         onClick={(e) => saveLogin(e)}
-                        disabled={btnDisable}
+                        //    disabled={btnDisable}
                       >
                         Sign In
                       </button>

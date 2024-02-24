@@ -131,7 +131,7 @@ const SideBar = () => {
                 </ul>
               </li>
 
-              <li className="collapsed">
+              <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a
                   className="m-link"
                   data-bs-toggle="collapse"
@@ -142,8 +142,26 @@ const SideBar = () => {
                   <span className="ms-2">Purchase</span>
                 </a>
                 {/* Menu: Sub menu ul */}
+                <ul className="sub-menu collapse show" id="my_dashboard">
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/purchase/purchase-order")}
+                    >
+                      Purchase Order
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/purchase/invoices")}
+                    >
+                     Invoice
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li className="collapsed">
+              <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a
                   className="m-link"
                   data-bs-toggle="collapse"
@@ -154,6 +172,24 @@ const SideBar = () => {
                   <span className="ms-2">Sales</span>
                 </a>
                 {/* Menu: Sub menu ul */}
+                <ul className="sub-menu collapse show" id="my_dashboard">
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/sales/sales-order")}
+                    >
+                      Sales Order
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/sales/invoices")}
+                    >
+                     Invoice
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a
