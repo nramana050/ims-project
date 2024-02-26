@@ -4,7 +4,6 @@ const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
 exports.getLogin = async (req, res) => {
-  console.log(req.body);
   try {
     try {
       const user = await logInModel.findOne({

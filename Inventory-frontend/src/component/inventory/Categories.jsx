@@ -15,9 +15,6 @@ import QRCode from "react-qr-code";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddCircleOutline } from "react-icons/io5";
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
-
 import Select from "react-select";
 
 const Categories = () => {
@@ -247,33 +244,6 @@ const Categories = () => {
           />
         </div>
       ) : (
-        <div className="layout-1" s>
-          <SideBar />
-          {/* start: body area */}
-          <div className="wrapper">
-            {/* start: page header */}
-            <NavBar />
-            {/* start: page toolbar */}
-            <div style={{ padding: "40px" }}>
-                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
-                        <Link
-                          to="/dashboard"
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          Home{" "}
-                        </Link>{" "}
-                       / Inventory
-                      </span>
-                      <span style={{ color: "black" }}> Products</span>
-                    </div>
-            <div className="main-div">
-              <div className="item-list-div">
-                <div className="card-heading-item">
-                  <h5>ALL ITEMS</h5>
-                  <div
-                    className="btn-div"
-                    style={{ marginTop: "-3.5rem", marginRight: "10px" }}
-
         <>
           {modalOpen ? (
             <div className="modal-ka-baap">
@@ -378,7 +348,6 @@ const Categories = () => {
                     className="d-flex align-items-center table-below-add-btn"
                     style={{ gap: "5px" }}
                     onClick={() => addBatch()}
-
                   >
                     <IoAddCircleOutline />
                     <div>Add</div>
@@ -515,6 +484,7 @@ const Categories = () => {
                         id="itemSearch"
                         value={{ label: itemName }}
                         onChange={(selectedOption) => {
+                          console.log(selectedOption)
                           if (selectedOption) {
                             const { batch } = selectedOption.value;
 

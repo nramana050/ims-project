@@ -30384,7 +30384,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   padding: 30px 40px;
   justify-content:space-between
 }
-.input-group-1{
+
 .input-group-1 {
 
   display: flex;
@@ -30393,7 +30393,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   background-color: rgba(244, 247, 246, 1);
   margin-bottom: 7px;
 }
-.search-input-in{
+
 .search-input-in {
   border-radius: 6px 0 0 6px;
   border: 1px solid rgba(210, 210, 210, 1);
@@ -30402,7 +30402,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   padding: 0 10px;
   outline: none;
 }
-.search-button-in{
+
 .search-button-in {
   background-color: rgba(0, 172, 154, 1);
   border-radius: 0 6px 6px 0;
@@ -30418,7 +30418,7 @@ table.dataTable.dtr-inline.collapsed.d-row
 .filter-icon-in{
   font-size: 20px;
 }
-.add-button-in{
+.add-button-in,
 .filter-button-in {
   border: 1px solid rgba(210, 210, 210, 1);
   border-radius: 2px;
@@ -30435,7 +30435,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   padding: 0 20px;
 }
 
-.modal-ka-baap{
+
 .modal-ka-baap {
   height: 100%;
   width: 100%;
@@ -30447,7 +30447,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   align-items: center;
   justify-content: center;
 }
-.add-item-modal-in{
+
 .add-item-modal-in {
 
   height: 80%;
@@ -30458,8 +30458,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   border-radius: 6px;
 }
 
-.close-modal-in:hover{
-  color:red;
+
 .close-modal-in:hover {
   color: red;
 }
@@ -30487,6 +30486,7 @@ table.dataTable.dtr-inline.collapsed.d-row
 .two-buttons-in{
   display: flex;
   gap:20px;
+}
 .table tbody tr td {
   border: 1px solid rgba(163, 163, 163, 0.5);
 }
@@ -30507,7 +30507,7 @@ table.dataTable.dtr-inline.collapsed.d-row
   right: 20px;
 }
 
-.next-button-in{
+
 .next-button-in {
   background-color: rgba(0, 172, 154, 1);
   border-radius: 4px;
