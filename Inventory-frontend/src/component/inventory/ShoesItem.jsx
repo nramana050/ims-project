@@ -6,7 +6,6 @@ import { HiOutlineFilter } from "react-icons/hi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import noDataImg from "../../assets/nodata.png";
-import Select from "react-select";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

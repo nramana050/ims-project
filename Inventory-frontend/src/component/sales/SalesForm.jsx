@@ -4,18 +4,17 @@ import NavBar from "../../component/NavBar";
 import { Bars } from "react-loader-spinner";
 import { Link } from "react-router-dom";
 import "../../Styles.css";
-import { Button } from "@mui/material";
+import { Button, TextField, IconButton, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import SalesViewTable from "./SalesViewTable";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import {QrReader} from 'react-qr-reader'
+import DeleteIcon from "@mui/icons-material/Delete";
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 
 
 const SalesForm = () => {
   const [formData,setFormData]=useState([])
-  
-
   const [data, setData] = useState("No result");
   console.log("here", typeof data);
   const dataObject =
@@ -33,14 +32,28 @@ const SalesForm = () => {
         );
 
   // setFormData([...formData, dataObject]);
+
+  const addRow = () => {
+    const newRow = {
+      id:formData.length + 1,
+      itemName: "",
+      itemCode: "",
+      quantity: 0,
+      price: 0,
+      discount: 0,
+      gstTax: "",
+      amount: 0,
+    };
+
+    setFormData((prevData) => [...prevData, newRow]);
+  };
+
   console.log("formData", formData);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [barCodeOpen, setBarCodeOpen] = useState(false);
-
-
-
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -49,105 +62,62 @@ const SalesForm = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const [productItems, setProductItems] = useState([
+    // Sample data, replace it with your actual product items
+    { itemName: "Product 1", hsn: "HSN001", sellingPrice: "₹ 100" },
+    { itemName: "Product 2", hsn: "HSN002", sellingPrice: "₹ 150" },
+    // ... (more items)
+  ]);
 
-  const productItems = [
-    {
-      itemName: "Reebok Floatride Women's Running Shoes",
-      hsn: "E088",
-      sellingPrice: "₹ 779.58",
-    },
-    {
-      itemName: "Reebok Floatride Women's Running Shoes",
-      hsn: "E088",
-      sellingPrice: "₹ 779.58",
-    },
-    {
-      itemName: "Reebok Floatride Women's Running Shoes",
-      hsn: "E088",
-      sellingPrice: "₹ 779.58",
-    },
-    {
-      itemName: "Reebok Floatride Women's Running Shoes",
-      hsn: "E088",
-      sellingPrice: "₹ 779.58",
-    },
-    {
-      itemName: "Reebok Floatride Women's Running Shoes",
-      hsn: "E088",
-      sellingPrice: "₹ 779.58",
-    },
-    {
-      itemName: "Reebok Floatride Women's Running Shoes",
-      hsn: "E088",
-      sellingPrice: "₹ 779.58",
-    },
-    {
-      itemName: "Reebok Floatride Women's Running Shoes",
-      hsn: "E088",
-      sellingPrice: "₹ 779.58",
-    },
-  ];
+  // const productItems = [
+  //   {
+  //     itemName: "Reebok Floatride Women's Running Shoes",
+  //     hsn: "E088",
+  //     sellingPrice: "₹ 779.58",
+  //   },
+  //   {
+  //     itemName: "Reebok Floatride Women's Running Shoes",
+  //     hsn: "E088",
+  //     sellingPrice: "₹ 779.58",
+  //   },
+  //   {
+  //     itemName: "Reebok Floatride Women's Running Shoes",
+  //     hsn: "E088",
+  //     sellingPrice: "₹ 779.58",
+  //   },
+  //   {
+  //     itemName: "Reebok Floatride Women's Running Shoes",
+  //     hsn: "E088",
+  //     sellingPrice: "₹ 779.58",
+  //   },
+  //   {
+  //     itemName: "Reebok Floatride Women's Running Shoes",
+  //     hsn: "E088",
+  //     sellingPrice: "₹ 779.58",
+  //   },
+  //   {
+  //     itemName: "Reebok Floatride Women's Running Shoes",
+  //     hsn: "E088",
+  //     sellingPrice: "₹ 779.58",
+  //   },
+  //   {
+  //     itemName: "Reebok Floatride Women's Running Shoes",
+  //     hsn: "E088",
+  //     sellingPrice: "₹ 779.58",
+  //   },
+  // ];
 
-  const stockBatchItems = [
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      stockQty: "583",
-    },
-  ];
-  const stockAdjustmentItems = [
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      currentQty: "583",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      currentQty: "583",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      currentQty: "583",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      currentQty: "583",
-      stockQty: "583",
-    },
-    {
-      batchNumber: "KL12MN34",
-      size: "UK3",
-      currentQty: "583",
-      stockQty: "583",
-    },
-  ];
+  const deleteRow = (index) => {
+    const updatedData = [...formData];
+    updatedData.splice(index, 1);
+    setFormData(updatedData);
+  };
 
+  const handleInputChange = (index, field, value) => {
+    const updatedData = [...formData];
+    updatedData[index][field] = value;
+    setFormData(updatedData);
+  };
 
   return (
     <div>
@@ -521,7 +491,127 @@ const SalesForm = () => {
                           gap: 20,
                         }}
                       >
-                        <SalesViewTable formData={formData}/>
+                      <table className="table">
+
+                      <thead>
+                      <tr>
+                        <th>NO</th>
+                        <th>ITEM NAME</th>
+                        <th>Hsn Code</th>
+                        <th>QTY</th>
+                        <th>PRICE/ITEM</th>
+                        <th>DISCOUNT</th>
+                        <th>GST</th>
+                        <th>AMOUNT</th>
+                        <th>ACTION</th>
+                      </tr>
+                    </thead>
+                        <tbody>
+                          {formData.map((row, index) => (
+                            <tr key={index}>
+                            <td>{row.id}</td>
+                              <td>
+                              <FormControl style={{ minWidth: 120 }}>
+                              <InputLabel id={`item-name-label-${index}`}>Item Name</InputLabel>
+                              <Select
+                                labelId={`item-name-label-${index}`}
+                                id={`item-name-select-${index}`}
+                                value={row.itemName}
+                                onChange={(e) => handleInputChange(index, "itemName", e.target.value)}
+                              >
+                                {productItems.map((item) => (
+                                  <MenuItem key={item.itemName} value={item.itemName}>
+                                    {item.itemName}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                              </td>
+                              <td>
+                                <TextField
+                                  value={row.itemCode}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "itemCode",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <TextField
+                                  type="number"
+                                  value={row.quantity}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "quantity",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <TextField
+                                  type="number"
+                                  value={row.price}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "price",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <TextField
+                                  type="number"
+                                  value={row.discount}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "discount",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <TextField
+                                  value={row.gstTax}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "gstTax",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <TextField
+                                  type="number"
+                                  value={row.amount}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "amount",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <IconButton onClick={() => deleteRow(index)}>
+                                  <DeleteIcon />
+                                </IconButton>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                         <Button
                           style={{
                             height: "40px",
@@ -536,7 +626,7 @@ const SalesForm = () => {
                           }}
                           variant="outlined"
                           startIcon={<AddCircleOutlineOutlinedIcon />}
-                          onClick={() => setModalOpen(true)}
+                          onClick={addRow}
 
                         >
                           Add
