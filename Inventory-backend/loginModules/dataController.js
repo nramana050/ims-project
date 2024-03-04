@@ -114,7 +114,7 @@ exports.sendMpin = async (req, res) => {
 exports.updateMpin = async (req, res) => {
   try {
     const result = await mpinModel.find({});
-    console.log(result);
+    
     await result[0].updateOne({
       mpin: CryptoJS.AES.encrypt(
         req.body.mpin,

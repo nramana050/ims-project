@@ -30507,7 +30507,12 @@ table.dataTable.dtr-inline.collapsed.d-row
   right: 20px;
 }
 
-
+.payment-pop-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
 .next-button-in {
   background-color: rgba(0, 172, 154, 1);
   border-radius: 4px;

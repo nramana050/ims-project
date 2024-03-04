@@ -120,14 +120,7 @@ const SideBar = () => {
                       Products
                     </a>
                   </li>
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/inventory/warehouse")}
-                    >
-                      Warehouse
-                    </a>
-                  </li>
+                  
                 </ul>
               </li>
 
@@ -203,12 +196,12 @@ const SideBar = () => {
                 </a>
                 {/* Menu: Sub menu ul */}
               </li>
-              <li className="collapsed">
+              <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a
                   className="m-link"
                   data-bs-toggle="collapse"
                   data-bs-target="#menu-Authentication"
-                  href="#"
+                 onClick={() => navigation("/payment/transactions")}
                 >
                   <img src={credit} />
                   <span className="ms-2">Payments</span>

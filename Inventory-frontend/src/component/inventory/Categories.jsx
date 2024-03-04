@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import shoes from "../../assets/shoes.png";
 import clothes from "../../assets/clothes.png";
 import jewellery from "../../assets/bag.png";
@@ -16,6 +16,9 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddCircleOutline } from "react-icons/io5";
 import Select from "react-select";
+import ReactToPrint from "react-to-print";
+import { useReactToPrint } from "react-to-print";
+import { Print } from "react-print";
 
 const Categories = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +64,7 @@ const Categories = () => {
     measuringUnit: "US",
     openingStock: 0,
     openingStockRate: 0,
-    gstTax: 0,
+    gstTax: 5,
     reorderPoint: 0,
     category: "shoes",
     batch: [
@@ -88,7 +91,7 @@ const Categories = () => {
       measuringUnit: "US",
       openingStock: 0,
       openingStockRate: 0,
-      gstTax: 0,
+      gstTax: 5,
       reorderPoint: 0,
       category: "shoes",
       batch: [
@@ -112,6 +115,25 @@ const Categories = () => {
       label: "UK",
     },
   ];
+  const gstType = [
+    {
+      value: "5",
+      label: "5%",
+    },
+    {
+      value: "12",
+      label: "12%",
+    },
+    {
+      value: "18",
+      label: "18%",
+    },
+    {
+      value: "24",
+      label: "24%",
+    },
+  ];
+
   const categoryItem = [
     {
       value: "shoes",
@@ -147,7 +169,6 @@ const Categories = () => {
   };
 
   const removeBatch = (id) => {
-    console.log("id", id);
     const updatedBatch = batch.filter((item) => item.id !== id);
     setBatch(updatedBatch);
   };
@@ -174,7 +195,12 @@ const Categories = () => {
     setBatch(updatedItems);
   };
 
-  const handleSubmit = async (e) => {
+  console.log(formData);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+  const handleSave = async (e) => {
     try {
       const res = await axios.post(
         "http://localhost:3700/inventory",
@@ -221,6 +247,24 @@ const Categories = () => {
       openingStock: totalStocks,
     });
   }, []);
+
+  const [qrCodeImage, setQRCodeImage] = useState(null);
+
+  console.log(JSON.stringify(formData))
+  const generateQRCode = () => {
+    setQRCodeImage(
+      <QRCode
+        value={JSON.stringify(formData)}
+        style={{ width: "150px", height: "150px" }}
+      />
+    );
+  };
+
+  let componentRef = useRef();
+
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // });
 
   return (
     <div>
@@ -484,7 +528,7 @@ const Categories = () => {
                         id="itemSearch"
                         value={{ label: itemName }}
                         onChange={(selectedOption) => {
-                          console.log(selectedOption)
+                          console.log(selectedOption);
                           if (selectedOption) {
                             const { batch } = selectedOption.value;
 
@@ -605,14 +649,15 @@ const Categories = () => {
                         />
                       </div>
                       <div className="buyer-input-label">
-                        <label>GST (optional)</label>
+                        <label>GST</label>
                         <TextField
-                          className="buyer-input"
+                          id="measuringUnit"
                           margin="dense"
+                          className="buyer-input"
                           type="number"
+                          select
                           fullWidth
-                          name="gstTax"
-                          id="gstTax"
+                          defaultValue="Select GST"
                           value={formData.gstTax}
                           onChange={(e) =>
                             setFormData({
@@ -620,8 +665,17 @@ const Categories = () => {
                               gstTax: e.target.value,
                             })
                           }
-                          required
-                        />
+                          name="gstTax"
+                          SelectProps={{
+                            native: true,
+                          }}
+                        >
+                          {gstType.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </TextField>
                       </div>
                       {/*  */}
                     </div>
@@ -716,7 +770,7 @@ const Categories = () => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              openingStock: e.target.value,
+                              openingStock: totalStocks,
                             })
                           }
                           required
@@ -756,12 +810,13 @@ const Categories = () => {
                           name="openingStockRate"
                           id="openingStockRate"
                           value={formData.openingStockRate}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setFormData({
                               ...formData,
                               openingStockRate: e.target.value,
-                            })
-                          }
+                            });
+                            handleInputChange(e);
+                          }}
                           required
                         />
                       </div>
@@ -776,37 +831,64 @@ const Categories = () => {
                           name="reorderPoint"
                           id="reorderPoint"
                           value={formData.reorderPoint}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setFormData({
                               ...formData,
                               reorderPoint: e.target.value,
-                            })
-                          }
+                            });
+                            handleInputChange(e);
+                          }}
                           required
                         />
                       </div>
                     </div>
 
-                    <div className="image-input-fields">
-                      <label>Upload Image</label>
-                      <div className="drop-area">
-                        <input
-                          type="file"
-                          // ref={fileInputRef}
-                          // style={{ display: "none" }}
-                          onChange={(e) => handleFileInputChange(e)}
-                        />
+                    <div
+                      className="data-input-fields"
+                      style={{ justifyContent: "space-between" }}
+                    >
+                      <div className="image-input-fields">
+                        <label>Upload Image</label>
+                        <div className="drop-area">
+                          <input
+                            type="file"
+                            // ref={fileInputRef}
+                            // style={{ display: "none" }}
+                            onChange={(e) => handleFileInputChange(e)}
+                          />
+                        </div>
+                      </div>
+                      <div style={{ display: "flex" }}>
+                        <button
+                          className={
+                            qrCodeImage === null ? "qrBlock" : "qrNone"
+                          }
+                          onClick={generateQRCode}
+                        >
+                          Generate QR Code
+                        </button>
+
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <ReactToPrint
+                            trigger={() => <Button>Print this out!</Button>}
+                            content={() => componentRef}
+                          />
+                          {/* Your content */}
+                          <div ref={(el) => (componentRef = el)}>
+                            <p>{qrCodeImage}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-
-                    <div className="data-input-fields"></div>
                     <div className="data-buttons">
                       <Button
                         id="input-btn-submit"
                         className="submit"
                         type="submit"
                         variant="outlined"
-                        //  onClick={handleSave}
+                        onClick={handleSave}
                         //   disabled={buttonCheck?false:true}
                       >
                         Submit

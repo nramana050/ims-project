@@ -71,40 +71,7 @@ const SalesOrder = () => {
                             <button className="add-button-in">Add <MdAdd style={{marginTop:'-1px'}}/></button>
                           </div>
                         </div>
-                        {/* <div
-                          className="input-group "
-                          style={{ marginLeft: "30rem" }}
-                        >
-                          <input
-                            type="search"
-                            className="rounded search-bar"
-                            placeholder="Search"
-                            aria-label="Search"
-                            aria-describedby="search-addon"
-                          />
-                          <button
-                            type="button"
-                            className="btn search-btn"
-                            data-mdb-ripple-init=""
-                          >
-                            Search
-                          </button>
-                        </div> */}
-
-                        {/* <div className="filter">
-                          <HiOutlineFilter
-                            size={30}
-                            color="rgba(0, 172, 154, 1)"
-                          />
-                        </div> */}
-                        {/* <button
-                          type="button"
-                          className="btn search-btn"
-                          data-mdb-ripple-init=""
-                          onClick={handleAddClick}
-                        >
-                          Add
-                        </button> */}
+                      
                       </div>
                       <table className="table table-bordered ">
                         <div id="table-responsive" className="table-responsive">

@@ -22,6 +22,15 @@
   width: 100%;
   border-radius: 3px;
 }
+
+#status-green {
+  color: green;
+}
+
+#status-red {
+  color: red;
+}
+
 .button-status-red {
   background-color: red;
   color: #ffffff;
@@ -849,4 +858,23 @@
   border: none;
   border-radius: 5px;
   font-size: 14px;
+}
+
+
+.qrBlock {
+  display: block;
+  background-color: #00ac9a;
+  color: white;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.qrNone {
+  display: none;
+}
+
+#salesItem .css-13cymwt-control,#salesItem .css-t3ipsp-control {
+  height: 55px;
+  width: 400px;
 }
