@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 const Inventory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [getShoesData, setGetShoesData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigation = useNavigate();
 
@@ -40,9 +41,24 @@ const Inventory = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleSearch = () => {
+    console.log("Search query:", searchQuery);
+    const filteredData = getShoesData.filter((item) =>
+      item.itemName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    console.log("Filtered data:", filteredData);
+    setGetShoesData(filteredData);
+  };
+
   useEffect(() => {
     getInventory();
   }, []);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      getInventory();
+    }
+  });
 
   const [currentShoesPage, setcurrentShoesPage] = useState(1);
   const itemsPerShoesPage = 5;
@@ -62,6 +78,10 @@ const Inventory = () => {
 
   const prevShoesPage = () => {
     setcurrentShoesPage(currentShoesPage - 1);
+  };
+
+  const handleInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -102,10 +122,15 @@ const Inventory = () => {
                     <input
                       type="search"
                       className="rounded search-bar"
-                      placeholder="Search"
-                      aria-label="Search"
+                      placeholder="Search by item name"
                       aria-describedby="search-addon"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        console.log("Input Value:", e.target.value);
+                        setSearchQuery(e.target.value);
+                      }}
                     />
+
                     <button
                       type="button"
                       className="btn search-btn"
@@ -113,6 +138,7 @@ const Inventory = () => {
                         backgroundColor: "rgba(0, 172, 154, 1)",
                         color: "white",
                       }}
+                      onClick={handleSearch}
                     >
                       Search
                     </button>

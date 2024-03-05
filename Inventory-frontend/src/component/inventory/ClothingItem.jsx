@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 const ClothingItem = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [getClothingData, setGetClothingData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigation = useNavigate();
 
@@ -65,6 +66,21 @@ const ClothingItem = () => {
     getClothingItem();
   }, []);
 
+  const handleSearch = () => {
+    console.log("Search query:", searchQuery);
+    const filteredData = getClothingData.filter((item) =>
+      item.itemName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    console.log("Filtered data:", filteredData);
+    setGetClothingData(filteredData);
+  };
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      getClothingItem();
+    }
+  });
+
   return (
     <div>
       {isLoading ? (
@@ -103,10 +119,14 @@ const ClothingItem = () => {
                     <input
                       type="search"
                       className="rounded search-bar"
-                      placeholder="Search"
-                      aria-label="Search"
+                      placeholder="Search by item name"
                       aria-describedby="search-addon"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                      }}
                     />
+
                     <button
                       type="button"
                       className="btn search-btn"
@@ -114,6 +134,7 @@ const ClothingItem = () => {
                         backgroundColor: "rgba(0, 172, 154, 1)",
                         color: "white",
                       }}
+                      onClick={handleSearch}
                     >
                       Search
                     </button>

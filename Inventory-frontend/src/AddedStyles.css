@@ -22,6 +22,15 @@
   width: 100%;
   border-radius: 3px;
 }
+
+#status-green {
+  color: green;
+}
+
+#status-red {
+  color: red;
+}
+
 .button-status-red {
   background-color: red;
   color: #ffffff;
@@ -83,6 +92,27 @@
   width: 80px;
 }
 
+#item {
+  margin: 30px 10px;
+  width: calc(80% / 3);
+  border: 2px dashed #d2d2d2;
+  border-radius: 8px;
+  height: 40vh;
+  background-color: #f7f7f7;
+}
+
+#itemSearch {
+  padding: 0;
+  width: 50%;
+}
+
+#itemSearch .css-13cymwt-control {
+  width: 100%;
+}
+#itemSearch .css-t3ipsp-control {
+  width: 100%;
+}
+
 .buyer-form-cross {
   position: absolute;
   top: 10px;
@@ -118,7 +148,7 @@
 #openingStockRate,
 #gstTax,
 #reorderPoint {
-  padding: 8px;
+  /* padding: 8px; */
   font-size: 14px;
   display: flex;
   justify-content: center;
@@ -129,6 +159,29 @@
   border: 2px dashed #ccc;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+.filters {
+  border: 3px solid #d2d2d2;
+  border-radius: 6px;
+  padding: 0.5rem;
+  height: 38px;
+}
+
+#btn-items-2 {
+  width: 224px;
+  height: 40px;
+  border: none;
+  border-radius: 6px;
+  border: 3px solid #d2d2d2;
+  padding: 0.2rem;
+  color: #6f6f6f;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
 }
 
 .image-input-fields .image-list {
@@ -566,12 +619,24 @@
   border-radius: 5px;
 }
 
+.buyer-input-labels{
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
 .buyer-input-label {
   width: 50%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
+}
+
+.page-head{
+  display: "flex";
+  justify-content: space-between;
 }
 
 .buyer-input-label label {
@@ -599,6 +664,37 @@
   gap: 10px;
   margin-top: 20px;
 }
+
+.data-buttons-2{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top:-35px;
+}
+
+#input-btn-gst{
+  width: 180.09px;
+  height: 44.09px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #00ac9a;
+  display:flex;
+  gap:5px;
+}
+
+#input-btn-gst2{
+  width: 180.09px;
+  height: 44.09px;
+  border:3px solid #BFBFBF;
+  border-radius: 5px;
+  color: #666666;;
+  display:flex;
+  gap:5px;
+  
+}
+
+
+
 #input-btn-submit {
   width: 136.09px;
   height: 42.09px;
@@ -788,3 +884,20 @@
 }
 
 
+.qrBlock {
+  display: block;
+  background-color: #00ac9a;
+  color: white;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.qrNone {
+  display: none;
+}
+
+#salesItem .css-13cymwt-control,#salesItem .css-t3ipsp-control {
+  height: 55px;
+  width: 400px;
+}

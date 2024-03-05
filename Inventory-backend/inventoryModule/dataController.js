@@ -2,40 +2,24 @@ const inventoryModel = require("./schema");
 
 exports.createInventory = async (req, res, next) => {
   try {
-    const {
-      itemName,
-      itemCode,
-      itemDescription,
-      sizes,
-      salesPrice,
-      purchasePrice,
-      measuringUnit,
-      openingStock,
-      openingStockRate,
-      gstTax,
-      reorderPoint,
-      category,
-    } = req.body;
+    const newItemData = req.body;
+    const newBatchesData = newItemData.batch; // Assuming batch data is in req.body.batch
+    delete newItemData.batch; // Remove batch data from item data
 
-    await inventoryModel.create({
-      itemName: itemName,
-      itemCode: itemCode,
-      itemDescription: itemDescription,
-      sizes: sizes,
-      salesPrice: salesPrice,
-      purchasePrice: purchasePrice,
-      measuringUnit: measuringUnit,
-      openingStock: openingStock,
-      openingStockRate: openingStockRate,
-      gstTax: gstTax,
-      reorderPoint: reorderPoint,
-      file: req.file.filename,
-      category: category,
-    });
-    res.json({ message: "success" });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    const newItem = new inventoryModel(newItemData);
+    if (req.file) {
+      newItem.file = req.file.filename;
+    }
+    await newItem.save();
+ 
+    // Save batches data
+    const newItemId = newItem._id;
+    await inventoryModel.findByIdAndUpdate(newItemId, { $push: { batch: newBatchesData } }, { new: true });
+
+    res.status(201).json({ message: "Item created successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 

@@ -4,13 +4,19 @@ const mongoose = require("mongoose");
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => {
-    console.log("db connected");
+    console.log("inventory db connected");
   })
   .catch((err) => {
     console.log(err);
   });
 
-let inventorySchema = new mongoose.Schema({
+const BatchSchema = new mongoose.Schema({
+  batchNumber: String,
+  size: String,
+  stockQty: Number,
+});
+
+const inventorySchema = new mongoose.Schema({
   itemName: String,
   itemCode: String,
   itemDescription: String,
@@ -24,6 +30,7 @@ let inventorySchema = new mongoose.Schema({
   reorderPoint: Number,
   file: String,
   category: String,
+  batch: [BatchSchema],
 });
 
 const inventoryModel = mongoose.model("inventory", inventorySchema);

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 const AccessoriesItem = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [getAccessoriesData, setGetAccessoriesData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigation = useNavigate();
 
@@ -68,6 +69,20 @@ const AccessoriesItem = () => {
     getAccessoriesItem();
   }, []);
 
+  const handleSearch = () => {
+    const filteredData = getAccessoriesData.filter((item) =>
+      item.itemName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    setGetAccessoriesData(filteredData);
+  };
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      getAccessoriesItem();
+    }
+  });
+
   return (
     <div>
       {isLoading ? (
@@ -106,9 +121,12 @@ const AccessoriesItem = () => {
                     <input
                       type="search"
                       className="rounded search-bar"
-                      placeholder="Search"
-                      aria-label="Search"
+                      placeholder="Search by item name"
                       aria-describedby="search-addon"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                      }}
                     />
                     <button
                       type="button"
@@ -117,6 +135,7 @@ const AccessoriesItem = () => {
                         backgroundColor: "rgba(0, 172, 154, 1)",
                         color: "white",
                       }}
+                      onClick={handleSearch}
                     >
                       Search
                     </button>

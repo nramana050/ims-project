@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Bars } from "react-loader-spinner";
-
 import NavBar from "../NavBar";
 import SideBar from "../SideBar";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import select from "react-select";
 
 const ItemsList = () => {
   const [isLoading, setIsLoading] = useState(true);
