@@ -11,7 +11,6 @@ import ClothingItem from "../inventory/ClothingItem";
 import AccessoriesItem from "../inventory/AccessoriesItem";
 import Categories from "../inventory/Categories";
 import ItemsList from "../inventory/ItemsList";
-import Warehouse from "../inventory/Warehouse";
 import CreateCompany from "../authentication/CreateCompany";
 import QuatationOrder from "../purchase/QuatationOrder";
 import Quotation from "../purchase/Quotation";
@@ -48,7 +47,6 @@ const MainRouting = () => {
       <Route path="/inventory/shoes" element={loggedIn ? <ShoesItem /> : <Navigate to="/" />} />
       <Route path="/inventory/clothing" element={loggedIn ? <ClothingItem /> : <Navigate to="/" />} />
       <Route path="/inventory/accessories" element={loggedIn ? <AccessoriesItem /> : <Navigate to="/" />} />
-      <Route path="/inventory/warehouse" element={loggedIn ? <Warehouse /> : <Navigate to="/" />} />
       <Route path="/quotation/quotation-order" element={loggedIn ? <QuatationOrder /> : <Navigate to="/" />} />
       <Route path="/quotation" element={loggedIn ? <Quotation /> : <Navigate to="/" />} />
       <Route path="/sales/sales-order" element={loggedIn ? <SalesForm /> : <Navigate to="/" />} />

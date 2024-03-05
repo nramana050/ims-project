@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import dashboard from "../../src/assets/icon/dashboard 1.png";
 import inventory from "../assets/icon/inventory (2) 1.png";
 import cart from "../assets/icon/cart.png";
@@ -8,10 +8,32 @@ import credit from "../assets/icon/credit-card.png";
 import report from "../assets/icon/report (3) 1.png";
 import setting from "../assets/icon/setting (1).png";
 import { useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 const SideBar = () => {
+  const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [quotationOpen, setQuotationOpen] = useState(false);
+  const [salesOpen, setSalesOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+
   const navigation = useNavigate();
+
+  const toggleInventory = () => {
+    setInventoryOpen(!inventoryOpen);
+  };
+
+  const toggleQuotation = () => {
+    setQuotationOpen(!quotationOpen);
+  };
+
+  const toggleSales = () => {
+    setSalesOpen(!salesOpen);
+  };
+
+  const toggleAccount = () => {
+    setAccountOpen(!accountOpen);
+  };
+
   return (
     <div>
       <div className="sidebar p-2 py-md-3 @@cardClass">
@@ -89,100 +111,94 @@ const SideBar = () => {
               <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a
                   className="m-link active"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#my_dashboard"
                   onClick={() => navigation("/dashboard")}
                 >
                   <img src={dashboard} />
                   <span className="ms-2">My Dashboard</span>
                 </a>
-                {/* Menu: Sub menu ul */}
               </li>
               <li className="collapsed" style={{ cursor: "pointer" }}>
-                <a
-                  className="m-link"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#menu_dashboard"
-                >
+                <a className="m-link" onClick={toggleInventory}>
                   <img src={inventory} />
                   <span className="ms-2">Inventory</span>
                   <span className="ms-auto text-end">
-                    <IoIosArrowDown />
+                    {inventoryOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
                   </span>
                 </a>
                 {/* Menu: Sub menu ul */}
-                <ul className="sub-menu collapse show" id="my_dashboard">
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/inventory/categories")}
-                    >
-                      Products
-                    </a>
-                  </li>
-                  
-                </ul>
+                {inventoryOpen && (
+                  <ul className="sub-menu collapse show" id="inventory">
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/inventory/categories")}
+                      >
+                        Products
+                      </a>
+                    </li>
+                  </ul>
+                )}
               </li>
 
               <li className="collapsed" style={{ cursor: "pointer" }}>
-                <a
-                  className="m-link"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#menu-Applications"
-                  href="#"
-                >
+                <a className="m-link" onClick={toggleQuotation}>
                   <img src={cart} />
                   <span className="ms-2">Quotation</span>
+                  <span className="ms-auto text-end">
+                    {quotationOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                  </span>
                 </a>
                 {/* Menu: Sub menu ul */}
-                <ul className="sub-menu collapse show" id="my_dashboard">
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/quotation/quotation-order")}
-                    >
-                      Quotation Order
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/quotation/list")}
-                    >
-                     Invoice
-                    </a>
-                  </li>
-                </ul>
+                {quotationOpen && (
+                  <ul className="sub-menu collapse show" id="quotation">
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/quotation/quotation-order")}
+                      >
+                        Quotation Order
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/quotation/list")}
+                      >
+                        Invoice
+                      </a>
+                    </li>
+                  </ul>
+                )}
               </li>
               <li className="collapsed" style={{ cursor: "pointer" }}>
-                <a
-                  className="m-link"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#menu_pages"
-                  href="#"
-                >
+                <a className="m-link" onClick={toggleSales}>
                   <img src={discount} />
                   <span className="ms-2">Sales</span>
+                  <span className="ms-auto text-end">
+                    {salesOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                  </span>
                 </a>
                 {/* Menu: Sub menu ul */}
-                <ul className="sub-menu collapse show" id="my_dashboard">
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/sales/sales-order")}
-                    >
-                      Sales Order
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/sales/list")}
-                    >
-                     Invoice
-                    </a>
-                  </li>
-                </ul>
+                {salesOpen && (
+                  <ul className="sub-menu collapse show" id="sales">
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/sales/sales-order")}
+                      >
+                        Sales Order
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/sales/list")}
+                      >
+                        Invoice
+                      </a>
+                    </li>
+                  </ul>
+                )}
               </li>
               <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a
@@ -220,23 +236,17 @@ const SideBar = () => {
                 </a>
                 {/* Menu: Sub menu ul */}
               </li>
-
-              <li className="collapsed">
-                <a
-                  className="m-link"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#menu-level0"
-                  href="#"
-                >
-                  <img src={setting} />
-                  <span className="ms-2">Account Solutions</span>
+              <li className="collapsed" style={{ cursor: "pointer" }}>
+                <a className="m-link" onClick={toggleAccount}>
+                  <img src={parcel} />
+                  <span className="ms-2">Account</span>
+                  <span className="ms-auto text-end">
+                    {accountOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                  </span>
                 </a>
                 {/* Menu: Sub menu ul */}
-                <ul
-                  className="sub-menu collapse show"
-                  id="my_dashboard"
-                  style={{ cursor: "pointer" }}
-                >
+                {accountOpen && (
+                  <ul className="sub-menu collapse show" id="account">
                   <li>
                     <a
                       className="ms-link"
@@ -253,8 +263,10 @@ const SideBar = () => {
                       Expense
                     </a>
                   </li>
-                </ul>
+                  </ul>
+                )}
               </li>
+              {/* Other menu items */}
             </ul>
           </div>
           {/* sidebar: footer link */}
