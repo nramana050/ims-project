@@ -132,22 +132,22 @@ const SideBar = () => {
                   href="#"
                 >
                   <img src={cart} />
-                  <span className="ms-2">Purchase</span>
+                  <span className="ms-2">Quotation</span>
                 </a>
                 {/* Menu: Sub menu ul */}
                 <ul className="sub-menu collapse show" id="my_dashboard">
                   <li>
                     <a
                       className="ms-link"
-                      onClick={() => navigation("/purchase/purchase-order")}
+                      onClick={() => navigation("/quotation/quotation-order")}
                     >
-                      Purchase Order
+                      Quotation Order
                     </a>
                   </li>
                   <li>
                     <a
                       className="ms-link"
-                      onClick={() => navigation("/purchase/invoices")}
+                      onClick={() => navigation("/quotation/list")}
                     >
                      Invoice
                     </a>
@@ -177,7 +177,7 @@ const SideBar = () => {
                   <li>
                     <a
                       className="ms-link"
-                      onClick={() => navigation("/sales/invoices")}
+                      onClick={() => navigation("/sales/list")}
                     >
                      Invoice
                     </a>
@@ -232,6 +232,28 @@ const SideBar = () => {
                   <span className="ms-2">Account Solutions</span>
                 </a>
                 {/* Menu: Sub menu ul */}
+                <ul
+                  className="sub-menu collapse show"
+                  id="my_dashboard"
+                  style={{ cursor: "pointer" }}
+                >
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/accounts/cash-on-hand")}
+                    >
+                      Cash On Hand
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="ms-link"
+                      onClick={() => navigation("/accounts/expense")}
+                    >
+                      Expense
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>

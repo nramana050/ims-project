@@ -2,16 +2,9 @@ import React, { useEffect, useState } from "react";
 import SideBar from "../SideBar";
 import NavBar from "../NavBar";
 import { Bars } from "react-loader-spinner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../Styles.css";
-import {
-  Button,
-  TextField,
-  IconButton,
-  FormControl,
-  InputLabel,
-  MenuItem,
-} from "@mui/material";
+import { Button, TextField, IconButton } from "@mui/material";
 // import SalesViewTable from "./SalesViewTable";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { IoMdCloseCircleOutline } from "react-icons/io";
@@ -21,9 +14,20 @@ import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import axios from "axios";
 import Select from "react-select";
 
-const SalesForm = () => {
+const PurchaseOrder = () => {
+  const navigation = useNavigate();
+
   const [product, setProduct] = useState();
+  const [data, setData] = useState("");
+  const [dataObject, setDataObject] = useState(null);
+
   const [formData, setFormData] = useState({
+    customerName: "",
+    mobile: "",
+    quotationOrderNo: "",
+    quotationOrderDate: "",
+    billingAddress:"",
+    gstNumber:"",
     items: [
       {
         id: "",
@@ -59,8 +63,11 @@ const SalesForm = () => {
     };
     setItem([...item, newItem]);
     setID(newItem.id);
+    setDataObject(null);
+    setData("");
   };
 
+  console.log("data", data);
   const handleItemChange = (e, id) => {
     const updateData = item.map((elem) => {
       return elem.id === id
@@ -80,10 +87,16 @@ const SalesForm = () => {
       return total + parseInt(elem.discount || 0);
     }, 0);
     const calcTotalSGST = item.reduce((total, elem) => {
-      return total + parseInt(elem.sgst || 0);
+      let price = parseInt(elem.price) || 0;
+      let qty = parseInt(elem.quantity) || 0;
+      let discount = parseInt(elem.discount) || 0;
+      return total + (price * qty - discount) * (parseInt(elem.sgst) / 100);
     }, 0);
     const calcTotalCGST = item.reduce((total, elem) => {
-      return total + parseInt(elem.cgst || 0);
+      let price = parseInt(elem.price) || 0;
+      let qty = parseInt(elem.quantity) || 0;
+      let discount = parseInt(elem.discount) || 0;
+      return total + (price * qty - discount) * (parseInt(elem.cgst) / 100);
     }, 0);
     setTotalGST(calcTotalSGST + calcTotalCGST);
     setTotalAmt(calcTotalAmount);
@@ -104,28 +117,15 @@ const SalesForm = () => {
   const [itemName, setItemName] = useState("");
   const [size, setSize] = useState([]);
 
-  const [data, setData] = useState("No result");
+  const [disabledInput, setDisabledInput] = useState("No Input");
 
-  console.log(data)
-  // const dataObject =
-  //   data === "No result"
-  //     ? {}
-  //     : JSON.parse(
-  //         '{"' +
-  //           data
-  //             .replace(/"/g, '\\"')
-  //             .replace(/:/g, '":"')
-  //             .replace(/,/g, '","')
-  //             .replace(/}/g, '"}')
-  //             .replace(/{/g, '{"') +
-  //           '"}'
-  //       );
-  // console.log("dataaa", dataObject);
   const [salesData, setSalesData] = useState({
     customerName: "",
     mobile: "",
-    salesOrderNo: "",
-    salesOrderDate: "",
+    quotationOrderNo: "",
+    quotationOrderDate: "",
+    billingAddress:"",
+    gstNumber:"",
     formData: [
       {
         id: "",
@@ -143,8 +143,8 @@ const SalesForm = () => {
     totalAmount: 0,
   });
 
-  const [modalOpen, setModalOpen] = useState(false);
   const [barCodeOpen, setBarCodeOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -168,13 +168,6 @@ const SalesForm = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const [productItems, setProductItems] = useState([
-    // Sample data, replace it with your actual product items
-    { itemName: "Product 1", hsn: "HSN001", sellingPrice: "₹ 100" },
-    { itemName: "Product 2", hsn: "HSN002", sellingPrice: "₹ 150" },
-    // ... (more items)
-  ]);
-
   const deleteRow = (id) => {
     const updatedData = item.filter((elem) => {
       return elem.id !== id;
@@ -182,51 +175,11 @@ const SalesForm = () => {
     setItem(updatedData);
   };
 
-  const handleInputChange = (index, field, value) => {
-    const updatedData = [...formData];
-    updatedData[index][field] = value;
-    setFormData(updatedData);
-  };
-
-  const [totalAmount, setTotalAmount] = useState(0);
-  const handleListChange = (index, e) => {
-    const { name, value } = e.target;
-    setSalesData((prevData) => {
-      const updatedEntities = [...prevData.formData];
-      updatedEntities[index] = {
-        ...updatedEntities[index],
-        [name]: value,
-        amount: calculateTotalAmount(index),
-      };
-
-      return {
-        ...prevData,
-        formData: updatedEntities,
-      };
-    });
-  };
-
-  // useEffect(() => { const total = salesData.formData.reduce((acc, row) => acc + Number(row.amount), 0);
-  //   setTotalAmount(total);})
   const handleSaleInput = (e) => {
-    setSalesData({
-      ...salesData,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
-      totalAmount: totalAmount,
     });
-  };
-
-  const calculateTotalAmount = (index) => {
-    const total =
-      salesData.formData[index]?.price -
-      salesData.formData[index]?.price *
-        (salesData.formData[index]?.discount / 100);
-    const afterTax =
-      total +
-      ((total * salesData.formData[index]?.cgst) / 100 +
-        (total * salesData.formData[index]?.sgst) / 100);
-
-    return afterTax.toFixed(2);
   };
 
   const [indexValue, setIndexValue] = useState(0);
@@ -236,9 +189,27 @@ const SalesForm = () => {
       return elem.id === ID
         ? {
             ...elem,
+            itemName: dataObject ? dataObject.itemName : "",
+            hsnCode: dataObject ? dataObject.itemCode : "",
+            price: dataObject ? dataObject.salesPrice : "",
+            cgst: dataObject ? dataObject.gstTax / 2 : "",
+            sgst: dataObject ? dataObject.gstTax / 2 : "",
+          }
+        : elem;
+    });
+    setItem(data);
+  }, [dataObject]);
+
+  useEffect(() => {
+    const data = item.map((elem) => {
+      return elem.id === ID
+        ? {
+            ...elem,
             itemName: product ? product.value.itemName : "",
             hsnCode: product ? product.value.itemCode : "",
             price: product ? product.value.salesPrice : "",
+            cgst: product ? product.value.gstTax / 2 : "",
+            sgst: product ? product.value.gstTax / 2 : "",
           }
         : elem;
     });
@@ -247,10 +218,11 @@ const SalesForm = () => {
 
   useEffect(() => {
     const data = item.map((elem) => {
+      let price = parseInt(elem.price) || 0;
       let qty = parseInt(elem.quantity) || 0;
       let discount = parseInt(elem.discount) || 0;
-      let sgst = parseInt(elem.sgst) || 0;
-      let cgst = parseInt(elem.cgst) || 0;
+      let sgst = (price * qty - discount) * (parseInt(elem.sgst) / 100) || 0;
+      let cgst = (price * qty - discount) * (parseInt(elem.cgst) / 100) || 0;
       let calculatedAmount = elem.price * qty + sgst + cgst - discount;
       if (calculatedAmount !== elem.amount) {
         return {
@@ -265,7 +237,7 @@ const SalesForm = () => {
     }
   }, [item]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setFormData({
       ...formData,
       items: item,
@@ -273,8 +245,28 @@ const SalesForm = () => {
       totalDiscount: totalDisc,
       totalAmount: totalAmt,
     });
+    setPaymentOpen(true);
   };
 
+  const paymentHandler =  async (e) => {
+    await axios
+    .post("http://localhost:3800/quotation", formData)
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+
+    navigation("/quotation", { state: { formData } });
+  };
+
+  useEffect(() => {
+    if (data !== "") {
+      const jsonObject = JSON.parse(data);
+      setDataObject(jsonObject);
+      setSize(jsonObject.batch);
+      setBarCodeOpen(false);
+      setData("");
+    }
+  }, [data]);
+  console.log(formData);
   const handleNext = () => {
     setBarCodeOpen(false);
     const newItem = {
@@ -286,14 +278,22 @@ const SalesForm = () => {
       discount: 0,
       size: 0,
       amount: 0,
-      sgst: 0,
-      cgst: 0,
+      sgst: dataObject.sgst / 2,
+      cgst: dataObject.cgst / 2,
     };
     setItem([...item, newItem]);
     setID(newItem.id);
+    setSize(dataObject.batch);
   };
 
-  console.log("dataaaaaaaa", dataObject);
+  const closeCam = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: true,
+    });
+    // the rest of the cleanup code
+    window.location.reload();
+  };
 
   return (
     <div>
@@ -318,68 +318,6 @@ const SalesForm = () => {
         </div>
       ) : (
         <div>
-          {modalOpen ? (
-            <div className="modal-ka-baap">
-              <div className="add-item-modal-in">
-                <div className="add-item-modal-top d-flex align-items-center">
-                  <div className="fw-bold fs-5">ADD ITEMS</div>
-                  <div
-                    className="inputs d-flex align-items-center mx-3"
-                    style={{ paddingLeft: "70px" }}
-                  >
-                    <input
-                      className="search-input-in"
-                      type="text"
-                      placeholder="Enter your search keyword"
-                      style={{ width: "250px" }}
-                    />
-                    <button className="search-button-in">Search</button>
-                  </div>
-                  <IoMdCloseCircleOutline
-                    className="fs-5 close-modal-in"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setModalOpen(false)}
-                  />
-                </div>
-                <hr />
-                <div className="add-item-modal-mid">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>ITEMS NAME</th>
-                        <th>HSN CODE</th>
-                        <th>SELLING PRICE</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {productItems.map((item) => (
-                        <tr>
-                          <td>
-                            <input type="checkbox" />
-                          </td>
-                          <td>{item.itemName}</td>
-                          <td>{item.hsn}</td>
-                          <td>{item.sellingPrice}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="add-item-modal-bottom">
-                  <div className="two-buttons-in">
-                    <button className="next-button-in">Next</button>
-                    <button
-                      className="cancel-button-in"
-                      onClick={() => setModalOpen(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
           {barCodeOpen ? (
             <div className="modal-ka-baap">
               <div className="add-item-modal-in" style={{ width: "500px" }}>
@@ -396,12 +334,8 @@ const SalesForm = () => {
                   <div>
                     <QrReader
                       onResult={(result, error) => {
-                        if (!!result) {
+                        if (result) {
                           setData(result?.text);
-                        }
-
-                        if (!!error) {
-                          console.info(error);
                         }
                       }}
                       style={{ width: "100%", height: "50%" }}
@@ -416,7 +350,52 @@ const SalesForm = () => {
                     </button>
                     <button
                       className="cancel-button-in"
-                      onClick={() => setBarCodeOpen(false)}
+                      onClick={() => {
+                        setBarCodeOpen(false);
+                        closeCam();
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {paymentOpen ? (
+            <div className="modal-ka-baap">
+              <div
+                className="add-item-modal-in"
+                style={{ width: "400px", height: "150px", textAlign: "center" }}
+              >
+                <h3>Print Your Quotation</h3>
+                <div className="add-item-modal-bottom" style={{ right: "50%" }}>
+                  <div className="payment-pop-buttons">
+                    <button
+                      className="next-button-in"
+                      style={{
+                        padding: "10px 30px",
+                        height: "40px",
+                        width: "120px",
+                        cursor: "pointer",
+                      }}
+                      onClick={(e) => {
+                        paymentHandler(e);
+                      }}
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="cancel-button-in"
+                      onClick={() => setPaymentOpen(false)}
+                      style={{
+                        padding: "10px 30px",
+                        height: "40px",
+                        width: "120px",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
                     >
                       Cancel
                     </button>
@@ -454,9 +433,9 @@ const SalesForm = () => {
                         >
                           Home{" "}
                         </Link>{" "}
-                        / Sales /
+                        / Quotation /
                       </span>
-                      <span style={{ color: "black" }}> Sales Order</span>
+                      <span style={{ color: "black" }}> Quotation Order</span>
                     </div>
                   </div>
 
@@ -464,7 +443,7 @@ const SalesForm = () => {
                     <div className="overlay" style={{ background: "white" }}>
                       <div style={{ padding: "20px 40px" }}>
                         <span style={{ color: "black", fontSize: "20px" }}>
-                          New Sales Order
+                          New Quotation Order
                         </span>
                       </div>
                       <form className="form-input-fields">
@@ -479,7 +458,7 @@ const SalesForm = () => {
                               id="exampleInputEmail1"
                               aria-describedby="emailHelp"
                               name="customerName"
-                              value={salesData.customerName}
+                              value={formData.customerName}
                               onChange={(e) => handleSaleInput(e)}
                             />
                           </div>
@@ -492,7 +471,7 @@ const SalesForm = () => {
                               class="form-control"
                               id="exampleInputPassword1"
                               name="mobile"
-                              value={salesData.mobile}
+                              value={formData.mobile}
                               onChange={(e) => handleSaleInput(e)}
                             />
                           </div>
@@ -500,28 +479,55 @@ const SalesForm = () => {
                         <div className="data-input-fields">
                           <div class="mb-3 w-50">
                             <label for="salesOrderNo" class="form-label">
-                              Sales Order No.
+                              Quotation Order No.
                             </label>
                             <input
                               type="number"
                               class="form-control"
                               id="exampleInputEmail1"
-                              aria-describedby="emailHelp"
-                              name="salesOrderNo"
-                              value={salesData.salesOrderNo}
+                              name="quotationOrderNo"
+                              value={formData.quotationOrderNo}
                               onChange={(e) => handleSaleInput(e)}
                             />
                           </div>
                           <div class="mb-3 w-50">
                             <label for="salesOrderDate" class="form-label">
-                              Sales Order Date
+                            Quotation Order Date
                             </label>
                             <input
                               type="date"
                               class="form-control"
                               id="exampleInputPassword1"
-                              name="salesOrderDate"
-                              value={salesData.salesOrderDate}
+                              name="quotationOrderDate"
+                              value={formData.quotationOrderDate}
+                              onChange={(e) => handleSaleInput(e)}
+                            />
+                          </div>
+                        </div>
+                        <div className="data-input-fields">
+                          <div class="mb-3 w-50">
+                            <label for="salesOrderNo" class="form-label">
+                              GST Number
+                            </label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="exampleInputEmail1"
+                              name="gstNumber"
+                              value={formData.gstNumber}
+                              onChange={(e) => handleSaleInput(e)}
+                            />
+                          </div>
+                          <div class="mb-3 w-50">
+                            <label for="salesOrderDate" class="form-label">
+                            Billing Address
+                            </label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="exampleInputPassword1"
+                              name="billingAddress"
+                              value={formData.billingAddress}
                               onChange={(e) => handleSaleInput(e)}
                             />
                           </div>
@@ -541,6 +547,7 @@ const SalesForm = () => {
                           <Select
                             margin="dense"
                             fullWidth
+                            isDisabled={item.length > 0 ? false : true}
                             name="itemName"
                             id="salesItem"
                             value={{ label: itemName }}
@@ -567,7 +574,12 @@ const SalesForm = () => {
                                 });
 
                                 setItemName(selectedOption.value.itemName);
-                                setSize(selectedOption.value.batch);
+                                setSize(
+                                  selectedOption.value.batch[0].size === "NA"
+                                    ? [...size]
+                                    : selectedOption.value.batch
+                                );
+                                setDisabledInput(selectedOption.value.category);
                               }
                             }}
                             options={options}
@@ -631,15 +643,7 @@ const SalesForm = () => {
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // value={salesData.formData[index]?.itemName}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "itemName",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
+                                   
                                   />
                                 </td>
                                 <td>
@@ -650,15 +654,7 @@ const SalesForm = () => {
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // value={salesData.formData[index]?.hsnCode}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "hsnCode",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
+                                  
                                   />
                                 </td>
                                 <td>
@@ -670,23 +666,13 @@ const SalesForm = () => {
                                     type="number"
                                     select
                                     fullWidth
+                                    // disabled={disabledInput === "accessories"?true:false}
                                     defaultValue="size"
                                     value={row.size}
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // value={salesData.formData[index]?.size}
-                                    // onChange={(e) => {
-                                    //   {
-                                    //     handleInputChange(
-                                    //       index,
-                                    //       "size",
-                                    //       e.target.value
-                                    //     );
-                                    //     handleListChange(index, e);
-                                    //     setIndexValue(index);
-                                    //   }
-                                    // }}
+                                 
                                     name="size"
                                     SelectProps={{
                                       native: true,
@@ -710,16 +696,7 @@ const SalesForm = () => {
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // value={salesData.formData[index]?.quantity}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "quantity",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    //   setIndexValue(index);
-                                    // }}
+                             
                                   />
                                 </td>
 
@@ -731,35 +708,18 @@ const SalesForm = () => {
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // value={salesData.formData[index]?.price}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "price",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
+                                 
                                   />
                                 </td>
                                 <td>
                                   <TextField
                                     type="number"
-                                    // value={salesData.formData[index]?.discount}
                                     name="discount"
                                     value={row.discount}
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "discount",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    //   setIndexValue(index);
-                                    // }}
+                                  
                                   />
                                 </td>
                                 <td>
@@ -770,15 +730,7 @@ const SalesForm = () => {
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // value={salesData.formData[index]?.sgst}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "sgst",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
+                                  
                                   />
                                 </td>
                                 <td>
@@ -789,34 +741,18 @@ const SalesForm = () => {
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
-                                    // value={salesData.formData[index]?.cgst}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "cgst",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
+                                 
                                   />
                                 </td>
                                 <td>
                                   <TextField
                                     type="number"
-                                    // value={calculateTotalAmount(index)}
                                     value={row.amount}
                                     onChange={(e) =>
                                       handleItemChange(e, row.id)
                                     }
                                     name="amount"
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "amount",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
+                                  
                                   />
                                 </td>
                                 <td>
@@ -911,4 +847,4 @@ const SalesForm = () => {
   );
 };
 
-export default SalesForm;
+export default PurchaseOrder;

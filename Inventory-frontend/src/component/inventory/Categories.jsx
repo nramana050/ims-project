@@ -198,7 +198,7 @@ const Categories = () => {
   console.log(formData);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
   };
   const handleSave = async (e) => {
     try {

@@ -1,8 +1,8 @@
-import React, { useRef,useMemo } from "react";
+import React, { useRef,useState,useEffect } from "react";
 import "../../Invoice.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {useReactToPrint} from "react-to-print";
-import ReactToPrint from "react-to-print"
+import { Bars } from "react-loader-spinner";
 
 const Invoice = () => {
   const data = [
@@ -18,25 +18,52 @@ const Invoice = () => {
     },
   ];
 
-//   useMemo(()=>console.log("test"),[])
+  const {state} = useLocation()
+  console.log(state)
 
   const navigation = useNavigate();
 
-  let componentRef = useRef(null);
+  let componentRef = useRef();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   })
+
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
+    <div>
+    {isLoading ? (
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+        }}
+      >
+        <Bars
+          height="80"
+          width="80"
+          color="#40a1ed"
+          ariaLabel="bars-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      </div>
+    ) : (
     <div className="invoice-container">
       <div className="head-t">
         <div className="tax-i">
-        {/* <ReactToPrint
-        trigger={() => <button>Print this out!</button>}
-        content={() => componentRef.current}
-      /> */}
-           <button onClick={() => handlePrint()}>Print</button>
-          <button onClick={() => navigation("/sales/sales-order")}>Back</button>
+           <button className="invoice-btn" onClick={() => handlePrint()}>Print</button>
+          <button className="invoice-btn" onClick={() => navigation("/sales/sales-order")}>Back</button>
         </div>
       </div>
       <div className="invoice" ref={componentRef}>
@@ -63,16 +90,16 @@ const Invoice = () => {
             <tbody>
               <tr className="">
                 <td className="inst">
-                  <h5>CUSTOMER NAME</h5>
+                  <h5 style={{textTransform:"uppercase"}}>{state.formData.customerName}</h5>
 
-                  <p>Phone: 7897978373</p>
+                  <p>Phone: {state.formData.mobile}</p>
                 </td>
                 {/* <td className="wa-p">
                   <p>WA-89 BLOCK NEW PATPARGANJ,ROAD SHAKARPUR,DELHI 110092</p>
                 </td> */}
                 <td className="wa-pl">
-                  <p>Sales Order Number:545654567</p>
-                  <p>Sales Order Date : 20-01-2024 </p>
+                  <p>Sales Order Number:{state.formData.salesOrderNo}</p>
+                  <p>Sales Order Date : {state.formData.salesOrderDate} </p>
                   <p>TIme : 02:53 PM </p>
                 </td>
               </tr>
@@ -81,7 +108,7 @@ const Invoice = () => {
           <table className="table">
             <thead className="table-c">
               <tr className="color">
-                <th>#</th>
+                <th>S.N</th>
                 <th>ITEM</th>
                 <th>HSN/SAC</th>
                 <th>QTY</th>
@@ -92,29 +119,19 @@ const Invoice = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
+              {state.formData.items.map((item,index) => (
                 <tr key={item.id} className="item-t table-cl">
-                  <td>{item.no}</td>
-                  <td>{item.item}</td>
-                  <td>{item.hsn}</td>
-                  <td>{item.qty}</td>
-                  <td>{item.price}</td>
-                  <td>{item.discount}</td>
-                  <td>{item.gst}</td>
-                  <td>{item.amount}</td>
+                  <td>{index + 1}</td>
+                  <td>{item.itemName}</td>
+                  <td>{item.hsnCode}</td>
+                  <td>{item.quantity}</td>
+                  <td>₹ {item.price}</td>
+                  <td>₹ {item.discount}</td>
+                  <td>{item.cgst + item.sgst}%</td>
+                  <td>₹ {item.amount}</td>
                 </tr>
+            
               ))}
-
-              <tr className="tdata table-cl">
-                <td>2</td>
-                <td>Nike Air</td>
-                <td>56</td>
-                <td>210</td>
-                <td>3000</td>
-                <td>20%</td>
-                <td>₹24,000.00</td>
-                <td>₹2,24,000.00</td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -123,30 +140,24 @@ const Invoice = () => {
           <table className="table">
             <thead className="table-c">
               <tr className="color">
-                <th>Tax type</th>
-                <th>Taxable Amount</th>
-                <th>Rate</th>
-                <th>Tax Amount</th>
+              <th>Before Tax Amount</th>
+                <th>CGST</th>
+                <th>SGST</th>
+                <th>Total Discount</th>
                 <th colSpan={2}>Amount</th>
               </tr>
             </thead>
             <tbody>
               <tr className="tdata">
-                <td>SGST</td>
-                <td>200000</td>
-                <td>6%</td>
-                <td>₹ 120000</td>
+              <td>₹ {state.formData.totalDiscount + (state.formData.totalAmount - state.formData.totalGST)}</td>
+                <td>₹ {state.formData.totalGST / 2}</td>
+                <td>₹ {state.formData.totalGST / 2}</td>
+                
+                <td>₹ {state.formData.totalDiscount}</td>
                 <td className="total-l">Sub Total</td>
-                <td className="total-l">₹ 224000</td>
+                <td className="total-l">₹ {state.formData.totalAmount}</td>
               </tr>
-              <tr className="tdata">
-                <td>CGST</td>
-                <td>200000</td>
-                <td>6%</td>
-                <td>₹ 120000</td>
-                <td>Sub Total</td>
-                <td>₹ 224000</td>
-              </tr>
+             
 
               <tr className="tdata">
                 <td></td>
@@ -154,7 +165,7 @@ const Invoice = () => {
                 <td></td>
                 <td></td>
                 <td className="total-l">Grand Total</td>
-                <td className="total-l">₹ 240000</td>
+                <td className="total-l">₹ {state.formData.totalAmount}</td>
               </tr>
             </tbody>
           </table>
@@ -177,7 +188,7 @@ const Invoice = () => {
                     gap: "30px",
                   }}
                 >
-                  <span>Credit</span>
+                  <span style={{textTransform:"uppercase"}}>{state.formData.method}</span>
                   <span style={{ fontWeight: "700" }}>
                     Thank you for shopping with us!!
                   </span>
@@ -191,6 +202,8 @@ const Invoice = () => {
           </table>
         </div>
       </div>
+    </div>
+    )}
     </div>
   );
 };

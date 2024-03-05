@@ -40,6 +40,22 @@
   .tax{
     display: flex;
   }
+
+  .tax-i {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tax-i .invoice-btn {
+    border: none;
+    padding: 8px 30px;
+   background-color: #6610f2;
+    color: white;
+    border-radius: 10px;
+    margin: 20px 0;
+    }
+
   .tax h1{
     font-size: 16px;
   }

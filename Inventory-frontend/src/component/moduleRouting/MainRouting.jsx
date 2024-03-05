@@ -13,11 +13,15 @@ import Categories from "../inventory/Categories";
 import ItemsList from "../inventory/ItemsList";
 import Warehouse from "../inventory/Warehouse";
 import CreateCompany from "../authentication/CreateCompany";
-import PurchaseOrder from "../purchase/PurchaseOrder";
-import Invoices from "../purchase/Invoices";
+import QuatationOrder from "../purchase/QuatationOrder";
+import Quotation from "../purchase/Quotation";
+import QuotationTable from "../purchase/QuotationTable";
 import SalesForm from "../sales/SalesForm";
 import Transactions from "../payment/Transactions";
-import Invoice from "../sales/Invoice";
+import SalesTable from "../sales/SalesTable";
+import Expense from "../accounts/Expense";
+import Cash from "../accounts/Cash";
+import Invoice from "../sales/Invoice"
 
 const MainRouting = () => {
   const [loggedIn, setLoggedIn] = useState(true);
@@ -25,6 +29,7 @@ const MainRouting = () => {
   const handleLogin = () => {
     setLoggedIn(true);
   };
+  
 
   return (
     <Routes>
@@ -44,11 +49,15 @@ const MainRouting = () => {
       <Route path="/inventory/clothing" element={loggedIn ? <ClothingItem /> : <Navigate to="/" />} />
       <Route path="/inventory/accessories" element={loggedIn ? <AccessoriesItem /> : <Navigate to="/" />} />
       <Route path="/inventory/warehouse" element={loggedIn ? <Warehouse /> : <Navigate to="/" />} />
-      <Route path="/purchase/purchase-order" element={loggedIn ? <PurchaseOrder /> : <Navigate to="/" />} />
-      <Route path="/purchase/invoices" element={loggedIn ? <Invoices /> : <Navigate to="/" />} />
+      <Route path="/quotation/quotation-order" element={loggedIn ? <QuatationOrder /> : <Navigate to="/" />} />
+      <Route path="/quotation" element={loggedIn ? <Quotation /> : <Navigate to="/" />} />
       <Route path="/sales/sales-order" element={loggedIn ? <SalesForm /> : <Navigate to="/" />} />
-      <Route path="/payment/transactions" element={loggedIn ? <Transactions /> : <Navigate to="/" />} />
       <Route path="/sales/invoice" element={loggedIn ? <Invoice /> : <Navigate to="/" />} />
+      <Route path="/payment/transactions" element={loggedIn ? <Transactions /> : <Navigate to="/" />} />
+      <Route path="/sales/list" element={loggedIn ? <SalesTable /> : <Navigate to="/" />} />
+      <Route path="/accounts/cash-on-hand" element={<Cash />} />
+      <Route path="/accounts/expense" element={<Expense />} />
+      <Route path="/quotation/list" element={loggedIn ? <QuotationTable /> : <Navigate to="/" />} />
     </Routes>
   );
 };

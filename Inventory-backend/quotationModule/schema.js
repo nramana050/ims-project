@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => {
-    console.log("sales db connected");
+    console.log("quotation db connected");
   })
   .catch((err) => {
     console.log(err);
@@ -22,19 +22,20 @@ const ProductSchema = new mongoose.Schema({
   cgst:String
 });
 
-const salesSchema = new mongoose.Schema({
+const quotationSchema = new mongoose.Schema({
     customerName: String,
     mobile: String,
-    salesOrderNo: String,
-    salesOrderDate: String,
+    quotationOrderNo: String,
+    quotationOrderDate: String,
+    billingAddress:String,
+    gstNumber:String,
   
   product: [ProductSchema],
-  method:String,
   totalGST:String,
   totalDiscount:String,
   totalAmount:String
 });
 
-const salesModel = mongoose.model("sale", salesSchema);
+const quotationModel = mongoose.model("quotation", quotationSchema);
 
-module.exports = salesModel;
+module.exports = quotationModel;
