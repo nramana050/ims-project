@@ -2,22 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Bars } from "react-loader-spinner";
 import NavBar from "../NavBar";
 import SideBar from "../SideBar";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import { RxCrossCircled } from "react-icons/rx";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import settings from "../../assets/settings 1.png";
-import { HiOutlineFilter } from "react-icons/hi";
-import { AiOutlineDelete } from "react-icons/ai";
-import filter from "../../assets/Filters.png";
 const Cash = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [open, setOpen] = useState(false);
   const [itemData, setItemData] = useState([]);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [getSalesData, setGetSalesData] = useState([]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -38,39 +29,92 @@ const Cash = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const [currentSalesPage, setcurrentSalesPage] = useState(1);
+  const itemsPerSalesPage = 8;
+
+  const handleSearch = () => {
+    console.log("Search query:", searchQuery);
+    const filteredData = getItemData.filter((item) =>
+      item.customerName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    console.log("Filtered data:", filteredData);
+    setGetSalesData(filteredData);
+  };
+  const calculateTotalAmount = () => {
+    const totalSalesAmount = getSalesData.reduce(
+      (total, salesItem) => total + parseFloat(salesItem.totalAmount || 0),
+      0
+    );
+
+    const totalExpenseAmount = itemData.reduce(
+      (total, expenseItem) =>
+        total + parseFloat(expenseItem.purchasePrice || 0),
+      0
+    );
+
+    return totalSalesAmount - totalExpenseAmount;
+  };
+
+  const totalAmount = calculateTotalAmount();
+  const totalColor = totalAmount >= 0 ? "green" : "red";
+  const totalSign = totalAmount >= 0 ? "+" : "-";
+
+  const indexOfLastSalesItem = currentSalesPage * itemsPerSalesPage;
+  const indexOfFirstSalesItem = indexOfLastSalesItem - itemsPerSalesPage;
+  const currentSalesItems = getSalesData.slice(
+    indexOfFirstSalesItem,
+    indexOfLastSalesItem
+  );
 
   const getItemData = async () => {
     await axios
-      .get(`http://localhost:3900/accounts/expense`)
+      .get("http://localhost:3900/accounts/expense")
       .then((result) => setItemData(result.data))
       .catch((err) => console.log(err));
   };
 
-  const handleSave = async () => {
-    await axios
-      .post("http://localhost:3900/accounts/cash", formData)
-      .then((result) => console.log(result.data))
-      .catch((err) => console.log(err));
-  };
-
-
-  const cancelButton = () => {
-    handleClose();
-    setFormData({
-      adjustment: "",
-      transferDate: "",
-      enterAmount: "",
-      description: "",
-    });
-  };
-  const handleSubmit = (e) => {
-    console.log("Form submitted:", formData);
+  const getSales = async () => {
+    const result = await axios.get("http://localhost:3800/sales");
+    setGetSalesData(result.data);
   };
 
   useEffect(() => {
     getItemData();
+    getSales();
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      getSales();
+    }
+  }, []);
+
+  const [dataObject, setDataObject] = useState(null);
+  const [item, setItem] = useState([]);
+  const [ID, setID] = useState("");
+
+  useEffect(() => {
+    const data = item.map((elem) => {
+      return elem.id === ID
+        ? {
+            ...elem,
+            itemName: dataObject ? dataObject.itemName : "",
+            hsnCode: dataObject ? dataObject.itemCode : "",
+            price: dataObject ? dataObject.salesPrice : "",
+            cgst: dataObject ? dataObject.gstTax / 2 : "",
+            sgst: dataObject ? dataObject.gstTax / 2 : "",
+          }
+        : elem;
+    });
+    setItem(data);
+  }, [dataObject]);
+
+  const itemNames = getSalesData.flatMap((obj) =>
+    obj.product.map((product) => product.itemName)
+  );
+
+  const itemNamesString = itemNames.join(", ");
 
   return (
     <div>
@@ -98,31 +142,27 @@ const Cash = () => {
           <SideBar />
           <div className="wrapper">
             <NavBar />
-            <div style={{ padding: "5px" }}>
-              <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
-                <Link
-                  to="/dashboard"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Home{" "}
-                </Link>{" "}
-                / Account Solutions/
-              </span>
-              <span style={{ color: "black" }}> Cash On Hand</span>
-            </div>
+
             <div className="main-div-2">
               <div className="table" id="main-table">
                 <div className="input-group-1">
                   <div>
                     <p style={{ width: "220px" }}>Cash On Hand </p>
                   </div>
-                  <div className="input-group ">
+
+                  <div
+                    className="input-group "
+                    style={{ justifyContent: "center" }}
+                  >
                     <input
                       type="search"
                       className="rounded search-bar"
-                      placeholder="Search"
-                      aria-label="Search"
+                      placeholder="Search by item name"
                       aria-describedby="search-addon"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                      }}
                     />
                     <button
                       type="button"
@@ -131,20 +171,17 @@ const Cash = () => {
                         backgroundColor: "rgba(0, 172, 154, 1)",
                         color: "white",
                       }}
+                      onClick={handleSearch}
                     >
                       Search
                     </button>
                   </div>
 
                   <div className="filter-container">
-                    <div className="filters">
-                      <img src={filter} />
-                    </div>
-                    <button id="btn-items-2" onClick={handleOpen}>
-                      {" "}
-                      Deposit/Withdrawal Cash
-                      <img src={settings} height={15} />
-                    </button>
+                    <p style={{ color: totalColor }}>
+                      {Math.abs(totalAmount) > 0 ? "Profit:" : "Loss:"}{" "}
+                      {totalSign} ₹ {Math.abs(totalAmount)}
+                    </p>
                   </div>
                 </div>
                 <table className="table table-bordered ">
@@ -161,7 +198,6 @@ const Cash = () => {
                           <th>ITEMS PURCHASED</th>
                           <th>DATE</th>
                           <th>AMOUNT</th>
-                        
                         </tr>
                       </thead>
                       <tbody>
@@ -181,7 +217,27 @@ const Cash = () => {
                                 "-"
                               )}
                             </td>
-                           
+                          </tr>
+                        ))}
+                      </tbody>
+
+                      <tbody>
+                        {currentSalesItems.map((item, index) => (
+                          <tr key={index} style={{ cursor: "pointer" }}>
+                            <td>{index + indexOfFirstSalesItem + 1}</td>
+                            <td>{item.customerName}</td>
+                            <td>{item.method}</td>
+                            <td>{itemNamesString}</td>
+                            <td>{item.salesOrderDate}</td>
+                            <td>
+                              {item.totalAmount ? (
+                                <span style={{ color: "green" }}>
+                                  + ₹ {item.totalAmount}
+                                </span>
+                              ) : (
+                                "-"
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -190,108 +246,6 @@ const Cash = () => {
                 </table>
               </div>
             </div>
-            <Modal
-              className="buyer-form-modal"
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <div
-                className="buyer-form-container"
-                style={{ position: "relative" }}
-              >
-                <h3>Adjust Cash</h3>
-                <RxCrossCircled
-                  className="buyer-form-cross"
-                  onClick={handleClose}
-                />
-                <form onSubmit={handleSubmit}>
-                  <div className="buyer-input-labels">
-                    <label>Adjustment</label>
-                    <TextField
-                      className="buyer-input"
-                      margin="dense"
-                      type="text"
-                      fullWidth
-                      name="adjustment"
-                      id="adjustment"
-                      placeholder="Add Cash"
-                      value={formData.adjustment}
-                      onChange={(e) => handleInputChange(e)}
-                      required
-                    />
-                  </div>
-
-                  <div className="buyer-input-labels">
-                    <label>Transfer Date</label>
-                    <TextField
-                      className="buyer-input"
-                      margin="dense"
-                      type="date"
-                      fullWidth
-                      name="transferDate"
-                      id="transferDate"
-                      value={formData.transferDate}
-                      onChange={(e) => handleInputChange(e)}
-                      required
-                    />
-                  </div>
-
-                  <div className="buyer-input-labels">
-                    <label>Enter Amount</label>
-                    <TextField
-                      className="buyer-input"
-                      margin="dense"
-                      type="number"
-                      fullWidth
-                      name="enterAmount"
-                      id="enterAmount"
-                      placeholder="Enter Amount"
-                      value={formData.enterAmount}
-                      onChange={(e) => handleInputChange(e)}
-                      required
-                    />
-                  </div>
-                  <div className="buyer-input-labels">
-                    <label>Description</label>
-                    <TextField
-                      className="buyer-input"
-                      margin="dense"
-                      type="text"
-                      fullWidth
-                      name="description"
-                      id="description"
-                      placeholder="Description"
-                      value={formData.description}
-                      onChange={(e) => handleInputChange(e)}
-                      required
-                    />
-                  </div>
-
-                  <div className="data-buttons">
-                    <Button
-                      id="input-btn-submit"
-                      className="submit"
-                      type="submit"
-                      variant="outlined"
-                      onClick={handleSave}
-                      //   disabled={buttonCheck?false:true}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      id="input-btn-cancel"
-                      className="cancel"
-                      onClick={cancelButton}
-                      variant="outlined"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </form>
-              </div>
-            </Modal>
           </div>
         </div>
       )}

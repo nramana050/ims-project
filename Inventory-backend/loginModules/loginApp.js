@@ -6,6 +6,8 @@ const {
   getMpin,
   sendMpin,
   updateMpin,
+  getDetailById,
+  checkEmail,
 } = require("./dataController");
 
 app.post("/", getLogin);
@@ -14,5 +16,7 @@ app.post("/set-mpin", createMpin);
 app.post("/mpin", getMpin);
 app.get("/mpin", sendMpin);
 app.put("/set-mpin", updateMpin);
+app.put("/reset-password/:id", getDetailById);
+app.post("/forgot-password", checkEmail);
 
 module.exports = app;

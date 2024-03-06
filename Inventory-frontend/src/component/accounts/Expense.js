@@ -35,7 +35,7 @@ const Expense = () => {
       .post(`http://localhost:3900/accounts/expense`, formData)
       .then((result) => {
         handleClose();
-        getItemData()
+        getItemData();
       })
       .catch((err) => console.log(err));
   };
@@ -83,7 +83,6 @@ const Expense = () => {
     setIsLoading(false);
   }, []);
 
- 
   return (
     <div>
       {isLoading ? (
@@ -110,25 +109,17 @@ const Expense = () => {
           <SideBar />
           <div className="wrapper">
             <NavBar />
-            <div style={{ padding: "10px" }}>
-              <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
-                <Link
-                  to="/dashboard"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Home{" "}
-                </Link>{" "}
-                / Account Solutions/
-              </span>
-              <span style={{ color: "black" }}> Expense List</span>
-            </div>
+
             <div className="main-div-2">
               <div className="table" id="main-table">
                 <div className="input-group-1">
                   <div>
                     <p style={{ width: "220px" }}>Expense List </p>
                   </div>
-                  <div className="input-group ">
+                  <div
+                    className="input-group "
+                    style={{ justifyContent: "center" }}
+                  >
                     <input
                       type="search"
                       className="rounded search-bar"
@@ -149,9 +140,6 @@ const Expense = () => {
                   </div>
 
                   <div className="filter-container">
-                    <div className="filters">
-                      <img src={filter} />
-                    </div>
                     <button id="btn-item" onClick={handleOpen}>
                       {" "}
                       Add

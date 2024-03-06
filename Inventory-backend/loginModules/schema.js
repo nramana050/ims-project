@@ -14,6 +14,8 @@ let dbSchema = new mongoose.Schema({
   username: String,
   password: String,
   isRemember: String,
+  mobile: String,
+  email: String,
 });
 
 let mpinSchema = new mongoose.Schema({

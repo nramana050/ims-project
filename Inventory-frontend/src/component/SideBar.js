@@ -15,6 +15,7 @@ const SideBar = () => {
   const [quotationOpen, setQuotationOpen] = useState(false);
   const [salesOpen, setSalesOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const navigation = useNavigate();
 
@@ -33,6 +34,9 @@ const SideBar = () => {
   const toggleAccount = () => {
     setAccountOpen(!accountOpen);
   };
+  const toggleReport = () => {
+    setReportOpen(!reportOpen);
+  };
 
   return (
     <div>
@@ -40,69 +44,10 @@ const SideBar = () => {
         <div className="container-fluid">
           {/* sidebar: title*/}
           <div className="title-text d-flex align-items-center mb-4 mt-1">
-            <h4 className="sidebar-title mb-0 flex-grow-1">
-              <span className="sm-txt">O</span>
-              <span>RIVE Admin</span>
-            </h4>
-            <div className="dropdown morphing scale-left">
-              <a
-                className="dropdown-toggle more-icon"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-              >
-                <i className="fa fa-ellipsis-h" />
-              </a>
-              <ul
-                className="dropdown-menu shadow border-0 p-2 mt-2"
-                data-bs-popper="none"
-              >
-                <li className="fw-bold px-2">Quick Actions</li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item"
-                    href="landing/index.html"
-                    aria-current="page"
-                  >
-                    Landing page
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="inventory/index.html">
-                    Inventory
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="ecommerce/index.html">
-                    eCommerce
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="hrms/index.html">
-                    HRMS
-                  </a>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a className="dropdown-item" href="account-invoices.html">
-                    Invoices List
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item"
-                    href="account-create-invoices.html"
-                  >
-                    Create Invoices
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <h3 id="sidebar-h3-design">
+              <span className="sm-txt">Insta-e-</span>
+              <span>Mart </span>
+            </h3>
           </div>
 
           {/* sidebar: menu list */}
@@ -217,24 +162,50 @@ const SideBar = () => {
                   className="m-link"
                   data-bs-toggle="collapse"
                   data-bs-target="#menu-Authentication"
-                 onClick={() => navigation("/payment/transactions")}
+                  onClick={() => navigation("/payment/transactions")}
                 >
                   <img src={credit} />
                   <span className="ms-2">Payments</span>
                 </a>
                 {/* Menu: Sub menu ul */}
               </li>
-              <li className="collapsed">
-                <a
-                  className="m-link"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#menu-level0"
-                  href="#"
-                >
-                  <img src={report} />
+              <li className="collapsed" style={{ cursor: "pointer" }}>
+                <a className="m-link" onClick={toggleReport}>
+                  <img src={parcel} />
                   <span className="ms-2">Reports</span>
+                  <span className="ms-auto text-end">
+                    {reportOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                  </span>
                 </a>
                 {/* Menu: Sub menu ul */}
+                {reportOpen && (
+                  <ul className="sub-menu collapse show" id="account">
+                    {/* <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/reports/main-report")}
+                      >
+                        Main Report
+                      </a>
+                    </li> */}
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/reports/sales-report")}
+                      >
+                        Sales Report
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/reports/stock-report")}
+                      >
+                        Stock Report
+                      </a>
+                    </li>
+                  </ul>
+                )}
               </li>
               <li className="collapsed" style={{ cursor: "pointer" }}>
                 <a className="m-link" onClick={toggleAccount}>
@@ -247,22 +218,22 @@ const SideBar = () => {
                 {/* Menu: Sub menu ul */}
                 {accountOpen && (
                   <ul className="sub-menu collapse show" id="account">
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/accounts/cash-on-hand")}
-                    >
-                      Cash On Hand
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="ms-link"
-                      onClick={() => navigation("/accounts/expense")}
-                    >
-                      Expense
-                    </a>
-                  </li>
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/accounts/cash-on-hand")}
+                      >
+                        Cash On Hand
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="ms-link"
+                        onClick={() => navigation("/accounts/expense")}
+                      >
+                        Expense
+                      </a>
+                    </li>
                   </ul>
                 )}
               </li>

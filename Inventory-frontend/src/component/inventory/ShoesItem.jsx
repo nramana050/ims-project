@@ -113,6 +113,31 @@ const Inventory = () => {
             {/* start: page header */}
             <NavBar />
             {/* start: page toolbar */}
+            <div
+              style={{
+                fontSize: "1.4rem",
+                width: "500px",
+                display: "flex",
+              }}
+            >
+              <div style={{ padding: "20px 40px 0" }}>
+                <span style={{ color: "#00AC9A", fontWeight: "600" }}>
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigation("/dashboard")}
+                  >
+                    Home
+                  </span>{" "}
+                  /{" "}
+                  <span
+                    onClick={() => navigation("/inventory/categories")}
+                    style={{ color: "black", cursor: "pointer" }}
+                  >
+                    categories
+                  </span>
+                </span>
+              </div>
+            </div>
 
             <div className="main-div-2">
               <div className="table" id="main-table">

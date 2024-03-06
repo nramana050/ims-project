@@ -76,10 +76,6 @@ const Categories = () => {
     ],
   });
 
-  const barcodeValue = Object.entries(formData)
-    .map(([key, value]) => `${key}:${value}`)
-    .join(",");
-
   const handleClose = () => {
     setFormData({
       itemName: "",
@@ -195,10 +191,8 @@ const Categories = () => {
     setBatch(updatedItems);
   };
 
-  console.log(formData);
-
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    //  e.preventDefault();
   };
   const handleSave = async (e) => {
     try {
@@ -211,7 +205,25 @@ const Categories = () => {
           },
         }
       );
-      console.log(res.data);
+    } catch (err) {
+      console.error(err.response.data);
+    }
+  };
+
+  const [updateId, setUpdateId] = useState(null);
+
+  const handleUpdate = async (id) => {
+    console.log(id);
+    try {
+      await axios.put(
+        `http://localhost:3700/inventory/update/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
     } catch (err) {
       console.error(err.response.data);
     }
@@ -250,8 +262,8 @@ const Categories = () => {
 
   const [qrCodeImage, setQRCodeImage] = useState(null);
 
-  console.log(JSON.stringify(formData))
   const generateQRCode = () => {
+    setDisplayQR("block");
     setQRCodeImage(
       <QRCode
         value={JSON.stringify(formData)}
@@ -260,11 +272,52 @@ const Categories = () => {
     );
   };
 
+  const [displayQR, setDisplayQR] = useState("none");
+
+  const [updateForm, setUpdateForm] = useState(false);
+
   let componentRef = useRef();
 
-  // const handlePrint = useReactToPrint({
-  //   content: () => componentRef.current,
-  // });
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
+  // const handlePrint = () => {
+  //   const printWindow = window.open("", "_blank");
+  //   if (printWindow) {
+  //     printWindow.document.write(`
+  //       <html>
+  //         <head>
+  //           <title>Print QR Code</title>
+  //           <style>
+  //             @media print {
+  //               body {
+  //                 margin: 0;
+  //               }
+  //               img {
+  //                 max-width: 100%;
+  //                 height: auto;
+  //               }
+  //             }
+  //           </style>
+  //         </head>
+  //         <body>
+  //           <img src="${qrCodeImage}" />
+  //           <script>
+  //             window.onload = function() {
+  //               window.print();
+  //               window.onafterprint = function() {
+  //                 window.close();
+  //               };
+  //             };
+  //           </script>
+  //         </body>
+  //       </html>
+  //     `);
+  //   } else {
+  //     console.error("Failed to open print window");
+  //   }
+  // };
 
   return (
     <div>
@@ -549,6 +602,8 @@ const Categories = () => {
                             });
                             setTotalStocks(totalStocks);
                             setItemName(selectedOption.value.itemName);
+                            setUpdateForm(true);
+                            setUpdateId(selectedOption.value._id);
                           }
                         }}
                         options={options}
@@ -871,13 +926,20 @@ const Categories = () => {
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <ReactToPrint
-                            trigger={() => <Button>Print this out!</Button>}
-                            content={() => componentRef}
-                          />
+                          {/* <ReactToPrint
+                            trigger={() => ( */}
+                          <Button
+                            onClick={handlePrint}
+                            style={{ display: `${displayQR}` }}
+                          >
+                            Print this out!
+                          </Button>
+                          {/* //   )}
+                          //   content={() => componentRef}
+                          // /> */}
                           {/* Your content */}
-                          <div ref={(el) => (componentRef = el)}>
-                            <p>{qrCodeImage}</p>
+                          <div>
+                            <p ref={componentRef}>{qrCodeImage}</p>
                           </div>
                         </div>
                       </div>
@@ -888,10 +950,12 @@ const Categories = () => {
                         className="submit"
                         type="submit"
                         variant="outlined"
-                        onClick={handleSave}
+                        onClick={() => {
+                          updateForm ? handleUpdate(updateId) : handleSave();
+                        }}
                         //   disabled={buttonCheck?false:true}
                       >
-                        Submit
+                        {updateForm ? "Update" : "Submit"}
                       </Button>
                       <Button
                         id="input-btn-cancel"

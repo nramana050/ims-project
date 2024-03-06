@@ -22,10 +22,17 @@ const SalesTable = () => {
   }, []);
 
   const getSales = async () => {
-    const result = await axios.get(
-      "http://localhost:3800/sales"
-    );
+    const result = await axios.get("http://localhost:3800/sales");
     setGetSalesData(result.data);
+  };
+
+  const deleteSales = async (id) => {
+    await axios
+      .delete(`http://localhost:3800/sales/delete/${id}`)
+      .then(() => {
+        getSales();
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleSearch = () => {
@@ -45,23 +52,19 @@ const SalesTable = () => {
     if (searchQuery === "") {
       getSales();
     }
-  },[]);
-console.log(getSalesData)
+  }, []);
+  console.log(getSalesData);
   const [currentSalesPage, setcurrentSalesPage] = useState(1);
   const itemsPerSalesPage = 8;
 
-  const indexOfLastSalesItem =
-    currentSalesPage * itemsPerSalesPage;
-  const indexOfFirstSalesItem =
-    indexOfLastSalesItem - itemsPerSalesPage;
+  const indexOfLastSalesItem = currentSalesPage * itemsPerSalesPage;
+  const indexOfFirstSalesItem = indexOfLastSalesItem - itemsPerSalesPage;
   const currentSalesItems = getSalesData.slice(
     indexOfFirstSalesItem,
     indexOfLastSalesItem
   );
 
-  const totalSalesPages = Math.ceil(
-    getSalesData.length / itemsPerSalesPage
-  );
+  const totalSalesPages = Math.ceil(getSalesData.length / itemsPerSalesPage);
 
   const nextSalesPage = () => {
     setcurrentSalesPage(currentSalesPage + 1);
@@ -130,11 +133,6 @@ console.log(getSalesData)
                       Search
                     </button>
                   </div>
-                  <div className="filter-container">
-                    <div className="filter">
-                      <HiOutlineFilter size={30} color="rgba(0, 172, 154, 1)" />
-                    </div>
-                  </div>
                 </div>
                 {getSalesData.length > 0 ? (
                   <table
@@ -168,12 +166,15 @@ console.log(getSalesData)
                               <td>₹ {item.totalDiscount}</td>
                               <td>₹ {item.totalGST}</td>
                               <td>₹ {item.totalAmount}</td>
-                              <td> <div className="action-btn">
-                            <AiOutlineDelete
-                              style={{ color: "red" }}
-                              // onClick={() => deleteItem(item._id)}
-                            />
-                          </div></td>
+                              <td>
+                                {" "}
+                                <div className="action-btn">
+                                  <AiOutlineDelete
+                                    style={{ color: "red" }}
+                                    onClick={() => deleteSales(item._id)}
+                                  />
+                                </div>
+                              </td>
                             </tr>
                           ))}
                         </tbody>

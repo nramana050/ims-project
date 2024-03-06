@@ -16,7 +16,7 @@ import Select from "react-select";
 
 const SalesForm = () => {
   const navigation = useNavigate();
-
+  const qrReader = React.createRef();
   const [product, setProduct] = useState();
   const [data, setData] = useState("");
   const [dataObject, setDataObject] = useState(null);
@@ -272,8 +272,8 @@ const SalesForm = () => {
       }
 
       const options = {
-        key: "", // Enter the Key ID generated from the Dashboard
-        amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        key: "",
+        amount,
         currency,
         name: "Insta-e-Mart",
         order_id: order.id,
@@ -300,7 +300,6 @@ const SalesForm = () => {
       rzp1.open();
     } catch (error) {
       console.error("Payment error:", error.message);
-      // Handle error
     }
 
     e.preventDefault();
@@ -354,7 +353,6 @@ const SalesForm = () => {
       audio: false,
       video: true,
     });
-    // the rest of the cleanup code
     window.location.reload();
   };
 
@@ -398,8 +396,9 @@ const SalesForm = () => {
                   <div>
                     <QrReader
                       onResult={(result, error) => {
-                        if (result) {
+                        if (!!result) {
                           setData(result?.text);
+                          qrReader.current.stop();
                         }
                       }}
                       style={{ width: "100%", height: "50%" }}
@@ -481,511 +480,339 @@ const SalesForm = () => {
             <SideBar />
             <div className="wrapper">
               <NavBar />
-              <div
-                className="above-table"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ width: "200px" }}>
-                  <div
-                    style={{
-                      fontSize: "1.4rem",
-                      width: "500px",
-                      display: "flex",
-                    }}
-                  >
-                    <div style={{ padding: "40px" }}>
-                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
-                        <Link
-                          to="/dashboard"
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          Home{" "}
-                        </Link>{" "}
-                        / Sales /
-                      </span>
-                      <span style={{ color: "black" }}> Sales Order</span>
+              <div className="overlay" style={{ background: "white" }}>
+                <div style={{ padding: "20px 40px" }}>
+                  <span style={{ color: "black", fontSize: "20px" }}>
+                    New Sales Order
+                  </span>
+                </div>
+                <form className="form-input-fields">
+                  <div className="data-input-fields">
+                    <div class="mb-3 w-50">
+                      <label for="customerName" class="form-label">
+                        Customer Name
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        name="customerName"
+                        value={formData.customerName}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                    <div class="mb-3 w-50">
+                      <label for="mobileNumber" class="form-label">
+                        Mobile Number
+                      </label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="exampleInputPassword1"
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
                     </div>
                   </div>
+                  <div className="data-input-fields">
+                    <div class="mb-3 w-50">
+                      <label for="salesOrderNo" class="form-label">
+                        Sales Order No.
+                      </label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        name="salesOrderNo"
+                        value={formData.salesOrderNo}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                    <div class="mb-3 w-50">
+                      <label for="salesOrderDate" class="form-label">
+                        Sales Order Date
+                      </label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="exampleInputPassword1"
+                        name="salesOrderDate"
+                        value={formData.salesOrderDate}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                  </div>
+                </form>
+                <div
+                  style={{
+                    justifyContent: "space-between",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 30px",
+                    gap: "100px",
+                  }}
+                >
+                  <div>
+                    <lable>Search the Product</lable>
+                    <Select
+                      margin="dense"
+                      fullWidth
+                      isDisabled={item.length > 0 ? false : true}
+                      name="itemName"
+                      id="salesItem"
+                      value={{ label: itemName }}
+                      onChange={(selectedOption) => {
+                        handleSelectChange(selectedOption);
+                        console.log(selectedOption);
+                        if (selectedOption) {
+                          var updatedEntities = [];
+                          setSalesData((prevData) => {
+                            updatedEntities = [...prevData.formData];
+                            updatedEntities[indexValue] = {
+                              ...updatedEntities[indexValue],
+                              itemName: selectedOption.value.itemName,
+                              hsnCode: selectedOption.value.itemCode,
+                              price: selectedOption.value.salesPrice,
+                              sgst: selectedOption.value.gstTax / 2,
+                              cgst: selectedOption.value.gstTax / 2,
+                            };
+                            // console.log(updatedEntities)
+                            return {
+                              ...prevData,
+                              formData: updatedEntities,
+                            };
+                          });
 
-                  <div className="page-toolbar px-xl-3 px-sm-2 px-0 py-3">
-                    <div className="overlay" style={{ background: "white" }}>
-                      <div style={{ padding: "20px 40px" }}>
-                        <span style={{ color: "black", fontSize: "20px" }}>
-                          New Sales Order
-                        </span>
-                      </div>
-                      <form className="form-input-fields">
-                        <div className="data-input-fields">
-                          <div class="mb-3 w-50">
-                            <label for="customerName" class="form-label">
-                              Customer Name
-                            </label>
-                            <input
+                          setItemName(selectedOption.value.itemName);
+
+                          setDisabledInput(selectedOption.value.category);
+                        }
+                      }}
+                      options={options}
+                    />
+                  </div>
+
+                  <button
+                    style={{
+                      height: "50px",
+                      display: "flex",
+                      width: "200px",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: "2px solid #565A5C",
+                      fontSize: "20px",
+                      color: " #565A5C",
+                      gap: "5px",
+                    }}
+                    onClick={() => setBarCodeOpen(true)}
+                  >
+                    <div>
+                      <QrCodeScannerIcon />{" "}
+                    </div>
+                    <div>Qr Code</div>
+                  </button>
+                </div>
+                <div
+                  className="salesviewtable"
+                  style={{
+                    marginTop: "50px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 20,
+                  }}
+                >
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>NO</th>
+                        <th>ITEM NAME</th>
+                        <th>Hsn Code</th>
+                        <th>QTY</th>
+                        <th>PRICE/ITEM</th>
+                        <th>DISCOUNT(%)</th>
+                        <th>SGST</th>
+                        <th>CGST</th>
+                        <th>AMOUNT</th>
+                        <th>ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {item.map((row, index) => (
+                        <tr key={row.id}>
+                          <td>{index + 1}</td>
+                          <td>
+                            <TextField
                               type="text"
-                              class="form-control"
-                              id="exampleInputEmail1"
-                              aria-describedby="emailHelp"
-                              name="customerName"
-                              value={formData.customerName}
-                              onChange={(e) => handleSaleInput(e)}
+                              value={row.itemName}
+                              name="itemName"
+                              onChange={(e) => handleItemChange(e, row.id)}
                             />
-                          </div>
-                          <div class="mb-3 w-50">
-                            <label for="mobileNumber" class="form-label">
-                              Mobile Number
-                            </label>
-                            <input
+                          </td>
+                          <td>
+                            <TextField
+                              name="hsnCode"
+                              type="text"
+                              value={row.hsnCode}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+
+                          <td>
+                            <TextField
                               type="number"
-                              class="form-control"
-                              id="exampleInputPassword1"
-                              name="mobile"
-                              value={formData.mobile}
-                              onChange={(e) => handleSaleInput(e)}
+                              name="quantity"
+                              value={row.quantity}
+                              onChange={(e) => handleItemChange(e, row.id)}
                             />
-                          </div>
-                        </div>
-                        <div className="data-input-fields">
-                          <div class="mb-3 w-50">
-                            <label for="salesOrderNo" class="form-label">
-                              Sales Order No.
-                            </label>
-                            <input
+                          </td>
+
+                          <td>
+                            <TextField
                               type="number"
-                              class="form-control"
-                              id="exampleInputEmail1"
-                              aria-describedby="emailHelp"
-                              name="salesOrderNo"
-                              value={formData.salesOrderNo}
-                              onChange={(e) => handleSaleInput(e)}
+                              name="price"
+                              value={row.price}
+                              onChange={(e) => handleItemChange(e, row.id)}
                             />
-                          </div>
-                          <div class="mb-3 w-50">
-                            <label for="salesOrderDate" class="form-label">
-                              Sales Order Date
-                            </label>
-                            <input
-                              type="date"
-                              class="form-control"
-                              id="exampleInputPassword1"
-                              name="salesOrderDate"
-                              value={formData.salesOrderDate}
-                              onChange={(e) => handleSaleInput(e)}
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              name="discount"
+                              value={row.discount}
+                              onChange={(e) => handleItemChange(e, row.id)}
                             />
-                          </div>
-                        </div>
-                      </form>
-                      <div
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              name="sgst"
+                              value={row.sgst}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              name="cgst"
+                              value={row.cgst}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              value={row.amount}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                              name="amount"
+                            />
+                          </td>
+                          <td>
+                            <IconButton onClick={() => deleteRow(row.id)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <Button
+                    style={{
+                      height: "40px",
+                      display: "flex",
+                      left: "10rem",
+                      width: "150px",
+                      alignItems: "right",
+                      justifyContent: "center",
+                      border: "2px solid #565A5C",
+                      fontSize: "15px",
+                      color: " #565A5C",
+                    }}
+                    variant="outlined"
+                    startIcon={<AddCircleOutlineOutlinedIcon />}
+                    onClick={addItem}
+                  >
+                    Add
+                  </Button>
+                </div>
+
+                <div className="other-sales-content">
+                  <div className="other-sales-content-left">
+                    <div>Terms And Condition</div>
+                    <div className="sales-content-box">
+                      <div>
+                        1. Goods once Sold will be not taken back or be
+                        exchanged.
+                      </div>
+                      <div>
+                        2. All the disputes are subject to Delhi jurisdiction
+                        only
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="other-sales-content-left"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                    }}
+                  >
+                    <TextField
+                      id="measuringUnit"
+                      margin="dense"
+                      className="buyer-input"
+                      type="text"
+                      select
+                      fullWidth
+                      defaultValue="method"
+                      value={formData.method}
+                      onChange={(e) => handleSaleInput(e)}
+                      name="method"
+                      SelectProps={{
+                        native: true,
+                      }}
+                    >
+                      {methodPayment.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.value}
+                          disabled={
+                            option.label === "Select Payment" ? true : false
+                          }
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </TextField>
+                    <div>Discount : Rs {totalDisc}</div>
+                    <div>GST Amount : Rs {totalGST}</div>
+                    <div>SUBTOTAL : Rs {totalAmt}</div>
+                    <div className="sales-content-btn">
+                      <Button
+                        variant="contained"
                         style={{
-                          justifyContent: "space-between",
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "0 30px",
-                          gap: "100px",
+                          backgroundColor: "#00AC9A",
+                          height: "40px",
+                          width: "100px",
+                        }}
+                        onClick={handleSave}
+                      >
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#FFD8D8",
+                          height: "40px",
+                          width: "100px",
+                          color: "#FF1616",
                         }}
                       >
-                        <div>
-                          <lable>Search the Product</lable>
-                          <Select
-                            margin="dense"
-                            fullWidth
-                            isDisabled={item.length > 0 ? false : true}
-                            name="itemName"
-                            id="salesItem"
-                            value={{ label: itemName }}
-                            onChange={(selectedOption) => {
-                              handleSelectChange(selectedOption);
-                              console.log(selectedOption);
-                              if (selectedOption) {
-                                var updatedEntities = [];
-                                setSalesData((prevData) => {
-                                  updatedEntities = [...prevData.formData];
-                                  updatedEntities[indexValue] = {
-                                    ...updatedEntities[indexValue],
-                                    itemName: selectedOption.value.itemName,
-                                    hsnCode: selectedOption.value.itemCode,
-                                    price: selectedOption.value.salesPrice,
-                                    sgst: selectedOption.value.gstTax / 2,
-                                    cgst: selectedOption.value.gstTax / 2,
-                                  };
-                                  // console.log(updatedEntities)
-                                  return {
-                                    ...prevData,
-                                    formData: updatedEntities,
-                                  };
-                                });
-
-                                setItemName(selectedOption.value.itemName);
-                                setSize(
-                                  selectedOption.value.batch[0].size === "NA"
-                                    ? [...size]
-                                    : selectedOption.value.batch
-                                );
-                                setDisabledInput(selectedOption.value.category);
-                              }
-                            }}
-                            options={options}
-                          />
-                        </div>
-
-                        <button
-                          style={{
-                            height: "50px",
-                            display: "flex",
-                            width: "200px",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            border: "2px solid #565A5C",
-                            fontSize: "20px",
-                            color: " #565A5C",
-                            gap: "5px",
-                          }}
-                          onClick={() => setBarCodeOpen(true)}
-                        >
-                          <div>
-                            <QrCodeScannerIcon />{" "}
-                          </div>
-                          <div>Qr Code</div>
-                        </button>
-                      </div>
-                      <div
-                        className="salesviewtable"
-                        style={{
-                          marginTop: "50px",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 20,
-                        }}
-                      >
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              <th>NO</th>
-                              <th>ITEM NAME</th>
-                              <th>Hsn Code</th>
-                              <th>Size</th>
-                              <th>QTY</th>
-                              <th>PRICE/ITEM</th>
-                              <th>DISCOUNT(%)</th>
-                              <th>SGST</th>
-                              <th>CGST</th>
-                              <th>AMOUNT</th>
-                              <th>ACTION</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {item.map((row, index) => (
-                              <tr key={row.id}>
-                                <td>{index + 1}</td>
-                                <td>
-                                  <TextField
-                                    type="text"
-                                    value={row.itemName}
-                                    name="itemName"
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // value={salesData.formData[index]?.itemName}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "itemName",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    name="hsnCode"
-                                    type="text"
-                                    value={row.hsnCode}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // value={salesData.formData[index]?.hsnCode}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "hsnCode",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    style={{ width: "80px", marginTop: "0" }}
-                                    id="measuringUnit"
-                                    margin="dense"
-                                    className="buyer-input"
-                                    type="number"
-                                    select
-                                    fullWidth
-                                    // disabled={disabledInput === "accessories"?true:false}
-                                    defaultValue="size"
-                                    value={row.size}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // value={salesData.formData[index]?.size}
-                                    // onChange={(e) => {
-                                    //   {
-                                    //     handleInputChange(
-                                    //       index,
-                                    //       "size",
-                                    //       e.target.value
-                                    //     );
-                                    //     handleListChange(index, e);
-                                    //     setIndexValue(index);
-                                    //   }
-                                    // }}
-                                    name="size"
-                                    SelectProps={{
-                                      native: true,
-                                    }}
-                                  >
-                                    {size.map((option) => (
-                                      <option
-                                        key={option.size}
-                                        value={option.size}
-                                      >
-                                        {option.size}
-                                      </option>
-                                    ))}
-                                  </TextField>
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="quantity"
-                                    value={row.quantity}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // value={salesData.formData[index]?.quantity}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "quantity",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    //   setIndexValue(index);
-                                    // }}
-                                  />
-                                </td>
-
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="price"
-                                    value={row.price}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // value={salesData.formData[index]?.price}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "price",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    // value={salesData.formData[index]?.discount}
-                                    name="discount"
-                                    value={row.discount}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "discount",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    //   setIndexValue(index);
-                                    // }}
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="sgst"
-                                    value={row.sgst}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // value={salesData.formData[index]?.sgst}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "sgst",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="cgst"
-                                    value={row.cgst}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    // value={salesData.formData[index]?.cgst}
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "cgst",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    // value={calculateTotalAmount(index)}
-                                    value={row.amount}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    name="amount"
-                                    // onChange={(e) => {
-                                    //   handleInputChange(
-                                    //     index,
-                                    //     "amount",
-                                    //     e.target.value
-                                    //   );
-                                    //   handleListChange(index, e);
-                                    // }}
-                                  />
-                                </td>
-                                <td>
-                                  <IconButton onClick={() => deleteRow(row.id)}>
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        <Button
-                          style={{
-                            height: "40px",
-                            display: "flex",
-                            left: "10rem",
-                            width: "150px",
-                            alignItems: "right",
-                            justifyContent: "center",
-                            border: "2px solid #565A5C",
-                            fontSize: "15px",
-                            color: " #565A5C",
-                          }}
-                          variant="outlined"
-                          startIcon={<AddCircleOutlineOutlinedIcon />}
-                          onClick={addItem}
-                        >
-                          Add
-                        </Button>
-                      </div>
-
-                      <div className="other-sales-content">
-                        <div className="other-sales-content-left">
-                          <div>Terms And Condition</div>
-                          <div className="sales-content-box">
-                            <div>
-                              1. Goods once Sold will be not taken back or be
-                              exchanged.
-                            </div>
-                            <div>
-                              2. All the disputes are subject to Delhi
-                              jurisdiction only
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="other-sales-content-left"
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "20px",
-                          }}
-                        >
-                          <TextField
-                            id="measuringUnit"
-                            margin="dense"
-                            className="buyer-input"
-                            type="text"
-                            select
-                            fullWidth
-                            defaultValue="method"
-                            value={formData.method}
-                            onChange={(e) => handleSaleInput(e)}
-                            name="method"
-                            SelectProps={{
-                              native: true,
-                            }}
-                          >
-                            {methodPayment.map((option) => (
-                              <option
-                                key={option.value}
-                                value={option.value}
-                                disabled={
-                                  option.label === "Select Payment"
-                                    ? true
-                                    : false
-                                }
-                              >
-                                {option.label}
-                              </option>
-                            ))}
-                          </TextField>
-                          <div>Discount : Rs {totalDisc}</div>
-                          <div>GST Amount : Rs {totalGST}</div>
-                          <div>SUBTOTAL : Rs {totalAmt}</div>
-                          <div className="sales-content-btn">
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "#00AC9A",
-                                height: "40px",
-                                width: "100px",
-                              }}
-                              onClick={handleSave}
-                            >
-                              SAVE
-                            </Button>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "#FFD8D8",
-                                height: "40px",
-                                width: "100px",
-                                color: "#FF1616",
-                              }}
-                            >
-                              CANCEL
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
+                        CANCEL
+                      </Button>
                     </div>
                   </div>
                 </div>

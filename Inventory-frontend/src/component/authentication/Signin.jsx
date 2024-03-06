@@ -12,18 +12,28 @@ import OtpInput from "react-otp-input";
 import image3 from "../../assets/image3.png";
 import { Bars } from "react-loader-spinner";
 
-const Signin = ({onLogin}) => {
+const Signin = ({ onLogin }) => {
   const navigation = useNavigate();
   const [number, setNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
+  const [forgotError, setForgotError] = useState("");
   const [flag, setFlag] = useState(false);
   const [confirmObj, setConfirmObj] = useState("");
   const { setUpRecaptcha } = useUserAuth();
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [emailOtp, setEmailOtp] = useState("");
+  const [emailOpen, setEmailOpen] = useState(false);
+  const handleEmailClose = () => setEmailOpen(false);
+  const handleForgotClose = () => setForgotOpen(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgot, setForgot] = useState("");
   const handleClose = () => setOpen(false);
+
+  const [passwordOpen, setPasswordOpen] = useState(false);
+  const handlePasswordClose = () => setPasswordOpen(false);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
@@ -47,9 +57,22 @@ const Signin = ({onLogin}) => {
     p: 4,
   };
 
-  const sendOTP = () => {
-    setMinutes(2);
-    setSeconds(59);
+  const handleForgotCheck = async () => {
+    await axios
+      .post(`http://localhost:3500/forgot-password`, {
+        forgotEmail: forgotEmail,
+      })
+      .then((res) => {
+        if (res) {
+          setIsLoading(false);
+          setEmailOpen(true);
+          setForgotOpen(false);
+          setForgot(res.data);
+        } else {
+          isLoading(true);
+        }
+      })
+      .catch((err) => setForgotError(err));
   };
   const resendOTP = () => {
     setMinutes(2);
@@ -115,6 +138,17 @@ const Signin = ({onLogin}) => {
     }
   };
 
+  const verifyEmailOtp = () => {
+    console.log(forgot);
+    console.log(emailOtp);
+    if (emailOtp == forgot) {
+      setPasswordOpen(true);
+      setEmailOpen(false);
+    } else {
+      setVerifyEmail("red");
+    }
+  };
+
   const handleInputChange = (e) => {
     setFormData({
       ...formdata,
@@ -149,10 +183,9 @@ const Signin = ({onLogin}) => {
           console.log(encryptedExpiryDate);
           localStorage.setItem("expiryDate", encryptedExpiryDate);
         }
-  
-        
+
         onLogin(true);
-   
+
         getData ? navigation("/mpin") : navigation("/set-mpin");
       } else {
         setError("* Invalid username or password");
@@ -191,6 +224,8 @@ const Signin = ({onLogin}) => {
     checkLogin();
   }, []);
 
+  const [verifyEmail, setVerifyEmail] = useState("#D5D4D2");
+
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -199,6 +234,21 @@ const Signin = ({onLogin}) => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const [updatedPassword, setUpdatedPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handlePassword = async () => {
+    if (updatedPassword === confirmPassword) {
+      await axios
+        .put(`http://localhost:3500/reset-password/${forgotEmail}`, {
+          confirmPassword: confirmPassword,
+        })
+        .then(() => window.location.reload())
+        .catch((err) => console.err(err));
+    }
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -265,8 +315,9 @@ const Signin = ({onLogin}) => {
                               {" "}
                               Password{" "}
                               <a
-                                className="color"
-                                href="auth-password-reset.html"
+                                className=""
+                                style={{ cursor: "pointer" }}
+                                onClick={() => setForgotOpen(true)}
                               >
                                 Forgot Password?
                               </a>
@@ -293,7 +344,7 @@ const Signin = ({onLogin}) => {
                               <a
                                 className="color"
                                 onClick={handleSendCode}
-                                style={{ cursor: "pointer" }}
+                                style={{ cursor: "pointer", color: "#4a4e69" }}
                               >
                                 Get OTP
                               </a>
@@ -352,31 +403,6 @@ const Signin = ({onLogin}) => {
                                   }}
                                 />
 
-                                <div className="countdown-text d-flex ">
-                                  {seconds > 0 || minutes > 0 ? (
-                                    <p>
-                                      Time Remaining:{" "}
-                                      {minutes < 10 ? `0${minutes}` : minutes}:
-                                      {seconds < 10 ? `0${seconds}` : seconds}
-                                    </p>
-                                  ) : (
-                                    <p>Didn't recieve code?</p>
-                                  )}
-
-                                  <a
-                                    disabled={seconds > 0 || minutes > 0}
-                                    style={{
-                                      color:
-                                        seconds > 0 || minutes > 0
-                                          ? "#DFE3E8"
-                                          : "#2794EB",
-                                    }}
-                                    onClick={resendOTP}
-                                  >
-                                    Resend OTP
-                                  </a>
-                                </div>
-
                                 <div
                                   className="col-12 text-center mt-1"
                                   onClick={verifyOtp}
@@ -385,6 +411,200 @@ const Signin = ({onLogin}) => {
                                     Verify
                                   </a>
                                 </div>
+                              </div>
+                            </Box>
+                          </Modal>
+                          <Modal
+                            open={forgotOpen}
+                            onClose={handleForgotClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={style}>
+                              <div className="card-modal">
+                                <form className="row g-3">
+                                  <div className="col-12 text-center mb-5">
+                                    <img
+                                      src="assets/img/auth-password-reset.svg"
+                                      className="w240 mb-4"
+                                      alt=""
+                                    />
+                                    <h1>Forgot password?</h1>
+                                    <span>
+                                      Enter the email address associated with
+                                      this user credentials.
+                                    </span>
+                                  </div>
+                                  <div className="col-12">
+                                    <div className="mb-2">
+                                      <label className="form-label">
+                                        Email address
+                                      </label>
+                                      <input
+                                        type="email"
+                                        error={forgotError}
+                                        className="form-control form-control-lg"
+                                        placeholder="name@example.com"
+                                        value={forgotEmail}
+                                        onChange={(e) =>
+                                          setForgotEmail(e.target.value)
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div className="col-12 text-center mt-4">
+                                    <a
+                                      onClick={handleForgotCheck}
+                                      className="btn btn-lg btn-block btn-dark lift text-uppercase"
+                                    >
+                                      SUBMIT
+                                    </a>
+                                  </div>
+                                  <div className="col-12 text-center mt-4">
+                                    <span
+                                      className="text-muted"
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <a
+                                        onClick={() => {
+                                          handleForgotClose();
+                                          navigation("/");
+                                        }}
+                                      >
+                                        Back to Sign in
+                                      </a>
+                                    </span>
+                                  </div>
+                                </form>
+                              </div>
+                            </Box>
+                          </Modal>
+                          <Modal
+                            id="email-otp-verify"
+                            open={emailOpen}
+                            onClose={handleEmailClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={style}>
+                              <div className="card-modal">
+                                <h4>OTP</h4>
+
+                                <div className="col-3 text-start card-cd">
+                                  <span>Enter OTP</span>
+                                </div>
+
+                                <OtpInput
+                                  value={emailOtp}
+                                  onChange={setEmailOtp}
+                                  numInputs={6}
+                                  error={"cfwjiw"}
+                                  renderSeparator={
+                                    <span style={{ width: "15px" }}></span>
+                                  }
+                                  renderInput={(props) => (
+                                    <input className="inputWidth" {...props} />
+                                  )}
+                                  inputStyle={{
+                                    border: `1px solid ${verifyEmail}`,
+                                    borderRadius: "8px",
+                                    margin: "5px",
+                                    width: "60px",
+                                    height: "54px",
+                                    fontSize: "12px",
+                                    color: "#000",
+                                    fontWeight: "400",
+                                    caretColor: "blue",
+                                  }}
+                                />
+
+                                <div
+                                  className="col-12 text-center mt-1"
+                                  onClick={verifyEmailOtp}
+                                >
+                                  <a className="btn btn-lg btn-block btn-dark lift text-uppercase">
+                                    Verify
+                                  </a>
+                                </div>
+                              </div>
+                            </Box>
+                          </Modal>
+                          <Modal
+                            open={passwordOpen}
+                            onClose={handlePasswordClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={style}>
+                              <div className="card-modal">
+                                <form className="row g-3">
+                                  <div className="col-12 text-center mb-5">
+                                    <img
+                                      src="assets/img/auth-password-reset.svg"
+                                      className="w240 mb-4"
+                                      alt=""
+                                    />
+                                    <h1>Reset password!!</h1>
+                                  </div>
+                                  <div className="col-12">
+                                    <div className="mb-2">
+                                      <label className="form-label">
+                                        New Password
+                                      </label>
+                                      <input
+                                        type="text"
+                                        className="form-control form-control-lg"
+                                        value={updatedPassword}
+                                        onChange={(e) =>
+                                          setUpdatedPassword(e.target.value)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="mb-2">
+                                      <label className="form-label">
+                                        Confirm Password
+                                      </label>
+                                      <input
+                                        type="password"
+                                        error={
+                                          updatedPassword === confirmPassword
+                                            ? ""
+                                            : "Password Mismatch"
+                                        }
+                                        className="form-control form-control-lg"
+                                        value={confirmPassword}
+                                        onChange={(e) =>
+                                          setConfirmPassword(e.target.value)
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div className="col-12 text-center mt-4">
+                                    <a
+                                      onClick={handlePassword}
+                                      className="btn btn-lg btn-block btn-dark lift text-uppercase"
+                                    >
+                                      SUBMIT
+                                    </a>
+                                  </div>
+                                  <div className="col-12 text-center mt-4">
+                                    <span
+                                      className="text-muted"
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <a
+                                        onClick={() => {
+                                          handlePasswordClose();
+                                          navigation("/");
+                                        }}
+                                      >
+                                        Back to Sign in
+                                      </a>
+                                    </span>
+                                  </div>
+                                </form>
                               </div>
                             </Box>
                           </Modal>
@@ -420,12 +640,6 @@ const Signin = ({onLogin}) => {
                       >
                         Sign In
                       </button>
-                      {/* <div className="col-12 text-center mt-4">
-                      <span className="text-muted">
-                        Don't have an account yet?{" "}
-                        <a href="auth-signup.html">Sign up here</a>
-                      </span>
-                    </div> */}
                     </form>
                     {/* End Form */}
                   </div>

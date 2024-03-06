@@ -23,6 +23,7 @@ import Select from "react-select";
 
 const SalesForm = () => {
   const [product, setProduct] = useState();
+  const qrReader = React.createRef();
   const [formData, setFormData] = useState({
     items: [
       {
@@ -106,21 +107,20 @@ const SalesForm = () => {
 
   const [data, setData] = useState("No result");
 
-  console.log(data)
-  // const dataObject =
-  //   data === "No result"
-  //     ? {}
-  //     : JSON.parse(
-  //         '{"' +
-  //           data
-  //             .replace(/"/g, '\\"')
-  //             .replace(/:/g, '":"')
-  //             .replace(/,/g, '","')
-  //             .replace(/}/g, '"}')
-  //             .replace(/{/g, '{"') +
-  //           '"}'
-  //       );
-  // console.log("dataaa", dataObject);
+  const dataObject =
+    data === "No result"
+      ? {}
+      : JSON.parse(
+          '{"' +
+            data
+              .replace(/"/g, '\\"')
+              .replace(/:/g, '":"')
+              .replace(/,/g, '","')
+              .replace(/}/g, '"}')
+              .replace(/{/g, '{"') +
+            '"}'
+        );
+  console.log("dataaa", dataObject);
   const [salesData, setSalesData] = useState({
     customerName: "",
     mobile: "",
@@ -398,6 +398,7 @@ const SalesForm = () => {
                       onResult={(result, error) => {
                         if (!!result) {
                           setData(result?.text);
+                          qrReader.current.stop();
                         }
 
                         if (!!error) {
@@ -586,7 +587,10 @@ const SalesForm = () => {
                             color: " #565A5C",
                             gap: "5px",
                           }}
-                          onClick={() => setBarCodeOpen(true)}
+                          onClick={() => {
+                            setBarCodeOpen(true);
+                            setData("No result");
+                          }}
                         >
                           <div>
                             <QrCodeScannerIcon />{" "}

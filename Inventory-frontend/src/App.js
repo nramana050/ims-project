@@ -1,5 +1,5 @@
-import "./Styles.css";
-import "./AddedStyles.css";
+// import "./Styles.css";
+// import "./AddedStyles.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserAuthContextProvider } from "./component/authentication/UserAuthContext";
 

@@ -16,6 +16,7 @@ import Select from "react-select";
 
 const PurchaseOrder = () => {
   const navigation = useNavigate();
+  const qrReader = React.createRef();
 
   const [product, setProduct] = useState();
   const [data, setData] = useState("");
@@ -26,8 +27,8 @@ const PurchaseOrder = () => {
     mobile: "",
     quotationOrderNo: "",
     quotationOrderDate: "",
-    billingAddress:"",
-    gstNumber:"",
+    billingAddress: "",
+    gstNumber: "",
     items: [
       {
         id: "",
@@ -124,8 +125,8 @@ const PurchaseOrder = () => {
     mobile: "",
     quotationOrderNo: "",
     quotationOrderDate: "",
-    billingAddress:"",
-    gstNumber:"",
+    billingAddress: "",
+    gstNumber: "",
     formData: [
       {
         id: "",
@@ -248,11 +249,11 @@ const PurchaseOrder = () => {
     setPaymentOpen(true);
   };
 
-  const paymentHandler =  async (e) => {
+  const paymentHandler = async (e) => {
     await axios
-    .post("http://localhost:3800/quotation", formData)
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+      .post("http://localhost:3800/quotation", formData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
     navigation("/quotation", { state: { formData } });
   };
@@ -334,8 +335,9 @@ const PurchaseOrder = () => {
                   <div>
                     <QrReader
                       onResult={(result, error) => {
-                        if (result) {
+                        if (!!result) {
                           setData(result?.text);
+                          qrReader.current.stop();
                         }
                       }}
                       style={{ width: "100%", height: "50%" }}
@@ -409,432 +411,369 @@ const PurchaseOrder = () => {
             <SideBar />
             <div className="wrapper">
               <NavBar />
-              <div
-                className="above-table"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ width: "200px" }}>
-                  <div
-                    style={{
-                      fontSize: "1.4rem",
-                      width: "500px",
-                      display: "flex",
-                    }}
-                  >
-                    <div style={{ padding: "40px" }}>
-                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
-                        <Link
-                          to="/dashboard"
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          Home{" "}
-                        </Link>{" "}
-                        / Quotation /
-                      </span>
-                      <span style={{ color: "black" }}> Quotation Order</span>
+
+              <div className="overlay" style={{ background: "white" }}>
+                <div style={{ padding: "20px 40px" }}>
+                  <span style={{ color: "black", fontSize: "20px" }}>
+                    New Quotation Order
+                  </span>
+                </div>
+                <form className="form-input-fields">
+                  <div className="data-input-fields">
+                    <div class="mb-3 w-50">
+                      <label for="customerName" class="form-label">
+                        Customer Name
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        name="customerName"
+                        value={formData.customerName}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                    <div class="mb-3 w-50">
+                      <label for="mobileNumber" class="form-label">
+                        Mobile Number
+                      </label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="exampleInputPassword1"
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
                     </div>
                   </div>
+                  <div className="data-input-fields">
+                    <div class="mb-3 w-50">
+                      <label for="salesOrderNo" class="form-label">
+                        Quotation Order No.
+                      </label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="exampleInputEmail1"
+                        name="quotationOrderNo"
+                        value={formData.quotationOrderNo}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                    <div class="mb-3 w-50">
+                      <label for="salesOrderDate" class="form-label">
+                        Quotation Order Date
+                      </label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="exampleInputPassword1"
+                        name="quotationOrderDate"
+                        value={formData.quotationOrderDate}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                  </div>
+                  <div className="data-input-fields">
+                    <div class="mb-3 w-50">
+                      <label for="salesOrderNo" class="form-label">
+                        GST Number
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="exampleInputEmail1"
+                        name="gstNumber"
+                        value={formData.gstNumber}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                    <div class="mb-3 w-50">
+                      <label for="salesOrderDate" class="form-label">
+                        Billing Address
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="exampleInputPassword1"
+                        name="billingAddress"
+                        value={formData.billingAddress}
+                        onChange={(e) => handleSaleInput(e)}
+                      />
+                    </div>
+                  </div>
+                </form>
+                <div
+                  style={{
+                    justifyContent: "space-between",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0 30px",
+                    gap: "100px",
+                  }}
+                >
+                  <div>
+                    <lable>Search the Product</lable>
+                    <Select
+                      margin="dense"
+                      fullWidth
+                      isDisabled={item.length > 0 ? false : true}
+                      name="itemName"
+                      id="salesItem"
+                      value={{ label: itemName }}
+                      onChange={(selectedOption) => {
+                        handleSelectChange(selectedOption);
+                        console.log(selectedOption);
+                        if (selectedOption) {
+                          var updatedEntities = [];
+                          setSalesData((prevData) => {
+                            updatedEntities = [...prevData.formData];
+                            updatedEntities[indexValue] = {
+                              ...updatedEntities[indexValue],
+                              itemName: selectedOption.value.itemName,
+                              hsnCode: selectedOption.value.itemCode,
+                              price: selectedOption.value.salesPrice,
+                              sgst: selectedOption.value.gstTax / 2,
+                              cgst: selectedOption.value.gstTax / 2,
+                            };
+                            // console.log(updatedEntities)
+                            return {
+                              ...prevData,
+                              formData: updatedEntities,
+                            };
+                          });
 
-                  <div className="page-toolbar px-xl-3 px-sm-2 px-0 py-3">
-                    <div className="overlay" style={{ background: "white" }}>
-                      <div style={{ padding: "20px 40px" }}>
-                        <span style={{ color: "black", fontSize: "20px" }}>
-                          New Quotation Order
-                        </span>
-                      </div>
-                      <form className="form-input-fields">
-                        <div className="data-input-fields">
-                          <div class="mb-3 w-50">
-                            <label for="customerName" class="form-label">
-                              Customer Name
-                            </label>
-                            <input
+                          setItemName(selectedOption.value.itemName);
+                          setSize(
+                            selectedOption.value.batch[0].size === "NA"
+                              ? [...size]
+                              : selectedOption.value.batch
+                          );
+                          setDisabledInput(selectedOption.value.category);
+                        }
+                      }}
+                      options={options}
+                    />
+                  </div>
+
+                  <button
+                    style={{
+                      height: "50px",
+                      display: "flex",
+                      width: "200px",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: "2px solid #565A5C",
+                      fontSize: "20px",
+                      color: " #565A5C",
+                      gap: "5px",
+                    }}
+                    onClick={() => setBarCodeOpen(true)}
+                  >
+                    <div>
+                      <QrCodeScannerIcon />{" "}
+                    </div>
+                    <div>Qr Code</div>
+                  </button>
+                </div>
+                <div
+                  className="salesviewtable"
+                  style={{
+                    marginTop: "50px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 20,
+                  }}
+                >
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>NO</th>
+                        <th>ITEM NAME</th>
+                        <th>Hsn Code</th>
+                        <th>Size</th>
+                        <th>QTY</th>
+                        <th>PRICE/ITEM</th>
+                        <th>DISCOUNT(%)</th>
+                        <th>SGST</th>
+                        <th>CGST</th>
+                        <th>AMOUNT</th>
+                        <th>ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {item.map((row, index) => (
+                        <tr key={row.id}>
+                          <td>{index + 1}</td>
+                          <td>
+                            <TextField
                               type="text"
-                              class="form-control"
-                              id="exampleInputEmail1"
-                              aria-describedby="emailHelp"
-                              name="customerName"
-                              value={formData.customerName}
-                              onChange={(e) => handleSaleInput(e)}
+                              value={row.itemName}
+                              name="itemName"
+                              onChange={(e) => handleItemChange(e, row.id)}
                             />
-                          </div>
-                          <div class="mb-3 w-50">
-                            <label for="mobileNumber" class="form-label">
-                              Mobile Number
-                            </label>
-                            <input
+                          </td>
+                          <td>
+                            <TextField
+                              name="hsnCode"
+                              type="text"
+                              value={row.hsnCode}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              style={{ width: "80px", marginTop: "0" }}
+                              id="measuringUnit"
+                              margin="dense"
+                              className="buyer-input"
                               type="number"
-                              class="form-control"
-                              id="exampleInputPassword1"
-                              name="mobile"
-                              value={formData.mobile}
-                              onChange={(e) => handleSaleInput(e)}
-                            />
-                          </div>
-                        </div>
-                        <div className="data-input-fields">
-                          <div class="mb-3 w-50">
-                            <label for="salesOrderNo" class="form-label">
-                              Quotation Order No.
-                            </label>
-                            <input
-                              type="number"
-                              class="form-control"
-                              id="exampleInputEmail1"
-                              name="quotationOrderNo"
-                              value={formData.quotationOrderNo}
-                              onChange={(e) => handleSaleInput(e)}
-                            />
-                          </div>
-                          <div class="mb-3 w-50">
-                            <label for="salesOrderDate" class="form-label">
-                            Quotation Order Date
-                            </label>
-                            <input
-                              type="date"
-                              class="form-control"
-                              id="exampleInputPassword1"
-                              name="quotationOrderDate"
-                              value={formData.quotationOrderDate}
-                              onChange={(e) => handleSaleInput(e)}
-                            />
-                          </div>
-                        </div>
-                        <div className="data-input-fields">
-                          <div class="mb-3 w-50">
-                            <label for="salesOrderNo" class="form-label">
-                              GST Number
-                            </label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="exampleInputEmail1"
-                              name="gstNumber"
-                              value={formData.gstNumber}
-                              onChange={(e) => handleSaleInput(e)}
-                            />
-                          </div>
-                          <div class="mb-3 w-50">
-                            <label for="salesOrderDate" class="form-label">
-                            Billing Address
-                            </label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="exampleInputPassword1"
-                              name="billingAddress"
-                              value={formData.billingAddress}
-                              onChange={(e) => handleSaleInput(e)}
-                            />
-                          </div>
-                        </div>
-                      </form>
-                      <div
-                        style={{
-                          justifyContent: "space-between",
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "0 30px",
-                          gap: "100px",
-                        }}
-                      >
-                        <div>
-                          <lable>Search the Product</lable>
-                          <Select
-                            margin="dense"
-                            fullWidth
-                            isDisabled={item.length > 0 ? false : true}
-                            name="itemName"
-                            id="salesItem"
-                            value={{ label: itemName }}
-                            onChange={(selectedOption) => {
-                              handleSelectChange(selectedOption);
-                              console.log(selectedOption);
-                              if (selectedOption) {
-                                var updatedEntities = [];
-                                setSalesData((prevData) => {
-                                  updatedEntities = [...prevData.formData];
-                                  updatedEntities[indexValue] = {
-                                    ...updatedEntities[indexValue],
-                                    itemName: selectedOption.value.itemName,
-                                    hsnCode: selectedOption.value.itemCode,
-                                    price: selectedOption.value.salesPrice,
-                                    sgst: selectedOption.value.gstTax / 2,
-                                    cgst: selectedOption.value.gstTax / 2,
-                                  };
-                                  // console.log(updatedEntities)
-                                  return {
-                                    ...prevData,
-                                    formData: updatedEntities,
-                                  };
-                                });
-
-                                setItemName(selectedOption.value.itemName);
-                                setSize(
-                                  selectedOption.value.batch[0].size === "NA"
-                                    ? [...size]
-                                    : selectedOption.value.batch
-                                );
-                                setDisabledInput(selectedOption.value.category);
-                              }
-                            }}
-                            options={options}
-                          />
-                        </div>
-
-                        <button
-                          style={{
-                            height: "50px",
-                            display: "flex",
-                            width: "200px",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            border: "2px solid #565A5C",
-                            fontSize: "20px",
-                            color: " #565A5C",
-                            gap: "5px",
-                          }}
-                          onClick={() => setBarCodeOpen(true)}
-                        >
-                          <div>
-                            <QrCodeScannerIcon />{" "}
-                          </div>
-                          <div>Qr Code</div>
-                        </button>
-                      </div>
-                      <div
-                        className="salesviewtable"
-                        style={{
-                          marginTop: "50px",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 20,
-                        }}
-                      >
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              <th>NO</th>
-                              <th>ITEM NAME</th>
-                              <th>Hsn Code</th>
-                              <th>Size</th>
-                              <th>QTY</th>
-                              <th>PRICE/ITEM</th>
-                              <th>DISCOUNT(%)</th>
-                              <th>SGST</th>
-                              <th>CGST</th>
-                              <th>AMOUNT</th>
-                              <th>ACTION</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {item.map((row, index) => (
-                              <tr key={row.id}>
-                                <td>{index + 1}</td>
-                                <td>
-                                  <TextField
-                                    type="text"
-                                    value={row.itemName}
-                                    name="itemName"
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                   
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    name="hsnCode"
-                                    type="text"
-                                    value={row.hsnCode}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                  
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    style={{ width: "80px", marginTop: "0" }}
-                                    id="measuringUnit"
-                                    margin="dense"
-                                    className="buyer-input"
-                                    type="number"
-                                    select
-                                    fullWidth
-                                    // disabled={disabledInput === "accessories"?true:false}
-                                    defaultValue="size"
-                                    value={row.size}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                 
-                                    name="size"
-                                    SelectProps={{
-                                      native: true,
-                                    }}
-                                  >
-                                    {size.map((option) => (
-                                      <option
-                                        key={option.size}
-                                        value={option.size}
-                                      >
-                                        {option.size}
-                                      </option>
-                                    ))}
-                                  </TextField>
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="quantity"
-                                    value={row.quantity}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                             
-                                  />
-                                </td>
-
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="price"
-                                    value={row.price}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                 
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="discount"
-                                    value={row.discount}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                  
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="sgst"
-                                    value={row.sgst}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                  
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    name="cgst"
-                                    value={row.cgst}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                 
-                                  />
-                                </td>
-                                <td>
-                                  <TextField
-                                    type="number"
-                                    value={row.amount}
-                                    onChange={(e) =>
-                                      handleItemChange(e, row.id)
-                                    }
-                                    name="amount"
-                                  
-                                  />
-                                </td>
-                                <td>
-                                  <IconButton onClick={() => deleteRow(row.id)}>
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        <Button
-                          style={{
-                            height: "40px",
-                            display: "flex",
-                            left: "10rem",
-                            width: "150px",
-                            alignItems: "right",
-                            justifyContent: "center",
-                            border: "2px solid #565A5C",
-                            fontSize: "15px",
-                            color: " #565A5C",
-                          }}
-                          variant="outlined"
-                          startIcon={<AddCircleOutlineOutlinedIcon />}
-                          onClick={addItem}
-                        >
-                          Add
-                        </Button>
-                      </div>
-
-                      <div className="other-sales-content">
-                        <div className="other-sales-content-left">
-                          <div>Terms And Condition</div>
-                          <div className="sales-content-box">
-                            <div>
-                              1. Goods once Sold will be not taken back or be
-                              exchanged.
-                            </div>
-                            <div>
-                              2. All the disputes are subject to Delhi
-                              jurisdiction only
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="other-sales-content-left"
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "20px",
-                          }}
-                        >
-                          <div>Discount : Rs {totalDisc}</div>
-                          <div>GST Amount : Rs {totalGST}</div>
-                          <div>SUBTOTAL : Rs {totalAmt}</div>
-                          <div className="sales-content-btn">
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "#00AC9A",
-                                height: "40px",
-                                width: "100px",
-                              }}
-                              onClick={handleSave}
-                            >
-                              SAVE
-                            </Button>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "#FFD8D8",
-                                height: "40px",
-                                width: "100px",
-                                color: "#FF1616",
+                              select
+                              fullWidth
+                              // disabled={disabledInput === "accessories"?true:false}
+                              defaultValue="size"
+                              value={row.size}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                              name="size"
+                              SelectProps={{
+                                native: true,
                               }}
                             >
-                              CANCEL
-                            </Button>
-                          </div>
-                        </div>
+                              {size.map((option) => (
+                                <option key={option.size} value={option.size}>
+                                  {option.size}
+                                </option>
+                              ))}
+                            </TextField>
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              name="quantity"
+                              value={row.quantity}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+
+                          <td>
+                            <TextField
+                              type="number"
+                              name="price"
+                              value={row.price}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              name="discount"
+                              value={row.discount}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              name="sgst"
+                              value={row.sgst}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              name="cgst"
+                              value={row.cgst}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              type="number"
+                              value={row.amount}
+                              onChange={(e) => handleItemChange(e, row.id)}
+                              name="amount"
+                            />
+                          </td>
+                          <td>
+                            <IconButton onClick={() => deleteRow(row.id)}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <Button
+                    style={{
+                      height: "40px",
+                      display: "flex",
+                      left: "10rem",
+                      width: "150px",
+                      alignItems: "right",
+                      justifyContent: "center",
+                      border: "2px solid #565A5C",
+                      fontSize: "15px",
+                      color: " #565A5C",
+                    }}
+                    variant="outlined"
+                    startIcon={<AddCircleOutlineOutlinedIcon />}
+                    onClick={addItem}
+                  >
+                    Add
+                  </Button>
+                </div>
+
+                <div className="other-sales-content">
+                  <div className="other-sales-content-left">
+                    <div>Terms And Condition</div>
+                    <div className="sales-content-box">
+                      <div>
+                        1. Goods once Sold will be not taken back or be
+                        exchanged.
                       </div>
+                      <div>
+                        2. All the disputes are subject to Delhi jurisdiction
+                        only
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="other-sales-content-left"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                    }}
+                  >
+                    <div>Discount : Rs {totalDisc}</div>
+                    <div>GST Amount : Rs {totalGST}</div>
+                    <div>SUBTOTAL : Rs {totalAmt}</div>
+                    <div className="sales-content-btn">
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#00AC9A",
+                          height: "40px",
+                          width: "100px",
+                        }}
+                        onClick={handleSave}
+                      >
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#FFD8D8",
+                          height: "40px",
+                          width: "100px",
+                          color: "#FF1616",
+                        }}
+                      >
+                        CANCEL
+                      </Button>
                     </div>
                   </div>
                 </div>

@@ -22,10 +22,17 @@ const QuotationTable = () => {
   }, []);
 
   const getQuotation = async () => {
-    const result = await axios.get(
-      "http://localhost:4000/quotation"
-    );
+    const result = await axios.get("http://localhost:4000/quotation");
     setGetQuotationData(result.data);
+  };
+
+  const deleteItem = async (id) => {
+    await axios
+      .delete(`http://localhost:4000/quotation/delete/${id}`)
+      .then(() => {
+        getQuotation();
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleSearch = () => {
@@ -45,13 +52,12 @@ const QuotationTable = () => {
     if (searchQuery === "") {
       getQuotation();
     }
-  },[]);
-console.log(getQuotationData)
+  }, []);
+  console.log(getQuotationData);
   const [currentQuotationPage, setcurrentQuotationPage] = useState(1);
   const itemsPerQuotationPage = 8;
 
-  const indexOfLastQuotationItem =
-    currentQuotationPage * itemsPerQuotationPage;
+  const indexOfLastQuotationItem = currentQuotationPage * itemsPerQuotationPage;
   const indexOfFirstQuotationItem =
     indexOfLastQuotationItem - itemsPerQuotationPage;
   const currentQuotationItems = getQuotationData.slice(
@@ -130,11 +136,6 @@ console.log(getQuotationData)
                       Search
                     </button>
                   </div>
-                  <div className="filter-container">
-                    <div className="filter">
-                      <HiOutlineFilter size={30} color="rgba(0, 172, 154, 1)" />
-                    </div>
-                  </div>
                 </div>
                 {getQuotationData.length > 0 ? (
                   <table
@@ -166,12 +167,15 @@ console.log(getQuotationData)
                               <td>₹ {item.totalDiscount}</td>
                               <td>₹ {item.totalGST}</td>
                               <td>₹ {item.totalAmount}</td>
-                              <td> <div className="action-btn">
-                            <AiOutlineDelete
-                              style={{ color: "red" }}
-                              // onClick={() => deleteItem(item._id)}
-                            />
-                          </div></td>
+                              <td>
+                                {" "}
+                                <div className="action-btn">
+                                  <AiOutlineDelete
+                                    style={{ color: "red" }}
+                                    onClick={() => deleteItem(item._id)}
+                                  />
+                                </div>
+                              </td>
                             </tr>
                           ))}
                         </tbody>

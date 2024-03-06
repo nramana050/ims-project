@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 // import "../../components/Style.css";
 import customer from "../../assets/customer.png";
 import courier from "../../assets/courier.png";
@@ -15,9 +15,9 @@ import Modal from "@mui/material/Modal";
 import { RxCrossCircled } from "react-icons/rx";
 import axios from "axios";
 import noDataImg from "../../assets/nodata.png";
-import Typography from '@mui/material/Typography';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
+import Typography from "@mui/material/Typography";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Link from "@mui/material/Link";
 
 const BuyersSuppliers = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -280,18 +280,7 @@ const BuyersSuppliers = () => {
             {/* start: page header */}
             <NavBar />
             {/* start: page toolbar */}
-            <div style={{ padding: "40px" }}>
-                      <span style={{ color: "#00AC9A", fontWeight: "bold" }}>
-                        <Link
-                          to="/dashboard"
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          Home{" "}
-                        </Link>{" "}
-                       /
-                      </span>
-                      <span style={{ color: "black" }}> Buyers & Suppliers</span>
-                    </div>
+
             <div className="wrapper buyer-wrapper">
               <div className="container">
                 <div style={{ width: "100%" }}>
@@ -373,7 +362,10 @@ const BuyersSuppliers = () => {
                     <div className="table" id="main-table">
                       <div className="input-group-1">
                         <p>Buyer List</p>
-                        <div className="input-group ">
+                        <div
+                          className="input-group "
+                          style={{ justifyContent: "center" }}
+                        >
                           <input
                             type="search"
                             className="rounded search-bar"
@@ -393,12 +385,6 @@ const BuyersSuppliers = () => {
                           </button>
                         </div>
                         <div className="filter-container">
-                          <div className="filter">
-                            <HiOutlineFilter
-                              size={30}
-                              color="rgba(0, 172, 154, 1)"
-                            />
-                          </div>
                           <button
                             onClick={handleOpen}
                             type="button"
@@ -478,7 +464,10 @@ const BuyersSuppliers = () => {
                   <div className="table" id="main-table">
                     <div className="input-group-1">
                       <p>Supplier List</p>
-                      <div className="input-group ">
+                      <div
+                        className="input-group "
+                        style={{ justifyContent: "center" }}
+                      >
                         <input
                           type="search"
                           className="rounded search-bar"
@@ -498,12 +487,6 @@ const BuyersSuppliers = () => {
                         </button>
                       </div>
                       <div className="filter-container">
-                        <div className="filter">
-                          <HiOutlineFilter
-                            size={30}
-                            color="rgba(0, 172, 154, 1)"
-                          />
-                        </div>
                         <button
                           onClick={handleOpen}
                           type="button"
@@ -579,7 +562,10 @@ const BuyersSuppliers = () => {
                   <div className="table" id="main-table">
                     <div className="input-group-1">
                       <p>To Pay</p>
-                      <div className="input-group ">
+                      <div
+                        className="input-group "
+                        style={{ justifyContent: "center" }}
+                      >
                         <input
                           type="search"
                           className="rounded search-bar"
@@ -599,12 +585,6 @@ const BuyersSuppliers = () => {
                         </button>
                       </div>
                       <div className="filter-container">
-                        <div className="filter">
-                          <HiOutlineFilter
-                            size={30}
-                            color="rgba(0, 172, 154, 1)"
-                          />
-                        </div>
                         <button
                           onClick={handleOpen}
                           type="button"
@@ -678,7 +658,10 @@ const BuyersSuppliers = () => {
                   <div className="table" id="main-table">
                     <div className="input-group-1">
                       <p>To Collect</p>
-                      <div className="input-group ">
+                      <div
+                        className="input-group "
+                        style={{ justifyContent: "center" }}
+                      >
                         <input
                           type="search"
                           className="rounded search-bar"
@@ -698,12 +681,6 @@ const BuyersSuppliers = () => {
                         </button>
                       </div>
                       <div className="filter-container">
-                        <div className="filter">
-                          <HiOutlineFilter
-                            size={30}
-                            color="rgba(0, 172, 154, 1)"
-                          />
-                        </div>
                         <button
                           onClick={handleOpen}
                           type="button"

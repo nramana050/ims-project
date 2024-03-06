@@ -24,11 +24,13 @@ const {
   getInventory,
   getListItem,
   deleteListItem,
+  updateItem,
 } = require("./dataController");
 
 app.post("/inventory", upload.single("file"), createInventory);
 app.get("/inventory", getInventory);
 app.get("/inventory/items-list/:id", getListItem);
 app.delete("/inventory/delete/:id", deleteListItem);
+app.put("/inventory/update/:id", upload.single("file"), updateItem);
 
 module.exports = app;

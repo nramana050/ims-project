@@ -3,13 +3,17 @@ import stock from "../../assets/now-in-stock.png";
 import expense from "../../assets/expense.png";
 import revenue from "../../assets/revenue.png";
 import customer from "../../assets/customer.png";
+import axios from "axios";
 import SideBar from "../SideBar";
 import NavBar from "../NavBar";
 import "../../Styles.css";
 import { Bars } from "react-loader-spinner";
+import ApexCharts from "react-apexcharts";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [stockValue, setStockValue] = useState("");
+  const [chartData, setChartData] = useState([]);
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -17,6 +21,149 @@ const Dashboard = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const getStock = async () => {
+    const result = await axios.get("http://localhost:3600/inventory");
+    const ShoesData = result.data.filter(
+      (item) => item.category === "shoes"
+    ).length;
+    const ClothingData = result.data.filter(
+      (item) => item.category === "clothing"
+    ).length;
+    const AccessoriesData = result.data.filter(
+      (item) => item.category === "accessories"
+    ).length;
+    const Data = result.data.length;
+    setStockValue(Data);
+    setChartData([ShoesData, ClothingData, AccessoriesData]);
+    console.log(stockValue);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await getStock();
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching stock:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const chartOptions = {
+    series: chartData,
+    labels: ["Shoes", "Clothing", "Accessories"],
+    chart: {
+      width: 380,
+      type: "donut",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            show: false,
+          },
+        },
+      },
+    ],
+    colors: ["#9399A1", "#10CBB7", "#2794EB"], // Set desired colors here
+  };
+
+  const salesChartOptions = {
+    series: [
+      {
+        name: "Revenue",
+        type: "column",
+        data: [11.54, 5.87],
+      },
+      {
+        name: "Cost",
+        type: "column",
+        data: [5.87],
+      },
+      {
+        name: "Revenue",
+        type: "line",
+        data: [11.54],
+      },
+    ],
+    chart: {
+      height: 350,
+      type: "line",
+      stacked: false,
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      width: [1, 1, 4],
+    },
+    title: {
+      text: "Sales Statistics",
+      align: "left",
+      offsetX: 110,
+    },
+    xaxis: {
+      categories: ["Revenue", "Cost"],
+    },
+    yaxis: [
+      {
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+          color: "#008FFB",
+        },
+        labels: {
+          style: {
+            colors: "#008FFB",
+          },
+        },
+        title: {
+          text: "Amount (in thousand crores)",
+          style: {
+            color: "#008FFB",
+          },
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+    ],
+    tooltip: {
+      fixed: {
+        enabled: true,
+        position: "topLeft",
+        offsetY: 30,
+        offsetX: 60,
+      },
+    },
+    legend: {
+      horizontalAlign: "left",
+      offsetX: 40,
+    },
+  };
+
+  useEffect(() => {
+    // Render the sales chart using ApexCharts
+    const salesChart = new ApexCharts(
+      document.querySelector("#saleschart"),
+      salesChartOptions
+    );
+    salesChart.render();
+  }, []);
+
   return (
     <div>
       {isLoading ? (
@@ -50,16 +197,13 @@ const Dashboard = () => {
               <div className="page-toolbar px-xl-4 px-sm-2 px-0 py-3">
                 <div className="container-fluid">
                   {/* .row end */}
-                  <div className="row align-items-center">
+                  {/* <div className="row align-items-center">
                     <div className="col">
                       <h1 className="fs-5 color-900 mt-1 mb-0">
                         Welcome back, Insta-e-Mart!
                       </h1>
-                      <small className="text-muted">
-                        You have 12 new messages and 7 new notifications.
-                      </small>
                     </div>
-                  </div>
+                  </div> */}
                   {/* .row end */}
                 </div>
               </div>
@@ -74,61 +218,9 @@ const Dashboard = () => {
                             Current Stock
                           </div>
                           <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">567</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              Unit
+                            <span className="fw-bold h4 mb-0">
+                              {stockValue}
                             </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            Stock Value
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">38,765</span>
-                            <span
-                              className="text-success ms-1 "
-                              style={{ fontSize: "12px" }}
-                            >
-                              rs
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            Stock In
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">55</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              Unit
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            Stock Out
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">32</span>
                             <span
                               className="text-success ms-1"
                               style={{ fontSize: "12px" }}
@@ -146,102 +238,60 @@ const Dashboard = () => {
                             Product Sold
                           </div>
                           <div className="mt-1">
+                            <span className="fw-bold h4 mb-0">₹38,765</span>
+                            <span
+                              className="text-success ms-1 "
+                              style={{ fontSize: "12px" }}
+                            ></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="text-muted text-uppercase small">
+                            Profit
+                          </div>
+                          <div className="mt-1">
+                            <span className="fw-bold h4 mb-0">₹55</span>
+                            <span
+                              className="text-success ms-1"
+                              style={{ fontSize: "12px" }}
+                            ></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="text-muted text-uppercase small">
+                            Expenses
+                          </div>
+                          <div className="mt-1">
+                            <span className="fw-bold h4 mb-0">32</span>
+                            <span
+                              className="text-success ms-1"
+                              style={{ fontSize: "12px" }}
+                            ></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="text-muted text-uppercase small">
+                            Stock In
+                          </div>
+                          <div className="mt-1">
                             <span className="fw-bold h4 mb-0">452</span>
                             <span
                               className="text-success ms-1"
                               style={{ fontSize: "12px" }}
                             >
                               M
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            to be packed
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">22</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              Qty
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            to be shipped
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">11</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              Pkgs
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            to be delivered
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">9</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              Pkgs
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            to be invoiced
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">5</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              Qty
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            Labour Cost
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">3,908</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            >
-                              rs
                             </span>
                           </div>
                         </div>
@@ -257,7 +307,7 @@ const Dashboard = () => {
                         </div>
                         <div className="card-body">
                           <div
-                            id="apex-StockQuality"
+                            id="stock-quality"
                             className="ac-line-transparent"
                           />
                         </div>
@@ -296,14 +346,19 @@ const Dashboard = () => {
                       <div className="card">
                         <div className="card-header">
                           <h6 className="card-title m-0">
-                            Top Selling Plans
+                            Stock Quantity
                             <small className="d-block text-muted">
-                              last update week ago
+                              Category wise
                             </small>
                           </h6>
                         </div>
                         <div className="d-flex justify-content-center">
-                          <div id="apex-TopSellingPlans" />
+                          <ApexCharts
+                            options={chartOptions}
+                            series={chartOptions.series}
+                            type="donut"
+                            width={380}
+                          />
                         </div>
                       </div>
                       {/* .card end */}
@@ -333,7 +388,7 @@ const Dashboard = () => {
                             </div>
                           </div>
                           <div
-                            id="apex-SalesStatistics"
+                            id="saleschart"
                             className="ac-line-transparent"
                           />
                         </div>

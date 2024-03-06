@@ -5,17 +5,7 @@ import { useReactToPrint } from "react-to-print";
 import { Bars } from "react-loader-spinner";
 
 const Quotation = () => {
-  const data = [
-    {
-      no: "1",
-      description: "SHOES VT",
-      price: "₹ 640",
-      qty: "210",
-      amount: "₹ 2,24,000.00",
-    },
-  ];
-
-  const {state} = useLocation()
+  const { state } = useLocation();
 
   const navigation = useNavigate();
 
@@ -45,24 +35,28 @@ const Quotation = () => {
           }}
         >
           <Bars
-          height="80"
-          width="80"
-          color="#40a1ed"
-          ariaLabel="bars-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-        />
+            height="80"
+            width="80"
+            color="#40a1ed"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
         </div>
       ) : (
         <div className="invoice-container">
           <div className="head-t">
             <div className="tax-i">
-            
               <button className="invoice-btn" onClick={() => handlePrint()}>
                 Print
               </button>
-              <button className="invoice-btn" onClick={() => navigation("/quotation/quotation-order")}>Back</button>
+              <button
+                className="invoice-btn"
+                onClick={() => navigation("/quotation/quotation-order")}
+              >
+                Back
+              </button>
             </div>
           </div>
           <div className="invoice" ref={componentRef}>
@@ -117,7 +111,7 @@ const Quotation = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {state.formData.items.map((item,index) => (
+                  {state.formData.items.map((item, index) => (
                     <tr key={item.id} className="item-t table-cl">
                       <td>{index + 1}</td>
                       <td>{item.itemName}</td>
@@ -138,7 +132,7 @@ const Quotation = () => {
                       Discount Amount: ₹ {state.formData.totalDiscount}
                     </td>
                   </tr>
-             
+
                   <tr>
                     <td></td>
                     <td></td>
@@ -150,8 +144,7 @@ const Quotation = () => {
                       Tax Amount: ₹ {state.formData.totalGST}
                     </td>
                   </tr>
-                 
-             
+
                   <tr>
                     <td></td>
                     <td></td>
@@ -173,36 +166,35 @@ const Quotation = () => {
             </div>
 
             <div className="main-table">
-            <table className="table" style={{ marginBottom: "0" }}>
-            <thead className="table-c">
-              <tr className="color wid-t">
-                <th>Greetings</th>
-                <th>Authorized Signatory</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="tdata">
-                <td
-                  style={{
-                    height: "100px",
-                    textAlign: "left",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "30px",
-                  }}
-                >
-                 
-                  <span style={{ fontWeight: "700" }}>
-                    Thank you for shopping with us!!
-                  </span>
-                </td>
-                <td
-                  style={{ width: "200px", height: "100px" }}
-                  className="textr"
-                ></td>
-              </tr>
-            </tbody>
-          </table>
+              <table className="table" style={{ marginBottom: "0" }}>
+                <thead className="table-c">
+                  <tr className="color wid-t">
+                    <th>Greetings</th>
+                    <th>Authorized Signatory</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="tdata">
+                    <td
+                      style={{
+                        height: "100px",
+                        textAlign: "left",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "30px",
+                      }}
+                    >
+                      <span style={{ fontWeight: "700" }}>
+                        Thank you for shopping with us!!
+                      </span>
+                    </td>
+                    <td
+                      style={{ width: "200px", height: "100px" }}
+                      className="textr"
+                    ></td>
+                  </tr>
+                </tbody>
+              </table>
               <div>
                 <p style={{ margin: "10px", textAlign: "justify" }}>
                   This quotation is not a contract or a bill. It is our best
