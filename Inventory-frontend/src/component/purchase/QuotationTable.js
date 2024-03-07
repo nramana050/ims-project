@@ -48,12 +48,13 @@ const QuotationTable = () => {
     getQuotation();
   }, []);
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      getQuotation();
-    }
-  }, []);
-  console.log(getQuotationData);
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getQuotation();
+    hasQuotationBeenCalled = true;
+  }
+
   const [currentQuotationPage, setcurrentQuotationPage] = useState(1);
   const itemsPerQuotationPage = 8;
 

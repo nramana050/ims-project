@@ -48,11 +48,13 @@ const SalesTable = () => {
     getSales();
   }, []);
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      getSales();
-    }
-  }, []);
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getSales();
+    hasQuotationBeenCalled = true;
+  }
+
   console.log(getSalesData);
   const [currentSalesPage, setcurrentSalesPage] = useState(1);
   const itemsPerSalesPage = 8;

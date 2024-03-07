@@ -372,6 +372,7 @@ const Dashboard = () => {
         opacity: 1,
       },
     },
+    colors: ["#9399A1", "#10CBB7", "#008FFB"],
   };
 
   const trend = {
@@ -710,14 +711,7 @@ const Dashboard = () => {
                 <div className="container-fluid d-flex flex-wrap justify-content-between align-items-center">
                   <p className="col-md-4 mb-0 text-muted">
                     © 2023
-                    <a
-                      href="https://www.orivesolutions.com/"
-                      target="_blank"
-                      title="Orive Solutions"
-                    >
-                      Orive Solutions
-                    </a>
-                    , All Rights Reserved.
+                    <a>Insta E Mart</a>, All Rights Reserved.
                   </p>
                 </div>
               </footer>

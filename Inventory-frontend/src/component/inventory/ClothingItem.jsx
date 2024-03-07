@@ -75,11 +75,12 @@ const ClothingItem = () => {
     setGetClothingData(filteredData);
   };
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      getClothingItem();
-    }
-  });
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getClothingItem();
+    hasQuotationBeenCalled = true;
+  }
 
   return (
     <div>

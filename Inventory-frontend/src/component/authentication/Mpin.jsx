@@ -39,7 +39,6 @@ const Mpin = () => {
         : await axios
             .post("http://localhost:3500/set-mpin", { mpin: secondPin })
             .then((result) => {
-              console.log(result.data);
               if (result.data === "success") {
                 navigation("/mpin");
               }

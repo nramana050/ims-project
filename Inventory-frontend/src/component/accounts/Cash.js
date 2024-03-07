@@ -16,30 +16,28 @@ const Cash = () => {
 
     return () => clearTimeout(timer);
   }, []);
-  const [formData, setFormData] = useState({
-    adjustment: "",
-    transferDate: "",
-    enterAmount: "",
-    description: "",
-    purchasePrice: "",
-  });
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+
   const [currentSalesPage, setcurrentSalesPage] = useState(1);
   const itemsPerSalesPage = 8;
 
   const handleSearch = () => {
     console.log("Search query:", searchQuery);
-    const filteredData = getItemData.filter((item) =>
+
+    // Filtering itemData
+    const filteredItemData = itemData.filter((item) =>
+      item.vendorName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    console.log("Filtered item data:", filteredItemData);
+    setItemData(filteredItemData);
+
+    // Filtering getSalesData
+    const filteredSalesData = getSalesData.filter((item) =>
       item.customerName.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    console.log("Filtered data:", filteredData);
-    setGetSalesData(filteredData);
+    console.log("Filtered sales data:", filteredSalesData);
+    setGetSalesData(filteredSalesData);
   };
+
   const calculateTotalAmount = () => {
     const totalSalesAmount = getSalesData.reduce(
       (total, salesItem) => total + parseFloat(salesItem.totalAmount || 0),
@@ -66,6 +64,16 @@ const Cash = () => {
     indexOfLastSalesItem
   );
 
+  const totalSalesPages = Math.ceil(getSalesData.length / itemsPerSalesPage);
+
+  const nextSalesPage = () => {
+    setcurrentSalesPage(currentSalesPage + 1);
+  };
+
+  const prevSalesPage = () => {
+    setcurrentSalesPage(currentSalesPage - 1);
+  };
+
   const getItemData = async () => {
     await axios
       .get("http://localhost:3900/accounts/expense")
@@ -81,14 +89,15 @@ const Cash = () => {
   useEffect(() => {
     getItemData();
     getSales();
-    setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      getSales();
-    }
-  }, []);
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getItemData();
+    getSales();
+    hasQuotationBeenCalled = true;
+  }
 
   const [dataObject, setDataObject] = useState(null);
   const [item, setItem] = useState([]);
@@ -242,6 +251,28 @@ const Cash = () => {
                         ))}
                       </tbody>
                     </table>
+                    <div>
+                      <button
+                        className="buyer-page-btn"
+                        onClick={prevSalesPage}
+                        disabled={currentSalesPage === 1}
+                      >
+                        Previous
+                      </button>
+                      <button
+                        className="buyer-page-btn"
+                        onClick={nextSalesPage}
+                        disabled={
+                          currentSalesPage === totalSalesPages ||
+                          totalSalesPages === 0
+                        }
+                      >
+                        Next
+                      </button>
+                    </div>
+                    <div>
+                      Page {currentSalesPage} of {totalSalesPages}
+                    </div>
                   </div>
                 </table>
               </div>

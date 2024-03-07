@@ -11,6 +11,7 @@ import plus from "../../assets/Plus.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../AddedStyles.css";
+import noDataImg from "../../assets/nodata.png";
 
 const Expense = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Expense = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [itemData, setItemData] = useState([]);
   const [expenses, setExpenses] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     vendorName: "",
     expenseCategory: "",
@@ -27,17 +29,50 @@ const Expense = () => {
     purchasePrice: "",
   });
 
+  const handleSearch = () => {
+    console.log("Search query:", searchQuery);
+    const filteredData = itemData.filter((item) =>
+      item.vendorName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    console.log("Filtered data:", filteredData);
+    setItemData(filteredData);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleOpen = () => setOpen(true);
-  console.log("abcd", expenses);
 
   const handleSave = async () => {
     await axios
-      .post(`http://localhost:3900/accounts/expense`, formData)
+      .post("http://localhost:3900/accounts/expense", formData)
       .then((result) => {
         handleClose();
         getItemData();
       })
       .catch((err) => console.log(err));
+  };
+
+  const [currentExpense, setcurrentExpense] = useState(1);
+  const itemsDataperPage = 5;
+
+  const indexOfLastItem = currentExpense * itemsDataperPage;
+  const indexOffirstItem = indexOfLastItem - itemsDataperPage;
+  const currentExpenseItem = itemData.slice(indexOffirstItem, indexOfLastItem);
+
+  const totalPage = Math.ceil(itemData.length / itemsDataperPage);
+
+  const nextPage = () => {
+    setcurrentExpense(currentExpense + 1);
+  };
+
+  const prevPage = () => {
+    setcurrentExpense(currentExpense - 1);
   };
 
   const cancelButton = () => {
@@ -67,6 +102,8 @@ const Expense = () => {
       .catch((err) => console.log(err));
   };
 
+  console.log(itemData);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -80,8 +117,13 @@ const Expense = () => {
 
   useEffect(() => {
     getItemData();
-    setIsLoading(false);
   }, []);
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getItemData();
+    hasQuotationBeenCalled = true;
+  }
 
   return (
     <div>
@@ -126,7 +168,12 @@ const Expense = () => {
                       placeholder="Search"
                       aria-label="Search"
                       aria-describedby="search-addon"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                      }}
                     />
+
                     <button
                       type="button"
                       className="btn search-btn"
@@ -134,6 +181,7 @@ const Expense = () => {
                         backgroundColor: "rgba(0, 172, 154, 1)",
                         color: "white",
                       }}
+                      onClick={handleSearch}
                     >
                       Search
                     </button>
@@ -147,40 +195,74 @@ const Expense = () => {
                     </button>
                   </div>
                 </div>
-
-                <table className="table table-bordered ">
-                  <thead>
-                    <tr>
-                      <th>Sl No</th>
-                      <th>VENDOR NAME</th>
-                      <th>EXPENSE CATEGORY</th>
-                      <th>ITEMS/NAME/PURCHASE</th>
-                      <th>BILL DATE</th>
-                      <th>PURCHASE PRICE</th>
-                      <th>ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {itemData.map((expense, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{expense.vendorName}</td>
-                        <td>{expense.expenseCategory}</td>
-                        <td>{expense.items}</td>
-                        <td>{expense.billDate}</td>
-                        <td>{expense.purchasePrice}</td>
-                        <td>
-                          <div className="action-btn">
-                            <AiOutlineDelete
-                              style={{ color: "red" }}
-                              onClick={() => deleteItem(expense._id)}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                {itemData.length > 0 ? (
+                  <table
+                    className="table table-bordered "
+                    style={{ height: "40vh" }}
+                  >
+                    <div id="table-responsive" className="table-responsive">
+                      <table
+                        id="table"
+                        className="table table-hover table-striped text-nowrap table-vcenter mb-0"
+                      >
+                        <thead>
+                          <tr>
+                            <th>Sl No</th>
+                            <th>VENDOR NAME</th>
+                            <th>EXPENSE CATEGORY</th>
+                            <th>ITEMS/NAME/PURCHASE</th>
+                            <th>BILL DATE</th>
+                            <th>PURCHASE PRICE</th>
+                            <th>ACTION</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentExpenseItem.map((expense, index) => (
+                            <tr key={index}>
+                              <td>{index + indexOffirstItem + 1}</td>
+                              <td>{expense.vendorName}</td>
+                              <td>{expense.expenseCategory}</td>
+                              <td>{expense.items}</td>
+                              <td>{expense.billDate}</td>
+                              <td>{expense.purchasePrice}</td>
+                              <td>
+                                <div className="action-btn">
+                                  <AiOutlineDelete
+                                    style={{ color: "red" }}
+                                    onClick={() => deleteItem(expense._id)}
+                                  />
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </table>
+                ) : (
+                  <div style={{ width: "100%", textAlign: "center" }}>
+                    <img src={noDataImg} alt="no-data" />
+                  </div>
+                )}
+              </div>
+              <div>
+                <button
+                  className="buyer-page-btn"
+                  onClick={prevPage}
+                  disabled={currentExpense === 1}
+                >
+                  Previous
+                </button>
+                <button
+                  className="buyer-page-btn"
+                  onClick={nextPage}
+                  disabled={currentExpense === totalPage || totalPage === 0}
+                >
+                  Next
+                </button>
+              </div>
+              <div>
+                Page {currentExpense} of {totalPage}
               </div>
             </div>
           </div>

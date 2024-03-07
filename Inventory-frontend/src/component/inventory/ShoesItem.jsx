@@ -54,11 +54,12 @@ const Inventory = () => {
     getInventory();
   }, []);
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      getInventory();
-    }
-  });
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getInventory();
+    hasQuotationBeenCalled = true;
+  }
 
   const [currentShoesPage, setcurrentShoesPage] = useState(1);
   const itemsPerShoesPage = 5;
@@ -78,10 +79,6 @@ const Inventory = () => {
 
   const prevShoesPage = () => {
     setcurrentShoesPage(currentShoesPage - 1);
-  };
-
-  const handleInputChange = (event) => {
-    setSearchQuery(event.target.value);
   };
 
   return (

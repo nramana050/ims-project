@@ -77,11 +77,12 @@ const AccessoriesItem = () => {
     setGetAccessoriesData(filteredData);
   };
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      getAccessoriesItem();
-    }
-  });
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getAccessoriesItem();
+    hasQuotationBeenCalled = true;
+  }
 
   return (
     <div>

@@ -30,7 +30,7 @@ const Transactions = () => {
   const handleSearch = () => {
     console.log("Search query:", searchQuery);
     const filteredData = getTransactionData.filter((item) =>
-      item.itemName.toLowerCase().includes(searchQuery.toLowerCase())
+      item.order_id.toLowerCase().includes(searchQuery.toLowerCase())
     );
     console.log("Filtered data:", filteredData);
     setGetTransactionData(filteredData);
@@ -40,11 +40,12 @@ const Transactions = () => {
     getTransaction();
   }, []);
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      getTransaction();
-    }
-  });
+  let hasQuotationBeenCalled = false;
+
+  if (searchQuery === "" && !hasQuotationBeenCalled) {
+    getTransaction();
+    hasQuotationBeenCalled = true;
+  }
 
   const [currentTransactionPage, setcurrentTransactionPage] = useState(1);
   const itemsPerTransactionPage = 8;

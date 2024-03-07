@@ -22,6 +22,7 @@ import Link from "@mui/material/Link";
 const BuyersSuppliers = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
@@ -33,6 +34,12 @@ const BuyersSuppliers = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      getBuyersSuppliers();
+    }
+  });
 
   const [card, setCard] = useState(0);
   const [display1, setDisplay1] = useState("none");
@@ -365,25 +372,7 @@ const BuyersSuppliers = () => {
                         <div
                           className="input-group "
                           style={{ justifyContent: "center" }}
-                        >
-                          <input
-                            type="search"
-                            className="rounded search-bar"
-                            placeholder="Search"
-                            aria-label="Search"
-                            aria-describedby="search-addon"
-                          />
-                          <button
-                            type="button"
-                            className="btn search-btn"
-                            style={{
-                              backgroundColor: "rgba(0, 172, 154, 1)",
-                              color: "white",
-                            }}
-                          >
-                            Search
-                          </button>
-                        </div>
+                        ></div>
                         <div className="filter-container">
                           <button
                             onClick={handleOpen}
@@ -467,25 +456,7 @@ const BuyersSuppliers = () => {
                       <div
                         className="input-group "
                         style={{ justifyContent: "center" }}
-                      >
-                        <input
-                          type="search"
-                          className="rounded search-bar"
-                          placeholder="Search"
-                          aria-label="Search"
-                          aria-describedby="search-addon"
-                        />
-                        <button
-                          type="button"
-                          className="btn search-btn"
-                          style={{
-                            backgroundColor: "rgba(0, 172, 154, 1)",
-                            color: "white",
-                          }}
-                        >
-                          Search
-                        </button>
-                      </div>
+                      ></div>
                       <div className="filter-container">
                         <button
                           onClick={handleOpen}
@@ -565,25 +536,7 @@ const BuyersSuppliers = () => {
                       <div
                         className="input-group "
                         style={{ justifyContent: "center" }}
-                      >
-                        <input
-                          type="search"
-                          className="rounded search-bar"
-                          placeholder="Search"
-                          aria-label="Search"
-                          aria-describedby="search-addon"
-                        />
-                        <button
-                          type="button"
-                          className="btn search-btn"
-                          style={{
-                            backgroundColor: "rgba(0, 172, 154, 1)",
-                            color: "white",
-                          }}
-                        >
-                          Search
-                        </button>
-                      </div>
+                      ></div>
                       <div className="filter-container">
                         <button
                           onClick={handleOpen}
@@ -661,25 +614,7 @@ const BuyersSuppliers = () => {
                       <div
                         className="input-group "
                         style={{ justifyContent: "center" }}
-                      >
-                        <input
-                          type="search"
-                          className="rounded search-bar"
-                          placeholder="Search"
-                          aria-label="Search"
-                          aria-describedby="search-addon"
-                        />
-                        <button
-                          type="button"
-                          className="btn search-btn"
-                          style={{
-                            backgroundColor: "rgba(0, 172, 154, 1)",
-                            color: "white",
-                          }}
-                        >
-                          Search
-                        </button>
-                      </div>
+                      ></div>
                       <div className="filter-container">
                         <button
                           onClick={handleOpen}

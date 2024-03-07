@@ -16,9 +16,7 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoAddCircleOutline } from "react-icons/io5";
 import Select from "react-select";
-import ReactToPrint from "react-to-print";
 import { useReactToPrint } from "react-to-print";
-import { Print } from "react-print";
 
 const Categories = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -194,7 +192,7 @@ const Categories = () => {
   };
 
   const handleSubmit = (e) => {
-    //  e.preventDefault();
+    e.preventDefault();
   };
   const handleSave = async (e) => {
     try {
@@ -891,17 +889,13 @@ const Categories = () => {
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <ReactToPrint
-                            trigger={() => (
-                              <Button
-                                style={{ display: `${displayQR}` }}
-                                onClick={handlePrint}
-                              >
-                                Print this out!
-                              </Button>
-                            )}
-                            content={() => componentRef}
-                          />
+                          <Button
+                            style={{ display: `${displayQR}` }}
+                            onClick={handlePrint}
+                          >
+                            Print this out!
+                          </Button>
+
                           {/* Your content */}
                           <div ref={(el) => (componentRef = el)}>
                             <p
@@ -921,6 +915,8 @@ const Categories = () => {
                         variant="outlined"
                         onClick={() => {
                           updateForm ? handleUpdate(updateId) : handleSave();
+                          handleClose();
+                          setOptions([]);
                         }}
                         //   disabled={buttonCheck?false:true}
                       >

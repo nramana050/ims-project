@@ -13,6 +13,14 @@ const Invoice = () => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    copyStyles: (styles) => ({
+      ...styles,
+      "thead th": {
+        ...styles["thead th"],
+        border: "1px solid black",
+        textAlign: "left",
+      },
+    }),
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +85,9 @@ const Invoice = () => {
               <table className="table">
                 <thead className="table-c">
                   <tr className="color">
-                    <th>Bill To</th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Bill To
+                    </th>
                     {/* <th>Ship To</th> */}
                   </tr>
                 </thead>
@@ -104,14 +114,30 @@ const Invoice = () => {
               <table className="table">
                 <thead className="table-c">
                   <tr className="color">
-                    <th>S.N</th>
-                    <th>ITEM</th>
-                    <th>HSN/SAC</th>
-                    <th>QTY</th>
-                    <th>PRICE</th>
-                    <th>DISCOUNT</th>
-                    <th>GST</th>
-                    <th>AMOUNT</th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      S.N
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      ITEM
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      HSN/SAC
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      QTY
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      PRICE
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      DISCOUNT
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      GST
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      AMOUNT
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -135,11 +161,24 @@ const Invoice = () => {
               <table className="table">
                 <thead className="table-c">
                   <tr className="color">
-                    <th>Before Tax Amount</th>
-                    <th>CGST</th>
-                    <th>SGST</th>
-                    <th>Total Discount</th>
-                    <th colSpan={2}>Amount</th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Before Tax Amount
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      CGST
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      SGST
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Total Discount
+                    </th>
+                    <th
+                      style={{ backgroundColor: "rgb(137, 95, 252)" }}
+                      colSpan={2}
+                    >
+                      Amount
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -171,8 +210,12 @@ const Invoice = () => {
               <table className="table" style={{ marginBottom: "0" }}>
                 <thead className="table-c">
                   <tr className="color wid-t">
-                    <th>Payment Mode</th>
-                    <th>Authorized Signatory</th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Payment Mode
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Authorized Signatory
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

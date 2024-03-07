@@ -353,6 +353,7 @@ const Signin = ({ onLogin }) => {
 
                           <PhoneInput
                             id="phone"
+                            style={{ display: "flex" }}
                             className="form-control form-control-lg"
                             type="tel"
                             maxLength={11}
@@ -636,7 +637,7 @@ const Signin = ({ onLogin }) => {
                       <button
                         className="col-12 text-center mt-4 btn btn-lg btn-block btn-dark lift text-uppercase"
                         onClick={(e) => saveLogin(e)}
-                        //    disabled={btnDisable}
+                        disabled={btnDisable}
                       >
                         Sign In
                       </button>

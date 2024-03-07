@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import Signin from "../authentication/Signin";
@@ -28,6 +28,13 @@ import SalesReport from "../reports/SalesReport";
 const MainRouting = () => {
   const [loggedIn, setLoggedIn] = useState(true);
 
+  // useEffect(() => {
+  //   if (localStorage.getItem("expiryDate")) {
+  //     setLoggedIn(true);
+  //   } else {
+  //     setLoggedIn(false);
+  //   }
+  // });
   const handleLogin = () => {
     setLoggedIn(true);
   };
