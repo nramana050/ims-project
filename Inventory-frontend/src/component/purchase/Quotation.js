@@ -13,6 +13,14 @@ const Quotation = () => {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    copyStyles: (styles) => ({
+      ...styles,
+      "thead th": {
+        ...styles["thead th"],
+        border: "1px solid black",
+        textAlign: "left",
+      },
+    }),
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +56,7 @@ const Quotation = () => {
         <div className="invoice-container">
           <div className="head-t">
             <div className="tax-i">
-              <button className="invoice-btn" onClick={() => handlePrint()}>
+              <button className="invoice-btn" onClick={handlePrint}>
                 Print
               </button>
               <button
@@ -77,8 +85,9 @@ const Quotation = () => {
               <table className="table">
                 <thead className="table-c">
                   <tr className="color">
-                    <th>Quotation For</th>
-                    {/* <th>Ship To</th> */}
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Quotation For
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -89,9 +98,7 @@ const Quotation = () => {
                       <p>Phone Number: {state.formData.mobile}</p>
                       <p>GSTIN : {state.formData.gstNumber} </p>
                     </td>
-                    {/* <td className="wa-p">
-                  <p>WA-89 BLOCK NEW PATPARGANJ,ROAD SHAKARPUR,DELHI 110092</p>
-                </td> */}
+
                     <td className="wa-pl">
                       <p>Quotation Number: {state.formData.quotationOrderNo}</p>
                       <p>Date : {state.formData.quotationOrderDate}</p>
@@ -103,11 +110,21 @@ const Quotation = () => {
               <table className="table">
                 <thead className="table-c">
                   <tr className="color">
-                    <th>S.N</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>QTY</th>
-                    <th>Total</th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      S.N
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Description
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Price
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      QTY
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Total
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -169,8 +186,12 @@ const Quotation = () => {
               <table className="table" style={{ marginBottom: "0" }}>
                 <thead className="table-c">
                   <tr className="color wid-t">
-                    <th>Greetings</th>
-                    <th>Authorized Signatory</th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Greetings
+                    </th>
+                    <th style={{ backgroundColor: "rgb(137, 95, 252)" }}>
+                      Authorized Signatory
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

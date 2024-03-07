@@ -7,7 +7,7 @@ import "jspdf-autotable";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import noDataImg from "../../assets/nodata.png";
-import header from "../../assets/Header.jpeg";
+import header from "../../assets/Header.png";
 import footer from "../../assets/Footer.png";
 import logo from "../../assets/logo.jpeg";
 import * as XLSX from "xlsx";

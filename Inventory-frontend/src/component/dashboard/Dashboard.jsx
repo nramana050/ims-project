@@ -1,29 +1,50 @@
 import React, { useEffect, useState } from "react";
-import stock from "../../assets/now-in-stock.png";
-import expense from "../../assets/expense.png";
-import revenue from "../../assets/revenue.png";
-import customer from "../../assets/customer.png";
-import axios from "axios";
+// import stock from "../../assets/now-in-stock.png";
+// import expense from "../../assets/expense.png";
+// import revenue from "../../assets/revenue.png";
+// import customer from "../../assets/customer.png";
 import SideBar from "../SideBar";
 import NavBar from "../NavBar";
 import "../../Styles.css";
-import { Bars } from "react-loader-spinner";
 import ApexCharts from "react-apexcharts";
+import axios from "axios";
+import { Bars } from "react-loader-spinner";
+// import { BarPlot } from "@mui/x-charts/BarChart";
+// import { ChartContainer } from "@mui/x-charts/ChartContainer";
+
+// import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
+// import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [getSalesData, setGetSalesData] = useState([]);
   const [stockValue, setStockValue] = useState("");
   const [chartData, setChartData] = useState([]);
+  const [itemData, setItemData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
-
     return () => clearTimeout(timer);
   }, []);
 
+  const [currentSalesPage, setcurrentSalesPage] = useState(1);
+  const itemsPerSalesPage = 8;
+  const indexOfLastSalesItem = currentSalesPage * itemsPerSalesPage;
+  const indexOfFirstSalesItem = indexOfLastSalesItem - itemsPerSalesPage;
+  const currentSalesItems = getSalesData.slice(
+    indexOfFirstSalesItem,
+    indexOfLastSalesItem
+  );
+
+  const [totalStock, setTotalStock] = useState([]);
+
   const getStock = async () => {
     const result = await axios.get("http://localhost:3600/inventory");
+    const QuantityData = result.data.filter((item) => item.openingStock > 0);
+
+    setTotalStock(QuantityData);
+
     const ShoesData = result.data.filter(
       (item) => item.category === "shoes"
     ).length;
@@ -36,8 +57,14 @@ const Dashboard = () => {
     const Data = result.data.length;
     setStockValue(Data);
     setChartData([ShoesData, ClothingData, AccessoriesData]);
-    console.log(stockValue);
   };
+
+  const stock = totalStock.map((obj) => obj.openingStock);
+
+  const sumOfStocks = stock.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +79,86 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const salesChart = new ApexCharts(
+      document.querySelector("#saleschart"),
+      salesChartOptions
+    );
+    salesChart.render();
+  }, []);
+
+  const getItemData = async () => {
+    const result = await axios.get("http://localhost:3900/accounts/expense");
+    const expenseData = result.data.filter((item) => item.purchasePrice > 0);
+    setItemData(expenseData);
+  };
+
+  const expense = itemData.map((obj) => obj.purchasePrice);
+
+  const sumOfExpenses = expense.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+
+  const [soldQuantity, setSoldQuantity] = useState([]);
+
+  const getSales = async () => {
+    const result = await axios.get("http://localhost:3800/sales");
+    const soldData = result.data.filter((item) => item.totalAmount > 0);
+
+    setSoldQuantity(soldData);
+    setGetSalesData(result.data);
+  };
+
+  const stockSold = soldQuantity.map((obj) => obj.totalAmount);
+
+  const sumOfStocksSold = stockSold.reduce(
+    (accumulator, currentValue) =>
+      parseFloat(accumulator) + parseFloat(currentValue),
+    0
+  );
+
+  const calculateTotalAmount = () => {
+    const totalSalesAmount = getSalesData.reduce(
+      (total, salesItem) => total + parseFloat(salesItem.totalAmount || 0),
+      0
+    );
+
+    const totalExpenseAmount = itemData.reduce(
+      (total, expenseItem) =>
+        total + parseFloat(expenseItem.purchasePrice || 0),
+      0
+    );
+
+    return totalSalesAmount - totalExpenseAmount;
+  };
+
+  const totalAmount = calculateTotalAmount();
+  const totalColor = totalAmount >= 0 ? "green" : "red";
+  const totalSign = totalAmount >= 0 ? "+" : "-";
+
+  const [getPayAmt, setGetPayAmt] = useState([]);
+  const [getCollectAmt, setGetCollectAmt] = useState([]);
+  const getBuyersSuppliers = async () => {
+    const result = await axios.get("http://localhost:3600/buyers-suppliers");
+    const payData = result.data.filter((item) => item.payAmount > 0);
+    setGetPayAmt(payData);
+    const collectData = result.data.filter((item) => item.collectAmount > 0);
+    setGetCollectAmt(collectData);
+  };
+
+  const payValues = getPayAmt.map((obj) => obj.payAmount);
+  const collectValues = getCollectAmt.map((obj) => obj.collectAmount);
+
+  const sumOfPay = payValues.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+  const sumOfCollect = collectValues.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
 
   const chartOptions = {
     series: chartData,
@@ -77,6 +184,31 @@ const Dashboard = () => {
       },
     ],
     colors: ["#9399A1", "#10CBB7", "#2794EB"], // Set desired colors here
+  };
+  const chartPayableOptions = {
+    series: [sumOfPay, sumOfCollect],
+    labels: ["To Pay", "To Collect"],
+    chart: {
+      width: 380,
+      type: "donut",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            show: false,
+          },
+        },
+      },
+    ],
+    colors: ["#9399A1", "#10CBB7"],
   };
 
   const salesChartOptions = {
@@ -155,14 +287,142 @@ const Dashboard = () => {
     },
   };
 
+  const series = [
+    {
+      type: "bar",
+      stack: "",
+      yAxisKey: "eco",
+      data: [2, 5, 3, 4, 1],
+    },
+    {
+      type: "bar",
+      stack: "",
+      yAxisKey: "eco",
+      data: [5, 6, 2, 8, 9],
+    },
+  ];
+
   useEffect(() => {
-    // Render the sales chart using ApexCharts
-    const salesChart = new ApexCharts(
-      document.querySelector("#saleschart"),
-      salesChartOptions
-    );
-    salesChart.render();
+    getSales();
+    getBuyersSuppliers();
+    getItemData();
   }, []);
+
+  const state = {
+    series: [
+      { name: "CLOTHING", data: [44, 55, 41, 67, 22, 43] },
+      { name: "SHOES", data: [13, 23, 20, 8, 13, 27] },
+      { name: "ACCESSORIES", data: [11, 17, 15, 15, 21, 14] },
+    ],
+    options: {
+      chart: {
+        type: "bar",
+        height: 350,
+        stacked: true,
+        toolbar: {
+          show: true,
+        },
+        zoom: {
+          enabled: true,
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: "bottom",
+              offsetX: -10,
+              offsetY: 0,
+            },
+          },
+        },
+      ],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          borderRadius: 10,
+          dataLabels: {
+            total: {
+              enabled: true,
+              style: {
+                fontSize: "13px",
+                fontWeight: 900,
+              },
+            },
+          },
+        },
+      },
+      xaxis: {
+        type: "datetime",
+        categories: [
+          "01/01/2011 GMT",
+          "01/02/2011 GMT",
+          "01/03/2011 GMT",
+          "01/04/2011 GMT",
+          "01/05/2011 GMT",
+          "01/06/2011 GMT",
+        ],
+      },
+      legend: {
+        position: "right",
+        offsetY: 40,
+      },
+      fill: {
+        opacity: 1,
+      },
+    },
+  };
+
+  const trend = {
+    series: [
+      {
+        name: "Desktops",
+        data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+      },
+    ],
+    options: {
+      chart: {
+        height: 350,
+        type: "line",
+        zoom: {
+          enabled: false,
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "straight",
+      },
+      title: {
+        text: "Product Trends by Month",
+        align: "left",
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"],
+          opacity: 0.5,
+        },
+      },
+      xaxis: {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+      },
+    },
+  };
 
   return (
     <div>
@@ -194,19 +454,6 @@ const Dashboard = () => {
             <NavBar />
             {/* start: page toolbar */}
             <>
-              <div className="page-toolbar px-xl-4 px-sm-2 px-0 py-3">
-                <div className="container-fluid">
-                  {/* .row end */}
-                  {/* <div className="row align-items-center">
-                    <div className="col">
-                      <h1 className="fs-5 color-900 mt-1 mb-0">
-                        Welcome back, Insta-e-Mart!
-                      </h1>
-                    </div>
-                  </div> */}
-                  {/* .row end */}
-                </div>
-              </div>
               {/* start: page body */}
               <div className="page-body px-xl-4 px-sm-2 px-0 py-lg-2 py-1 mt-0 mt-lg-3">
                 <div className="container-fluid">
@@ -219,7 +466,8 @@ const Dashboard = () => {
                           </div>
                           <div className="mt-1">
                             <span className="fw-bold h4 mb-0">
-                              {stockValue}
+                              {" "}
+                              {sumOfStocks}{" "}
                             </span>
                             <span
                               className="text-success ms-1"
@@ -235,30 +483,13 @@ const Dashboard = () => {
                       <div className="card">
                         <div className="card-body">
                           <div className="text-muted text-uppercase small">
-                            Product Sold
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">₹38,765</span>
-                            <span
-                              className="text-success ms-1 "
-                              style={{ fontSize: "12px" }}
-                            ></span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
                             Profit
                           </div>
                           <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">₹55</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            ></span>
+                            <span className="fw-bold h4 mb-0">
+                              {" "}
+                              {totalSign} ₹ {Math.abs(totalAmount)}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -267,31 +498,37 @@ const Dashboard = () => {
                       <div className="card">
                         <div className="card-body">
                           <div className="text-muted text-uppercase small">
-                            Expenses
+                            Expense
                           </div>
                           <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">32</span>
-                            <span
-                              className="text-success ms-1"
-                              style={{ fontSize: "12px" }}
-                            ></span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="card">
-                        <div className="card-body">
-                          <div className="text-muted text-uppercase small">
-                            Stock In
-                          </div>
-                          <div className="mt-1">
-                            <span className="fw-bold h4 mb-0">452</span>
+                            <span className="fw-bold h4 mb-0">
+                              {sumOfExpenses}
+                            </span>
                             <span
                               className="text-success ms-1"
                               style={{ fontSize: "12px" }}
                             >
-                              M
+                              rupees
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="card">
+                        <div className="card-body">
+                          <div className="text-muted text-uppercase small">
+                            Product Sold
+                          </div>
+                          <div className="mt-1">
+                            <span className="fw-bold h4 mb-0">
+                              {sumOfStocksSold}
+                            </span>
+                            <span
+                              className="text-success ms-1"
+                              style={{ fontSize: "12px" }}
+                            >
+                              rupees
                             </span>
                           </div>
                         </div>
@@ -299,168 +536,113 @@ const Dashboard = () => {
                     </div>
                   </div>
                   {/* .row end */}
+
                   <div className="row g-3 row-deck">
                     <div className="col-xl-4 col-lg-4 col-md-6">
-                      <div className="card">
-                        <div className="card-header">
-                          <h6 className="card-title m-0">Stock Quality</h6>
-                        </div>
-                        <div className="card-body">
+                      <div className="card-body">
+                        <div
+                          id="apex-QualityPurchase"
+                          className="ac-line-transparent"
+                        />
+                        <div className="card" style={{ height: "60vh" }}>
+                          <div className="card-header">
+                            <h6 className="card-title m-0">
+                              Stock Quantity
+                              <small className="d-block text-muted">
+                                Category wise
+                              </small>
+                            </h6>
+                          </div>
                           <div
-                            id="stock-quality"
-                            className="ac-line-transparent"
-                          />
+                            className="d-flex justify-content-center"
+                            style={{ marginTop: "40px" }}
+                          >
+                            <ApexCharts
+                              options={chartOptions}
+                              series={chartOptions.series}
+                              type="donut"
+                              width={380}
+                            />
+                          </div>
                         </div>
                       </div>
                       {/* .card end */}
                     </div>
                     <div className="col-xl-4 col-lg-4 col-md-6">
                       <div className="card">
-                        <div className="card-header">
-                          <h6 className="card-title m-0">Average Cost</h6>
-                        </div>
                         <div className="card-body">
-                          <div
-                            id="apex-AverageCost"
-                            className="ac-line-transparent"
+                          <ApexCharts
+                            options={trend.options}
+                            series={trend.series}
+                            type="line"
+                            height={350}
                           />
                         </div>
                       </div>
                       {/* .card end */}
                     </div>
+
                     <div className="col-xl-4 col-lg-4 col-md-6">
-                      <div className="card">
-                        <div className="card-header">
-                          <h6 className="card-title m-0">Quality Purchase</h6>
-                        </div>
-                        <div className="card-body">
+                      <div className="card-body">
+                        <div
+                          id="apex-QualityPurchase"
+                          className="ac-line-transparent"
+                        />
+                        <div className="card" style={{ height: "60vh" }}>
+                          <div className="card-header">
+                            <h6 className="card-title m-0">
+                              Payable Amount
+                              <small className="d-block text-muted">
+                                Buyer Seller Wise
+                              </small>
+                            </h6>
+                          </div>
                           <div
-                            id="apex-QualityPurchase"
-                            className="ac-line-transparent"
-                          />
+                            className="d-flex justify-content-center"
+                            style={{ marginTop: "40px" }}
+                          >
+                            <ApexCharts
+                              options={chartPayableOptions}
+                              series={chartPayableOptions.series}
+                              type="donut"
+                              width={380}
+                            />
+                          </div>
                         </div>
                       </div>
                       {/* .card end */}
                     </div>
-                    <div className="col-xl-4 col-lg-6 col-md-6">
-                      <div className="card">
+                    {/* <div className="col-xl-6 col-lg-6 col-md-6">
+                      <div className="card" style={{ padding: "20px" }}>
                         <div className="card-header">
                           <h6 className="card-title m-0">
-                            Stock Quantity
-                            <small className="d-block text-muted">
-                              Category wise
-                            </small>
+                            Recievable Amount List
                           </h6>
                         </div>
-                        <div className="d-flex justify-content-center">
-                          <ApexCharts
-                            options={chartOptions}
-                            series={chartOptions.series}
-                            type="donut"
-                            width={380}
-                          />
-                        </div>
+                        <table
+                          id="myDataTable_no_filter"
+                          className="table myDataTable card-table mb-0"
+                        >
+                          <thead>
+                            <th>CUSTOMER</th>
+                            <th>MOBILE</th>
+                            <th>PAYMENT</th>
+                          </thead>
+
+                          <tbody>
+                            {currentSalesItems.map((item, index) => (
+                              <tr key={index} style={{ cursor: "pointer" }}>
+                                <td>{item.mobile}</td>
+                                <td>{item.customerName}</td>
+                                <td>{item.method}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
-                      {/* .card end */}
-                    </div>
-                    <div className="col-xl-8 col-lg-12 col-md-12">
-                      <div className="card">
-                        <div className="card-header">
-                          <h6 className="card-title m-0">Sales Statistics</h6>
-                        </div>
-                        <div className="card-body">
-                          <div className="row">
-                            <div className="col-6">
-                              <div className="card-body">
-                                <div className="fw-bold h6 mb-0">11.54k</div>
-                                <div className="text-muted small text-uppercase">
-                                  Revenue
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-6">
-                              <div className="card-body">
-                                <div className="fw-bold h6 mb-0">5.87k</div>
-                                <div className="text-muted small text-uppercase">
-                                  Cost
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            id="saleschart"
-                            className="ac-line-transparent"
-                          />
-                        </div>
-                      </div>
-                      {/* .card end */}
-                    </div>
-                    <div className="col-xl-4 col-lg-6 col-md-6">
-                      <div className="card">
-                        <div className="card-header">
-                          <h6 className="card-title m-0">New Agents</h6>
-                        </div>
-                        <div className="card-body">
-                          <div className="d-flex align-items-center mb-3">
-                            <img
-                              className="avatar rounded-circle"
-                              src="../assets/img/xs/avatar2.jpg"
-                              alt=""
-                            />
-                            <div className="flex-fill ms-3">
-                              <div className="h6 mb-0">Pritam Behera</div>
-                              <small>Exp. 5 Year</small>
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center mb-3">
-                            <img
-                              className="avatar rounded-circle"
-                              src="../assets/img/xs/avatar3.jpg"
-                              alt=""
-                            />
-                            <div className="flex-fill ms-3">
-                              <div className="h6 mb-0">Maryam Sahu</div>
-                              <small>Exp. 2.5 Year</small>
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center mb-3">
-                            <img
-                              className="avatar rounded-circle"
-                              src="../assets/img/xs/avatar4.jpg"
-                              alt=""
-                            />
-                            <div className="flex-fill ms-3">
-                              <div className="h6 mb-0">Hrusikesh Jena</div>
-                              <small>Exp. 8.2 Year</small>
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center mb-3">
-                            <img
-                              className="avatar rounded-circle"
-                              src="../assets/img/xs/avatar5.jpg"
-                              alt=""
-                            />
-                            <div className="flex-fill ms-3">
-                              <div className="h6 mb-0">Subham Parida</div>
-                              <small>Exp. 3 Year</small>
-                            </div>
-                          </div>
-                          <div className="d-flex align-items-center">
-                            <img
-                              className="avatar rounded-circle"
-                              src="../assets/img/xs/avatar6.jpg"
-                              alt=""
-                            />
-                            <div className="flex-fill ms-3">
-                              <div className="h6 mb-0">Praveen Kumar</div>
-                              <small>Exp. 7 Year</small>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-xl-8 col-lg-12 col-md-12">
-                      <div className="card">
+                    </div> */}
+                    <div className="col-xl-6 col-lg-12 col-md-12">
+                      <div className="card" style={{ padding: "20px" }}>
                         <div className="card-header">
                           <h6 className="card-title m-0">Sales Order</h6>
                         </div>
@@ -469,58 +651,52 @@ const Dashboard = () => {
                           className="table myDataTable card-table mb-0"
                         >
                           <thead>
-                            <tr>
-                              <th>Channel</th>
-                              <th>Draft</th>
-                              <th>Confirmed</th>
-                              <th>Packed</th>
-                              <th>Shipped</th>
-                              <th>Invoiced</th>
-                            </tr>
+                            <th>Sl No</th>
+                            <th>CUSTOMER</th>
+                            <th>MOBILE</th>
+                            <th>PAYMENT</th>
+                            <th>DISCOUNT</th>
+                            <th>TAX</th>
+                            <th>AMOUNT</th>
                           </thead>
+
                           <tbody>
-                            <tr>
-                              <td>Other</td>
-                              <td>0</td>
-                              <td>22</td>
-                              <td>3</td>
-                              <td>18</td>
-                              <td>56</td>
-                            </tr>
-                            <tr>
-                              <td>Etary</td>
-                              <td>0</td>
-                              <td>3</td>
-                              <td>3</td>
-                              <td>6</td>
-                              <td>33</td>
-                            </tr>
-                            <tr>
-                              <td>Shopify</td>
-                              <td>0</td>
-                              <td>2</td>
-                              <td>12</td>
-                              <td>18</td>
-                              <td>65</td>
-                            </tr>
-                            <tr>
-                              <td>Magento</td>
-                              <td>0</td>
-                              <td>16</td>
-                              <td>8</td>
-                              <td>11</td>
-                              <td>13</td>
-                            </tr>
-                            <tr>
-                              <td>Wordpress</td>
-                              <td>0</td>
-                              <td>18</td>
-                              <td>16</td>
-                              <td>76</td>
-                              <td>22</td>
-                            </tr>
+                            {currentSalesItems.map((item, index) => (
+                              <tr key={index} style={{ cursor: "pointer" }}>
+                                <td>{index + indexOfFirstSalesItem + 1}</td>
+                                <td>{item.mobile}</td>
+                                <td>{item.customerName}</td>
+                                <td>{item.method}</td>
+                                <td>₹ {item.totalDiscount}</td>
+                                <td>₹ {item.totalGST}</td>
+                                <td>₹ {item.totalAmount}</td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
+                      </div>
+                      {/* .card end */}
+                    </div>
+
+                    <div className="col-xl-6 col-lg-12 col-md-12">
+                      <div className="card">
+                        <div className="card-header">
+                          <h6 className="card-title m-0">Sales Statistics</h6>
+                        </div>
+                        <div className="card-body">
+                          <div className="row">
+                            <ApexCharts
+                              options={state.options}
+                              series={state.series}
+                              type="bar"
+                              height={350}
+                            />
+                          </div>
+                          <div
+                            id="apex-SalesStatistics"
+                            className="ac-line-transparent"
+                          />
+                        </div>
                       </div>
                       {/* .card end */}
                     </div>
@@ -528,6 +704,7 @@ const Dashboard = () => {
                   {/* .row end */}
                 </div>
               </div>
+
               {/* start: page footer */}
               <footer className="page-footer px-xl-4 px-sm-2 px-0 py-3">
                 <div className="container-fluid d-flex flex-wrap justify-content-between align-items-center">

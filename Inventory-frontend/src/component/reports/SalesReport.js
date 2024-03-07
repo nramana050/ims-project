@@ -4,11 +4,8 @@ import SideBar from "../SideBar";
 import NavBar from "../NavBar";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { HiOutlineFilter } from "react-icons/hi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FiEdit } from "react-icons/fi";
 import noDataImg from "../../assets/nodata.png";
-import header from "../../assets/Header.jpeg";
+import header from "../../assets/Header.png";
 import footer from "../../assets/Footer.png";
 import logo from "../../assets/logo.jpeg";
 import * as XLSX from "xlsx";
@@ -71,66 +68,12 @@ const SalesReport = () => {
     getSalesInfo();
   }, []);
   let doc;
-  const convertToPdf = () => {
-    try {
-      doc = new jsPDF();
-      const centerX = (doc.internal.pageSize.width - 80) / 2;
-      doc.addImage(header, "PNG", 0, 0 + 0, doc.internal.pageSize.width, 10);
-      doc.addImage(
-        footer,
-        "PNG",
-        0,
-        doc.internal.pageSize.height - 35,
-        doc.internal.pageSize.width,
-        35
-      );
-      const logoUrl = logo;
-      doc.addImage(logoUrl, "PNG", centerX, 15, 80, 15);
-      const tableMargin = 20;
-      const tableStartY = 15 + tableMargin;
-      doc.autoTable({
-        head: [
-          [
-            "Sl No",
-            "ITEMS NAME",
-            "HSN CODE",
-            "QUANTITY",
-            "SELLING PRICE",
-            "SGST",
-            "CGST",
-            "AMOUNT",
-          ],
-        ],
-        body: getSalesData.map((row, index) => [
-          index + 1,
-          row.itemName,
-          row.hsnCode,
-          row.quantity,
-          row.price,
-          row.sgst,
-          row.cgst,
-          row.amount,
-        ]),
-        styles: { fontSize: 5, fontStyle: "normal" },
-        headStyles: {
-          fillColor: [206, 206, 206],
-          textColor: [20, 25, 40],
-          fontSize: 5,
-          fontStyle: "bold",
-          width: 20,
-        },
-        startY: tableStartY,
-      });
-      doc.save("stockreport.pdf");
-    } catch (error) {
-      console.error("Error creating PDF:", error);
-    }
-  };
+
   const createPdf = () => {
     try {
       doc = new jsPDF();
       const centerX = (doc.internal.pageSize.width - 80) / 2;
-      doc.addImage(header, "PNG", 0, 0 + 0, doc.internal.pageSize.width, 10);
+      doc.addImage(header, "PNG", 0, 0 + 0, doc.internal.pageSize.width, 50);
       doc.addImage(
         footer,
         "PNG",
@@ -139,10 +82,9 @@ const SalesReport = () => {
         doc.internal.pageSize.width,
         35
       );
-      const logoUrl = logo;
-      doc.addImage(logoUrl, "PNG", centerX, 15, 80, 15);
+
       const tableMargin = 20;
-      const tableStartY = 15 + tableMargin;
+      const tableStartY = 25 + tableMargin;
       doc.autoTable({
         head: [
           [

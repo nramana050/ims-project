@@ -926,20 +926,21 @@ const Categories = () => {
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
                         >
-                          {/* <ReactToPrint
-                            trigger={() => ( */}
-                          <Button
-                            onClick={handlePrint}
-                            style={{ display: `${displayQR}` }}
-                          >
-                            Print this out!
-                          </Button>
-                          {/* //   )}
-                          //   content={() => componentRef}
-                          // /> */}
+                          <ReactToPrint
+                            trigger={() => (
+                              <Button onClick={handlePrint}>
+                                Print this out!
+                              </Button>
+                            )}
+                            content={() => componentRef}
+                          />
                           {/* Your content */}
-                          <div>
-                            <p ref={componentRef}>{qrCodeImage}</p>
+                          <div ref={(el) => (componentRef = el)}>
+                            <p
+                              style={{ textAlign: "center", marginTop: "40px" }}
+                            >
+                              {qrCodeImage}
+                            </p>
                           </div>
                         </div>
                       </div>

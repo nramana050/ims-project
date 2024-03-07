@@ -9944,7 +9944,6 @@ progress {
   }
   .row-cols-xl-5 > * {
     flex: 0 0 auto;
-    width: 20%;
   }
   .row-cols-xl-6 > * {
     flex: 0 0 auto;
@@ -30695,4 +30694,23 @@ table.dataTable.dtr-inline.collapsed.d-row
   border: 1px dotted rgba(163, 163, 163, 0.75);
   background-color: transparent;
   font-weight: 600;
+}
+@media print {
+  body * {
+    visibility: visible !important;
+  }
+
+  .invoice-container,
+  .invoice {
+    width: 100%;
+    margin: 0;
+  }
+
+  .invoice-container table thead th {
+    visibility: visible !important;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
 }
