@@ -59,7 +59,7 @@ const Signin = ({ onLogin }) => {
 
   const handleForgotCheck = async () => {
     await axios
-      .post(`http://localhost:3500/forgot-password`, {
+      .post(`http://35.154.125.232:3500/forgot-password`, {
         forgotEmail: forgotEmail,
       })
       .then((res) => {
@@ -159,7 +159,7 @@ const Signin = ({ onLogin }) => {
   const [getData, setGetData] = useState([]);
 
   const getMpin = async () => {
-    const result = await axios.get("http://localhost:3500");
+    const result = await axios.get("http://35.154.125.232:3500");
     setGetData(result.data);
   };
 
@@ -170,17 +170,15 @@ const Signin = ({ onLogin }) => {
   const saveLogin = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("http://localhost:3500", formdata);
+      const result = await axios.post("http://35.154.125.232:3500", formdata);
       if (result.data !== "failure") {
         const tokenData = jwtDecode(result.data.accessToken);
         const expirationTimestamp = tokenData.exp * 1000;
         if (formdata.isRemember === true) {
-          console.log("first");
           const encryptedExpiryDate = CryptoJS.AES.encrypt(
             expirationTimestamp.toString(),
             "hey you cant decode my message"
           ).toString();
-          console.log(encryptedExpiryDate);
           localStorage.setItem("expiryDate", encryptedExpiryDate);
         }
 
@@ -241,7 +239,7 @@ const Signin = ({ onLogin }) => {
   const handlePassword = async () => {
     if (updatedPassword === confirmPassword) {
       await axios
-        .put(`http://localhost:3500/reset-password/${forgotEmail}`, {
+        .put(`http://35.154.125.232:3500/reset-password/${forgotEmail}`, {
           confirmPassword: confirmPassword,
         })
         .then(() => window.location.reload())

@@ -14,7 +14,7 @@ const PinLogin = () => {
   const handleMpin = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://localhost:3500/mpin", { mpin: firstPin })
+      .post("http://35.154.125.232:3500/mpin", { mpin: firstPin })
       .then((result) =>
         result.data === "success" ? navigation("/dashboard") : setError("red")
       )

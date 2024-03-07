@@ -15,7 +15,7 @@ const Mpin = () => {
   const [getData, setGetData] = useState([]);
 
   const getMpin = async () => {
-    const result = await axios.get("http://localhost:3500");
+    const result = await axios.get("http://35.154.125.232:3500");
     setGetData(result.data);
   };
 
@@ -28,7 +28,7 @@ const Mpin = () => {
     if (firstPin === secondPin) {
       getData
         ? await axios
-            .put("http://localhost:3500/set-mpin", { mpin: secondPin })
+            .put("http://35.154.125.232:3500/set-mpin", { mpin: secondPin })
             .then((result) => {
               console.log(result.data);
               if (result.data === "success") {
@@ -37,7 +37,7 @@ const Mpin = () => {
             })
             .catch((err) => console.log(err))
         : await axios
-            .post("http://localhost:3500/set-mpin", { mpin: secondPin })
+            .post("http://35.154.125.232:3500/set-mpin", { mpin: secondPin })
             .then((result) => {
               if (result.data === "success") {
                 navigation("/mpin");
