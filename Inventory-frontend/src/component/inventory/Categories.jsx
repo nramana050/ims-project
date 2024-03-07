@@ -98,6 +98,8 @@ const Categories = () => {
         },
       ],
     });
+    setQRCodeImage(null);
+    setDisplayQR("none");
     setOpen(false);
   };
 
@@ -281,43 +283,6 @@ const Categories = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
-  // const handlePrint = () => {
-  //   const printWindow = window.open("", "_blank");
-  //   if (printWindow) {
-  //     printWindow.document.write(`
-  //       <html>
-  //         <head>
-  //           <title>Print QR Code</title>
-  //           <style>
-  //             @media print {
-  //               body {
-  //                 margin: 0;
-  //               }
-  //               img {
-  //                 max-width: 100%;
-  //                 height: auto;
-  //               }
-  //             }
-  //           </style>
-  //         </head>
-  //         <body>
-  //           <img src="${qrCodeImage}" />
-  //           <script>
-  //             window.onload = function() {
-  //               window.print();
-  //               window.onafterprint = function() {
-  //                 window.close();
-  //               };
-  //             };
-  //           </script>
-  //         </body>
-  //       </html>
-  //     `);
-  //   } else {
-  //     console.error("Failed to open print window");
-  //   }
-  // };
 
   return (
     <div>
@@ -928,7 +893,10 @@ const Categories = () => {
                         >
                           <ReactToPrint
                             trigger={() => (
-                              <Button onClick={handlePrint}>
+                              <Button
+                                style={{ display: `${displayQR}` }}
+                                onClick={handlePrint}
+                              >
                                 Print this out!
                               </Button>
                             )}
@@ -937,7 +905,7 @@ const Categories = () => {
                           {/* Your content */}
                           <div ref={(el) => (componentRef = el)}>
                             <p
-                              style={{ textAlign: "center", marginTop: "40px" }}
+                              style={{ textAlign: "center", marginTop: "10px" }}
                             >
                               {qrCodeImage}
                             </p>
