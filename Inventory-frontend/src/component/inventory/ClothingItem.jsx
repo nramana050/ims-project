@@ -166,11 +166,6 @@ const ClothingItem = () => {
                       Search
                     </button>
                   </div>
-                  <div className="filter-container">
-                    <div className="filter">
-                      <HiOutlineFilter size={30} color="rgba(0, 172, 154, 1)" />
-                    </div>
-                  </div>
                 </div>
                 {getClothingData.length > 0 ? (
                   <table
