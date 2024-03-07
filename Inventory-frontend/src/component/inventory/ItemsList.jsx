@@ -21,7 +21,7 @@ const ItemsList = () => {
 
   const getItemData = async () => {
     await axios
-      .get(`http://localhost:3700/inventory/items-list/${id}`)
+      .get(`http://35.154.125.232:3700/inventory/items-list/${id}`)
       .then((result) => setItemData(result.data))
       .catch((err) => console.log(err));
   };

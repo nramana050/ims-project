@@ -146,7 +146,9 @@ const SalesForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3700/inventory");
+        const response = await axios.get(
+          "http://35.154.125.232:3700/inventory"
+        );
         const formattedOptions = response.data.map((item) => ({
           value: item,
           label: item.itemName,
@@ -251,7 +253,7 @@ const SalesForm = () => {
     const currency = "INR";
 
     try {
-      const response = await fetch("http://localhost:5000/order", {
+      const response = await fetch("http://35.154.125.232:5000/order", {
         method: "POST",
         body: JSON.stringify({
           amount,
@@ -450,7 +452,7 @@ const SalesForm = () => {
                             })
                           : paymentHandler(e);
                         await axios
-                          .post("http://localhost:3800/sales", formData)
+                          .post("http://35.154.125.232:3800/sales", formData)
                           .then((res) => console.log(res))
                           .catch((err) => console.log(err));
                       }}

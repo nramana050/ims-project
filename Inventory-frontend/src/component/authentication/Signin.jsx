@@ -635,7 +635,7 @@ const Signin = ({ onLogin }) => {
                       <button
                         className="col-12 text-center mt-4 btn btn-lg btn-block btn-dark lift text-uppercase"
                         onClick={(e) => saveLogin(e)}
-                        disabled={btnDisable}
+                        // disabled={btnDisable}
                       >
                         Sign In
                       </button>

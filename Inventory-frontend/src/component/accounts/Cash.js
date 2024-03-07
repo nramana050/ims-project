@@ -76,13 +76,13 @@ const Cash = () => {
 
   const getItemData = async () => {
     await axios
-      .get("http://localhost:3900/accounts/expense")
+      .get("http://35.154.125.232:3900/accounts/expense")
       .then((result) => setItemData(result.data))
       .catch((err) => console.log(err));
   };
 
   const getSales = async () => {
-    const result = await axios.get("http://localhost:3800/sales");
+    const result = await axios.get("http://35.154.125.232:3800/sales");
     setGetSalesData(result.data);
   };
 

@@ -1,24 +1,22 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Bars } from "react-loader-spinner";
 import SideBar from "../SideBar";
 import NavBar from "../NavBar";
 import { useNavigate } from "react-router-dom";
 
-
 const MainReport = () => {
-    const navigation = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          await new Promise((resolve) => setTimeout(resolve, 1500));
-          setIsLoading(false);
-        };
-        fetchData();
-      }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
 
   return (
-
     <div>
       {isLoading ? (
         <div
@@ -54,13 +52,15 @@ const MainReport = () => {
                     <h5>INVENTORY</h5>
                   </div>
                   <div className="report-card">
-                    <a onClick={() => navigation("/reports/stockreport")}>Stock Summary Report</a>
+                    <a onClick={() => navigation("/reports/stockreport")}>
+                      Stock Summary Report
+                    </a>
                   </div>
-                  <hr/>
+                  <hr />
                   <div className="report-card">
                     <a>Low Stock Report</a>
                   </div>
-                  <hr/>
+                  <hr />
                 </div>
 
                 <div className=" mt-4 card-items">
@@ -68,9 +68,11 @@ const MainReport = () => {
                     <h5>SALES</h5>
                   </div>
                   <div className="report-card">
-                    <a onClick={() => navigation("/reports/salesreport")}>Sales Summary Report</a>
+                    <a onClick={() => navigation("/reports/salesreport")}>
+                      Sales Summary Report
+                    </a>
                   </div>
-                  <hr/>
+                  <hr />
                 </div>
 
                 <div className=" mt-4 card-items">
@@ -80,7 +82,7 @@ const MainReport = () => {
                   <div className="report-card">
                     <a>Expense Summary Report</a>
                   </div>
-                  <hr/>
+                  <hr />
                 </div>
 
                 <div className=" mt-4 card-items">
@@ -90,15 +92,15 @@ const MainReport = () => {
                   <div className="report-card">
                     <a>Cash In Hand Summary Report</a>
                   </div>
-                  <hr/>
+                  <hr />
                   <div className="report-card">
                     <a>Amount Payable Report</a>
                   </div>
-                  <hr/>
+                  <hr />
                   <div className="report-card">
                     <a>Amount Recievable Report</a>
                   </div>
-                  <hr/>
+                  <hr />
                 </div>
               </div>
             </div>
@@ -106,7 +108,7 @@ const MainReport = () => {
         </div>
       )}
     </div>
-  )
+  );
 };
 
 export default MainReport;

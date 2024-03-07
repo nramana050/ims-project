@@ -109,7 +109,7 @@ const BuyersSuppliers = () => {
 
   const handleSave = async () => {
     await axios
-      .post("http://localhost:3600/buyers-suppliers", formData)
+      .post("http://35.154.125.232:3600/buyers-suppliers", formData)
       .then((result) => console.log(result.data))
       .catch((err) => console.log(err));
   };
@@ -119,7 +119,9 @@ const BuyersSuppliers = () => {
   const [getPayAmt, setGetPayAmt] = useState([]);
   const [getCollectAmt, setGetCollectAmt] = useState([]);
   const getBuyersSuppliers = async () => {
-    const result = await axios.get("http://localhost:3600/buyers-suppliers");
+    const result = await axios.get(
+      "http://35.154.125.232:3600/buyers-suppliers"
+    );
     const buyerData = result.data.filter((item) => item.category === "Buyers");
     setGetBuyerData(buyerData);
     const supplierData = result.data.filter(

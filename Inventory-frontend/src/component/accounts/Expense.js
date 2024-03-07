@@ -50,7 +50,7 @@ const Expense = () => {
 
   const handleSave = async () => {
     await axios
-      .post("http://localhost:3900/accounts/expense", formData)
+      .post("http://35.154.125.232:3900/accounts/expense", formData)
       .then((result) => {
         handleClose();
         getItemData();
@@ -88,7 +88,7 @@ const Expense = () => {
 
   const deleteItem = async (id) => {
     await axios
-      .delete(`http://localhost:3900/expense/delete/${id}`)
+      .delete(`http://35.154.125.232:3900/expense/delete/${id}`)
       .then(() => {
         getItemData();
       })
@@ -97,7 +97,7 @@ const Expense = () => {
 
   const getItemData = async () => {
     await axios
-      .get("http://localhost:3900/accounts/expense")
+      .get("http://35.154.125.232:3900/accounts/expense")
       .then((result) => setItemData(result.data))
       .catch((err) => console.log(err));
   };

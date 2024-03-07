@@ -49,7 +49,7 @@ const SalesReport = () => {
   };
 
   const getSalesInfo = async () => {
-    const result = await axios.get("http://localhost:3800/sales");
+    const result = await axios.get("http://35.154.125.232:3800/sales");
     const SalesData = result.data;
     setGetSalesData(SalesData);
   };
@@ -57,7 +57,7 @@ const SalesReport = () => {
   const handleDelete = async (id) => {
     console.log(id);
     await axios
-      .delete(`http://localhost:3800/sales/delete/${id}`)
+      .delete(`http://35.154.125.232:3800/sales/delete/${id}`)
       .then(() => {
         getSalesInfo();
         alert("Deleted Successfully");

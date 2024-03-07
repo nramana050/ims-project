@@ -150,7 +150,9 @@ const SalesForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3700/inventory");
+        const response = await axios.get(
+          "http://35.154.125.232:3700/inventory"
+        );
         const formattedOptions = response.data.map((item) => ({
           value: item,
           label: item.itemName,

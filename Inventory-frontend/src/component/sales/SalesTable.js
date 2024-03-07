@@ -22,13 +22,13 @@ const SalesTable = () => {
   }, []);
 
   const getSales = async () => {
-    const result = await axios.get("http://localhost:3800/sales");
+    const result = await axios.get("http://35.154.125.232:3800/sales");
     setGetSalesData(result.data);
   };
 
   const deleteSales = async (id) => {
     await axios
-      .delete(`http://localhost:3800/sales/delete/${id}`)
+      .delete(`http://35.154.125.232:3800/sales/delete/${id}`)
       .then(() => {
         getSales();
       })

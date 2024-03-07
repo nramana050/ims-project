@@ -33,7 +33,9 @@ const Categories = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3700/inventory");
+        const response = await axios.get(
+          "http://35.154.125.232:3700/inventory"
+        );
 
         const formattedOptions = response.data.map((item) => ({
           value: item,
@@ -197,7 +199,7 @@ const Categories = () => {
   const handleSave = async (e) => {
     try {
       const res = await axios.post(
-        "http://localhost:3700/inventory",
+        "http://35.154.125.232:3700/inventory",
         formData,
         {
           headers: {
@@ -216,7 +218,7 @@ const Categories = () => {
     console.log(id);
     try {
       await axios.put(
-        `http://localhost:3700/inventory/update/${id}`,
+        `http://35.154.125.232:3700/inventory/update/${id}`,
         formData,
         {
           headers: {

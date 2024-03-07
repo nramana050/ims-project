@@ -48,7 +48,7 @@ const AccessoriesItem = () => {
   };
 
   const getAccessoriesItem = async () => {
-    const result = await axios.get("http://localhost:3600/inventory");
+    const result = await axios.get("http://35.154.125.232:3600/inventory");
     const AccessoriesData = result.data.filter(
       (item) => item.category === "accessories"
     );
@@ -57,7 +57,7 @@ const AccessoriesItem = () => {
 
   const handleDelete = async (id) => {
     await axios
-      .delete(`http://localhost:3600/inventory/delete/${id}`)
+      .delete(`http://35.154.125.232:3600/inventory/delete/${id}`)
       .then(() => {
         alert("Deleted Successfully");
         getAccessoriesItem();

@@ -26,14 +26,14 @@ const Inventory = () => {
   }, []);
 
   const getInventory = async () => {
-    const result = await axios.get("http://localhost:3600/inventory");
+    const result = await axios.get("http://35.154.125.232:3600/inventory");
     const ShoesData = result.data.filter((item) => item.category === "shoes");
     setGetShoesData(ShoesData);
   };
 
   const handleDelete = async (id) => {
     await axios
-      .delete(`http://localhost:3600/inventory/delete/${id}`)
+      .delete(`http://35.154.125.232:3600/inventory/delete/${id}`)
       .then(() => {
         alert("Deleted Successfully");
         getInventory();

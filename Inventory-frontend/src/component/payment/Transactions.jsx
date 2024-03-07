@@ -22,7 +22,7 @@ const Transactions = () => {
 
   const getTransaction = async () => {
     const result = await axios.get(
-      "http://localhost:3800/payment/transactions"
+      "http://35.154.125.232:3800/payment/transactions"
     );
     setGetTransactionData(result.data.items);
   };

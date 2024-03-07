@@ -22,13 +22,13 @@ const QuotationTable = () => {
   }, []);
 
   const getQuotation = async () => {
-    const result = await axios.get("http://localhost:4000/quotation");
+    const result = await axios.get("http://35.154.125.232:4000/quotation");
     setGetQuotationData(result.data);
   };
 
   const deleteItem = async (id) => {
     await axios
-      .delete(`http://localhost:4000/quotation/delete/${id}`)
+      .delete(`http://35.154.125.232:4000/quotation/delete/${id}`)
       .then(() => {
         getQuotation();
       })

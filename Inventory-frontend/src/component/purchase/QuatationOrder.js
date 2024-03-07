@@ -151,7 +151,9 @@ const PurchaseOrder = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3700/inventory");
+        const response = await axios.get(
+          "http://35.154.125.232:3700/inventory"
+        );
         const formattedOptions = response.data.map((item) => ({
           value: item,
           label: item.itemName,
@@ -251,7 +253,7 @@ const PurchaseOrder = () => {
 
   const paymentHandler = async (e) => {
     await axios
-      .post("http://localhost:3800/quotation", formData)
+      .post("http://35.154.125.232:3800/quotation", formData)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
 
