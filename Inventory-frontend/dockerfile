@@ -10,8 +10,7 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install --froce
 
-# Copy the entire application into the container
-COPY . .
+
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
